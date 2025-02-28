@@ -9,6 +9,4 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     List<Produto> findByNomeProdutoContainingIgnoreCase(String nomeProduto);
     List<Produto> findByCategoriaContainingIgnoreCase(String categoria);
     List<Produto> findBySetorAlimenticioContainingIgnoreCase(String setorAlimenticio);
-
-    List<Produto> findByQuantidadeLessThan(double quantidadeMin);
 }

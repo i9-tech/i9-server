@@ -94,7 +94,7 @@ public class ProdutoController {
         List<Produto> produtos = repository.findAll();
         List<Produto> produtosEstoqueBaixo = new ArrayList<>();
 
-        for (int i = 0; i < produtos.size() ; i++) {
+        for (int i = 0; i < produtos.size(); i++) {
             Produto produtodaVez = produtos.get(i);
             if (produtodaVez.getQuantidade() < produtodaVez.getQuantidadeMin()) {
                 produtosEstoqueBaixo.add(produtodaVez);
@@ -104,11 +104,5 @@ public class ProdutoController {
             return ResponseEntity.status(204).build();
         }
         return ResponseEntity.status(200).body(produtosEstoqueBaixo);
-    }
-
-    @GetMapping("/data-validade/data-recente")
-    public ResponseEntity<Produto> produtoProximoValidade(@RequestParam LocalDate dataValidade, LocalDate dataRecente) {
-        Optional<Produto> maisRecente = repository.findTop3ByOrderByDesc();
-        return ResponseEntity.of(maisRecente);
     }
 }
