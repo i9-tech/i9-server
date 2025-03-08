@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.colaboradores.Colaborador;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,29 +27,46 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listar() {
-        List<Produto> todosProdutos = repository.findAll();
+    public ResponseEntity<List<Produto>> listar(@RequestParam int fkEmpresa) {
+        List<Produto> todosProduto = repository.findByFkEmpresa(fkEmpresa);
 
-        if (todosProdutos.isEmpty()) {
+        if (todosProduto.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(todosProdutos);
+        return ResponseEntity.status(200).body(todosProduto);
     }
 
-    @PutMapping("/{id}")
-    private ResponseEntity<Produto> editar(@PathVariable int id, @RequestBody Produto produtoParaEditar) {
-        if (repository.existsById(id)) {
+    @PatchMapping("/{id}")
+    private ResponseEntity<Produto> editar(@PathVariable int id, @RequestBody Produto produtoParaEditar, @RequestParam int fkEmpresa) {
+        Optional<Produto> produtoExistente = repository.findById(id);
+
+        if (produtoExistente.isPresent()) {
+            Produto produto = produtoExistente.get();
+
+            if (produto.getFkEmpresa() != fkEmpresa) {
+                return ResponseEntity.status(403).build();
+            }
+
             produtoParaEditar.setId(id);
+            produtoParaEditar.setFkEmpresa(fkEmpresa);
+
             Produto produtoEditado = repository.save(produtoParaEditar);
             return ResponseEntity.status(200).body(produtoEditado);
         }
         return ResponseEntity.status(404).build();
     }
 
-
     @DeleteMapping("/{id}")
-    private ResponseEntity<Produto> deletar(@PathVariable int id) {
-        if (repository.existsById(id)) {
+    private ResponseEntity<Void> deletar(@PathVariable int id, @RequestParam int fkEmpresa) {
+        Optional<Produto> produtoExistente = repository.findById(id);
+
+        if (produtoExistente.isPresent()) {
+            Produto produto = produtoExistente.get();
+
+            if (produto.getFkEmpresa() != fkEmpresa) {
+                return ResponseEntity.status(403).build();
+            }
+
             repository.deleteById(id);
             return ResponseEntity.status(204).build();
         }
@@ -56,9 +74,8 @@ public class ProdutoController {
     }
 
     @GetMapping("/nome")
-    public ResponseEntity<List<Produto>> buscarPorNome(@RequestParam String nomeProduto) {
-
-        List<Produto> produtosNome = repository.findByNomeProdutoContainingIgnoreCase(nomeProduto);
+    public ResponseEntity<List<Produto>> buscarPorNome(@RequestParam String nomeProduto, @RequestParam int fkEmpresa) {
+        List<Produto> produtosNome = repository.findByNomeProdutoContainingIgnoreCaseAndFkEmpresa(nomeProduto, fkEmpresa);
 
         if (produtosNome.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -66,11 +83,9 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(produtosNome);
     }
 
-
     @GetMapping("/categoria")
-    public ResponseEntity<List<Produto>> buscarPorCategoria(@RequestParam String categoria) {
-
-        List<Produto> produtosCategoria = repository.findByCategoriaContainingIgnoreCase(categoria);
+    public ResponseEntity<List<Produto>> buscarPorCategoria(@RequestParam String categoria,  @RequestParam int fkEmpresa) {
+        List<Produto> produtosCategoria = repository.findByCategoriaContainingIgnoreCaseAndFkEmpresa(categoria, fkEmpresa);
 
         if (produtosCategoria.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -79,9 +94,9 @@ public class ProdutoController {
     }
 
     @GetMapping("/setor")
-    public ResponseEntity<List<Produto>> buscarPorSetor(@RequestParam String setorAlimenticio) {
+    public ResponseEntity<List<Produto>> buscarPorSetor(@RequestParam String setorAlimenticio,  @RequestParam int fkEmpresa) {
 
-        List<Produto> produtosSetor = repository.findBySetorAlimenticioContainingIgnoreCase(setorAlimenticio);
+        List<Produto> produtosSetor = repository.findBySetorAlimenticioContainingIgnoreCaseAndFkEmpresa(setorAlimenticio, fkEmpresa);
 
         if (produtosSetor.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -90,8 +105,8 @@ public class ProdutoController {
     }
 
     @GetMapping("/estoque-baixo")
-    public ResponseEntity<List<Produto>> buscarEstoqueBaixo() {
-        List<Produto> produtos = repository.findAll();
+    public ResponseEntity<List<Produto>> buscarEstoqueBaixo(@RequestParam int fkEmpresa) {
+        List<Produto> produtos = repository.findByFkEmpresa(fkEmpresa);
         List<Produto> produtosEstoqueBaixo = new ArrayList<>();
 
         for (int i = 0; i < produtos.size(); i++) {
@@ -100,9 +115,29 @@ public class ProdutoController {
                 produtosEstoqueBaixo.add(produtodaVez);
             }
         }
+
         if (produtosEstoqueBaixo.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
         return ResponseEntity.status(200).body(produtosEstoqueBaixo);
     }
+
+    @GetMapping("/estoque-alto")
+    public ResponseEntity<List<Produto>> buscarEstoqueAlto(@RequestParam int fkEmpresa) {
+        List<Produto> produtos = repository.findByFkEmpresa(fkEmpresa);
+        List<Produto> produtosEstoqueAlto = new ArrayList<>();
+
+        for (int i = 0; i < produtos.size(); i++) {
+            Produto produtodaVez = produtos.get(i);
+            if (produtodaVez.getQuantidade() > produtodaVez.getQuantidadeMax()) {
+                produtosEstoqueAlto.add(produtodaVez);
+            }
+        }
+
+        if (produtosEstoqueAlto.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.status(200).body(produtosEstoqueAlto);
+    }
+
 }

@@ -12,24 +12,36 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private int codigo;
     private String nomeProduto;
+    private LocalDate dataVencimento;
+    private double valorCompra;
     private double valorUnitario;
     private int quantidade;
+    private LocalDate dtRegistro;
+    private String descricao;
     private String categoria;
     private String setorAlimenticio;
-    private String descricao;
-    private LocalDate dataVencimento;
-    private LocalDate dtRegistro;
     private int quantidadeMin;
     private int quantidadeMax;
-    private int idRegistro;
+    private int fkColaborador;
+    private int fkEmpresa;
 
-    public Integer getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public String getNomeProduto() {
@@ -40,20 +52,52 @@ public class Produto {
         this.nomeProduto = nomeProduto;
     }
 
-    public Double getValorUnitario() {
+    public LocalDate getDataVencimento() {
+        return dataVencimento;
+    }
+
+    public void setDataVencimento(LocalDate dataVencimento) {
+        this.dataVencimento = dataVencimento;
+    }
+
+    public double getValorCompra() {
+        return valorCompra;
+    }
+
+    public void setValorCompra(double valorCompra) {
+        this.valorCompra = valorCompra;
+    }
+
+    public double getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(Double valorUnitario) {
+    public void setValorUnitario(double valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 
-    public Integer getQuantidade() {
+    public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public LocalDate getDtRegistro() {
+        return dtRegistro;
+    }
+
+    public void setDtRegistro(LocalDate dtRegistro) {
+        this.dtRegistro = dtRegistro;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public String getCategoria() {
@@ -72,32 +116,12 @@ public class Produto {
         this.setorAlimenticio = setorAlimenticio;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public int getQuantidadeMin() {
+        return quantidadeMin;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
-    public LocalDate getDtRegistro() {
-        return dtRegistro;
-    }
-
-    public void setDtRegistro(LocalDate dtRegistro) {
-        this.dtRegistro = dtRegistro;
-    }
-
-    public Integer getIdRegistro() {
-        return idRegistro;
+    public void setQuantidadeMin(int quantidadeMin) {
+        this.quantidadeMin = quantidadeMin;
     }
 
     public int getQuantidadeMax() {
@@ -108,15 +132,19 @@ public class Produto {
         this.quantidadeMax = quantidadeMax;
     }
 
-    public int getQuantidadeMin() {
-        return quantidadeMin;
+    public int getFkColaborador() {
+        return fkColaborador;
     }
 
-    public void setQuantidadeMin(int quantidadeMin) {
-        this.quantidadeMin = quantidadeMin;
+    public void setFkColaborador(int fkColaborador) {
+        this.fkColaborador = fkColaborador;
     }
 
-    public void setIdRegistro(Integer idRegistro) {
-        this.idRegistro = idRegistro;
+    public int getFkEmpresa() {
+        return fkEmpresa;
+    }
+
+    public void setFkEmpresa(int fkEmpresa) {
+        this.fkEmpresa = fkEmpresa;
     }
 }
