@@ -21,7 +21,11 @@ public class ProdutoController {
     private ProdutoRepository repository;
 
     @PostMapping
-    private ResponseEntity<Produto> cadastrar(@RequestBody Produto produto) {
+    private ResponseEntity<Produto> cadastrar(@RequestBody Produto produto,  @RequestParam int fkEmpresa) {
+        if (produto.getFkEmpresa() != fkEmpresa) {
+            return ResponseEntity.status(403).build();
+        }
+
         Produto produtoRegistrado = this.repository.save(produto);
         return ResponseEntity.status(201).body(produtoRegistrado);
     }
