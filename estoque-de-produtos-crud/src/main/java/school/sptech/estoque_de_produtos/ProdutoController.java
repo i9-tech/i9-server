@@ -32,7 +32,7 @@ public class ProdutoController {
 
     @GetMapping
     public ResponseEntity<List<Produto>> listar(@RequestParam int fkEmpresa) {
-        List<Produto> todosProduto = repository.findByFkEmpresa(fkEmpresa);
+        List<Produto> todosProduto = repository.findByFkEmpresa(1);
 
         if (todosProduto.isEmpty()) {
             return ResponseEntity.status(204).build();
