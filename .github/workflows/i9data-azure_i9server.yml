@@ -26,7 +26,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-        working-directory: /estoque-de-produtos
+        working-directory: /estoque_de_produtos
 
 
       - name: Upload artifact for deployment job
