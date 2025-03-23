@@ -1,4 +1,4 @@
-package school.sptech.estoque_de_produtos;
+package school.sptech.entity.produto;
 
 import jakarta.persistence.*;
 
@@ -22,9 +22,25 @@ public class Produto {
     private String setorAlimenticio;
     private int quantidadeMin;
     private int quantidadeMax;
-    private int fkColaborador;
+    private int fkFuncionario;
     private int fkEmpresa;
+    private int fkPedidoPratoProduto;
 
+    public int getFkFuncionario() {
+        return fkFuncionario;
+    }
+
+    public void setFkFuncionario(int fkFuncionario) {
+        this.fkFuncionario = fkFuncionario;
+    }
+
+    public int getFkPedidoPratoProduto() {
+        return fkPedidoPratoProduto;
+    }
+
+    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
+        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
+    }
 
     public int getId() {
         return id;
@@ -131,11 +147,11 @@ public class Produto {
     }
 
     public int getFkColaborador() {
-        return fkColaborador;
+        return fkFuncionario;
     }
 
-    public void setFkColaborador(int fkColaborador) {
-        this.fkColaborador = fkColaborador;
+    public void setFkColaborador(int fkFuncionario) {
+        this.fkFuncionario = fkFuncionario;
     }
 
     public int getFkEmpresa() {

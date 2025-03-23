@@ -1,14 +1,11 @@
-package school.sptech.estoque_de_produtos;
+package school.sptech.controller.produto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.colaboradores.Colaborador;
+import school.sptech.entity.produto.Produto;
+import school.sptech.repository.produto.ProdutoRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +18,7 @@ public class ProdutoController {
     private ProdutoRepository repository;
 
     @PostMapping
-    private ResponseEntity<Produto> cadastrar(@RequestBody Produto produto,  @RequestParam int fkEmpresa) {
+    private ResponseEntity<Produto> cadastrar(@RequestBody Produto produto, @RequestParam int fkEmpresa) {
         if (produto.getFkEmpresa() != fkEmpresa) {
             return ResponseEntity.status(403).build();
         }
