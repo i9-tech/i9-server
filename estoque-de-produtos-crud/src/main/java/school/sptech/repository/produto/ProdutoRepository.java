@@ -1,8 +1,8 @@
-package school.sptech.estoque_de_produtos;
+package school.sptech.repository.produto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import school.sptech.entity.produto.Produto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {

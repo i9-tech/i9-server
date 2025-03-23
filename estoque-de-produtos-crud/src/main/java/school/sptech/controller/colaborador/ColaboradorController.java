@@ -1,9 +1,10 @@
-package school.sptech.colaboradores;
+package school.sptech.controller.colaborador;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.estoque_de_produtos.Produto;
+import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.repository.colaborador.ColaboradorRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,18 +17,18 @@ public class ColaboradorController {
     private ColaboradorRepository repository;
 
     @PostMapping
-    private ResponseEntity<Colaborador> cadastrar(@RequestBody Colaborador colaborador) {
-        if(repository.existsById(colaborador.getId())) {
+    private ResponseEntity<Funcionario> cadastrar(@RequestBody Funcionario funcionario) {
+        if(repository.existsById(funcionario.getId())) {
             return ResponseEntity.status(409).build();
         }
-        colaborador.gerarSenha();
-        Colaborador colaboradorRegistrado = this.repository.save(colaborador);
-        return ResponseEntity.status(201).body(colaboradorRegistrado);
+        funcionario.gerarSenha();
+        Funcionario funcionarioRegistrado = this.repository.save(funcionario);
+        return ResponseEntity.status(201).body(funcionarioRegistrado);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Colaborador>> listarPorEmpresa(@RequestParam int fkEmpresa) {
-        List<Colaborador> todosColaboradoresEmpresa = repository.findByFkEmpresa(fkEmpresa);
+    public ResponseEntity<List<Funcionario>> listarPorEmpresa(@RequestParam int fkEmpresa) {
+        List<Funcionario> todosColaboradoresEmpresa = repository.findByFkEmpresa(fkEmpresa);
 
         if (todosColaboradoresEmpresa.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -36,18 +37,18 @@ public class ColaboradorController {
     }
 
     @PatchMapping("/{id}")
-    private ResponseEntity<Colaborador> editar(@PathVariable int id, @RequestBody Colaborador colaborarParaEditar) {
+    private ResponseEntity<Funcionario> editar(@PathVariable int id, @RequestBody Funcionario colaborarParaEditar) {
         if (repository.existsById(id)) {
             colaborarParaEditar.gerarSenha();
             colaborarParaEditar.setId(id);
-            Colaborador colaboradorEditado = repository.save(colaborarParaEditar);
-            return ResponseEntity.status(200).body(colaboradorEditado);
+            Funcionario funcionarioEditado = repository.save(colaborarParaEditar);
+            return ResponseEntity.status(200).body(funcionarioEditado);
         }
         return ResponseEntity.status(404).build();
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Colaborador> deletar(@PathVariable int id) {
+    private ResponseEntity<Funcionario> deletar(@PathVariable int id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
             return ResponseEntity.status(204).build();
@@ -56,8 +57,8 @@ public class ColaboradorController {
     }
 
     @GetMapping("/colaborador/{id}")
-    public ResponseEntity<Colaborador> buscarPorIdColaborador(@PathVariable int id) {
-        Optional<Colaborador> colaborador = repository.findById(id);
+    public ResponseEntity<Funcionario> buscarPorIdColaborador(@PathVariable int id) {
+        Optional<Funcionario> colaborador = repository.findById(id);
 
         if (colaborador.isPresent()) {
             return ResponseEntity.status(200).body(colaborador.get());

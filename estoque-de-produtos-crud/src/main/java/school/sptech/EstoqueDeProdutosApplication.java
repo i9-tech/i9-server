@@ -1,4 +1,4 @@
-package school.sptech.estoque_de_produtos;
+package school.sptech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
