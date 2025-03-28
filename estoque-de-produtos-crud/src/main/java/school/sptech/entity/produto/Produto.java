@@ -161,4 +161,5 @@ public class Produto {
     public void setFkEmpresa(int fkEmpresa) {
         this.fkEmpresa = fkEmpresa;
     }
+
 }
