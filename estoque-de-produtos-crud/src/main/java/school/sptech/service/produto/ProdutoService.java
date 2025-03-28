@@ -1,13 +1,12 @@
 package school.sptech.service.produto;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.produto.Produto;
 import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
+import school.sptech.exception.ValidacaoException;
 import school.sptech.repository.produto.ProdutoRepository;
-import school.sptech.service.funcionario.FuncionarioService;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,6 +116,53 @@ public class ProdutoService {
         }
 
         repository.deleteById(produto.get());
+
+    }
+
+    public Produto editarProduto(int id, Produto produtoParaEditar, int fkEmpresa){
+        Optional<Produto> produto = repository.findByIdAndFkEmpresa(id, fkEmpresa);
+
+
+        if (produto.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Produto não encontrado na empresa especificada.");
+        }
+
+        Produto produtoExiste = produto.get();
+
+        validarProduto(produtoParaEditar);
+
+        produtoExiste.setId(id);
+        produtoExiste.setNomeProduto(produtoParaEditar.getNomeProduto());
+        produtoExiste.setDataVencimento(produtoParaEditar.getDataVencimento());
+        produtoExiste.setValorUnitario(produtoParaEditar.getValorUnitario());
+        produtoExiste.setDescricao(produtoParaEditar.getDescricao());
+        produtoExiste.setCategoria(produtoParaEditar.getCategoria());
+        produtoExiste.setSetorAlimenticio(produtoParaEditar.getSetorAlimenticio());
+
+
+        return repository.save(produtoExiste);
+    }
+
+    private void validarProduto(Produto produto){
+        if (produto.getNomeProduto() == null || produto.getNomeProduto().trim().isEmpty()){
+            throw new ValidacaoException("O nome do produto é obrigatório");
+        }
+
+        if (produto.getCategoria() == null || produto.getCategoria().trim().isEmpty()){
+            throw new ValidacaoException("A categoria do produto é obrigatório");
+        }
+
+        if (produto.getSetorAlimenticio() == null || produto.getSetorAlimenticio().trim().isEmpty()){
+            throw new ValidacaoException("O setor alimentício do produto é obrigatório");
+        }
+
+        if (produto.getValorUnitario() <= 0) {
+            throw new ValidacaoException("O valor unitário deve ser maior que zero");
+        }
+
+        if (produto.getDataVencimento() == null){
+            throw new ValidacaoException("A data de vencimento do produto é obrigatório");
+        }
 
     }
 }

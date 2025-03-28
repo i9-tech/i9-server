@@ -3,14 +3,9 @@ package school.sptech.controller.produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.produto.Produto;
-import school.sptech.repository.produto.ProdutoRepository;
 import school.sptech.service.produto.ProdutoService;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/produtos")
@@ -20,7 +15,7 @@ public class ProdutoController {
     private ProdutoService service;
 
     @PostMapping
-    private ResponseEntity<Produto> cadastrar(@RequestBody Produto produtoParaCadastrar, @PathVariable int fkEmpresa) {
+    public ResponseEntity<Produto> cadastrar(@RequestBody Produto produtoParaCadastrar, @PathVariable int fkEmpresa) {
         Produto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, fkEmpresa);
         return ResponseEntity.status(201).body(produtoCadastrado);
     }
@@ -31,26 +26,12 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(todosProdutos);
     }
 
-//    @PatchMapping("/{id}")
-//    private ResponseEntity<Produto> editar(@PathVariable int id, @RequestBody Produto produtoParaEditar, @RequestParam int fkEmpresa) {
-//        Optional<Produto> produtoExistente = repository.findById(id);
-//
-//        if (produtoExistente.isPresent()) {
-//            Produto produto = produtoExistente.get();
-//
-//            if (produto.getFkEmpresa() != fkEmpresa) {
-//                return ResponseEntity.status(403).build();
-//            }
-//
-//            produtoParaEditar.setId(id);
-//            produtoParaEditar.setFkEmpresa(fkEmpresa);
-//
-//            Produto produtoEditado = repository.save(produtoParaEditar);
-//            return ResponseEntity.status(200).body(produtoEditado);
-//        }
-//        return ResponseEntity.status(404).build();
-//    }
-//
+    @PatchMapping("/{id}/{fkEmpresa}")
+    private ResponseEntity<Produto> editarProduto(@PathVariable int id, @RequestBody Produto produtoParaEditar, @PathVariable int fkEmpresa) {
+        Produto produtoEditado = service.editarProduto(id, produtoParaEditar, fkEmpresa);
+        return ResponseEntity.status(200).body(produtoEditado);
+    }
+
     @DeleteMapping("/{id}/{fkEmpresa}")
     public ResponseEntity<Void> removerPorId(@PathVariable int id, @PathVariable int fkEmpresa) {
         service.removerPorId(id, fkEmpresa);

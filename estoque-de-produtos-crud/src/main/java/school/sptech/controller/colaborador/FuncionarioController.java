@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.produto.Produto;
 import school.sptech.service.funcionario.FuncionarioService;
 
 import java.util.List;
@@ -41,20 +42,10 @@ public class FuncionarioController {
         return ResponseEntity.status(204).build();
     }
 
-
-//
-//    @PatchMapping("/{id}")
-//    private ResponseEntity<Funcionario> editar(@PathVariable int id, @RequestBody Funcionario colaborarParaEditar) {
-//        if (repository.existsById(id)) {
-//            colaborarParaEditar.gerarSenha();
-//            colaborarParaEditar.setId(id);
-//            Funcionario funcionarioEditado = repository.save(colaborarParaEditar);
-//            return ResponseEntity.status(200).body(funcionarioEditado);
-//        }
-//        return ResponseEntity.status(404).build();
-//    }
-
-
-
+    @PatchMapping("/{id}/{fkEmpresa}")
+    private ResponseEntity<Funcionario> editarFuncionario(@PathVariable int id, @RequestBody Funcionario funcionarioParaEditar, @PathVariable int fkEmpresa) {
+        Funcionario funcionarioEditado = service.editarFuncionario(id, fkEmpresa, funcionarioParaEditar);
+        return ResponseEntity.status(200).body(funcionarioEditado);
+    }
 
 }
