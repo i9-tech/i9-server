@@ -1,16 +1,12 @@
-package school.sptech.controller.colaborador;
+package school.sptech.controller.funcionario;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.controller.colaborador.dto.FuncionarioRequestDto;
-import school.sptech.controller.colaborador.dto.FuncionarioResponseDto;
-import school.sptech.entity.funcionario.Funcionario;
-import school.sptech.entity.produto.Produto;
+import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
+import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.service.funcionario.FuncionarioService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/colaboradores")
