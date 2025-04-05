@@ -1,17 +1,10 @@
-package school.sptech.colaboradores;
+package school.sptech.controller.colaborador.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
 
-@Entity
-public class Colaborador {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class FuncionarioRequestDto {
     private String nome;
     private String cpf;
     private String cargo;
@@ -20,22 +13,35 @@ public class Colaborador {
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
-    private int fkEmpresa;
     private String senha;
 
-
-    public void gerarSenha() {
-        if (cpf != null) {
-            this.senha = fkEmpresa + "@" + cpf;
+    //convertendo dto em entity
+    public static Funcionario toEntity(FuncionarioRequestDto requestDto, int fkEmpresa){
+        if (requestDto == null){
+            return null;
         }
+
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome(requestDto.getNome());
+        funcionario.setCpf(requestDto.getCpf());
+        funcionario.setCargo(requestDto.getCargo());
+        funcionario.setDataAdmissao(requestDto.getDataAdmissao());
+        funcionario.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
+        funcionario.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
+        funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
+        funcionario.setProprietario(requestDto.isProprietario());
+        funcionario.setFkEmpresa(fkEmpresa);
+        funcionario.setSenha(requestDto.getSenha());
+
+        return funcionario;
     }
 
-    public int getId() {
-        return id;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public String getNome() {
@@ -70,31 +76,6 @@ public class Colaborador {
         this.dataAdmissao = dataAdmissao;
     }
 
-    public boolean isProprietario() {
-        return proprietario;
-    }
-
-    public void setProprietario(boolean proprietario) {
-        this.proprietario = proprietario;
-    }
-
-    public int getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-
     public boolean isAcessoSetorCozinha() {
         return acessoSetorCozinha;
     }
@@ -117,5 +98,13 @@ public class Colaborador {
 
     public void setAcessoSetorAtendimento(boolean acessoSetorAtendimento) {
         this.acessoSetorAtendimento = acessoSetorAtendimento;
+    }
+
+    public boolean isProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(boolean proprietario) {
+        this.proprietario = proprietario;
     }
 }
