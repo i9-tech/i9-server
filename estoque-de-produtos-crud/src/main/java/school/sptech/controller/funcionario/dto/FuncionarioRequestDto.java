@@ -1,47 +1,64 @@
-package school.sptech.controller.colaborador.dto;
+package school.sptech.controller.funcionario.dto;
 
-import school.sptech.entity.funcionario.Funcionario;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class FuncionarioRequestDto {
+
+
+    private Integer id;
+
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
+
+    @NotBlank(message = "O CPF é obrigatório")
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+            message = "O cpf deve ser no formato 999.999.999-99 ")
     private String cpf;
+
+    @NotBlank(message = "O cargo é obrigatório")
     private String cargo;
+
+    @NotBlank(message = "A data de admissão é obrigatória")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    //definir um padrão de armazenamento
     private LocalDate dataAdmissao;
+
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
+
+    @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 11,
+    message = "A senha deve ter no mínimo 11 caracteres")
     private String senha;
 
-    //convertendo dto em entity
-    public static Funcionario toEntity(FuncionarioRequestDto requestDto, int fkEmpresa){
-        if (requestDto == null){
-            return null;
-        }
-
-        Funcionario funcionario = new Funcionario();
-        funcionario.setNome(requestDto.getNome());
-        funcionario.setCpf(requestDto.getCpf());
-        funcionario.setCargo(requestDto.getCargo());
-        funcionario.setDataAdmissao(requestDto.getDataAdmissao());
-        funcionario.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
-        funcionario.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
-        funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
-        funcionario.setProprietario(requestDto.isProprietario());
-        funcionario.setFkEmpresa(fkEmpresa);
-        funcionario.setSenha(requestDto.getSenha());
-
-        return funcionario;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
+    public FuncionarioRequestDto(Integer id, String nome, String cpf, String cargo,
+                                 LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                 boolean acessoSetorAtendimento, boolean proprietario, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cargo = cargo;
+        this.dataAdmissao = dataAdmissao;
+        this.acessoSetorCozinha = acessoSetorCozinha;
+        this.acessoSetorEstoque = acessoSetorEstoque;
+        this.acessoSetorAtendimento = acessoSetorAtendimento;
+        this.proprietario = proprietario;
         this.senha = senha;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -106,5 +123,13 @@ public class FuncionarioRequestDto {
 
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

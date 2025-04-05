@@ -1,6 +1,8 @@
 package school.sptech.service.funcionario;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
+import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
@@ -10,26 +12,47 @@ import school.sptech.repository.funcionario.FuncionarioRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Service
 public class FuncionarioService {
 
-    @Autowired
     private FuncionarioRepository repository;
 
-    public List<Funcionario> listarPorEmpresa(int fkEmpresa) {
+    public FuncionarioService(FuncionarioRepository repository) {
+        this.repository = repository;
+    }
+
+    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, int fkEmpresa){
+
+        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndFkEmpresa(requestDto.getCpf(), fkEmpresa);
+
+        if (funcionarioExisteByCpf){
+            throw new EntidadeConflictException("Esse usuário já está cadastrado!");
+        }
+
+        // Convertendo DTO para entity
+        Funcionario funcionario = FuncionarioRequestDto.toEntity(requestDto, fkEmpresa);
+
+        funcionario = repository.save(funcionario);
+        return FuncionarioResponseDto.fromEntity(funcionario);
+
+    }
+
+    public List<FuncionarioResponseDto> listarPorEmpresa(int fkEmpresa) {
 
         List<Funcionario> todosFuncionariosEmpresa = repository.findByFkEmpresa(fkEmpresa);
 
-        //Em operações de listagem, é comum retornar uma lista vazia em vez de lançar uma exceção, isso evita tratativa de erro
         if (todosFuncionariosEmpresa.isEmpty()) {
             return Collections.emptyList(); // Retorna uma lista vazia
         }
 
-        return todosFuncionariosEmpresa;
-
+        return todosFuncionariosEmpresa.stream()
+                .map(FuncionarioResponseDto::fromEntity)
+                .collect(Collectors.toList()); // Retorna uma lista com dtos
     }
 
-    public Optional<Funcionario> buscarFuncionarioPorId(int id, int fkEmpresa) {
+    public FuncionarioResponseDto buscarFuncionarioPorId(int id, int fkEmpresa) {
 
         Optional<Funcionario> funcionario = repository.findByIdAndFkEmpresa(id, fkEmpresa);
 
@@ -37,7 +60,8 @@ public class FuncionarioService {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
-        return funcionario;
+
+        return FuncionarioResponseDto.fromEntity(funcionario.get());
 
     }
 
@@ -49,56 +73,44 @@ public class FuncionarioService {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
-        repository.deleteById(funcionario.get());
+        repository.delete(funcionario.get());
     }
 
-    public Funcionario cadastrarFuncionario(Funcionario funcionario, int fkEmpresa){
 
-        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndFkEmpresa(funcionario.getCpf(), fkEmpresa);
-        boolean funcionarioExisteById= repository.existsByIdAndFkEmpresa(funcionario.getId(), fkEmpresa);
-
-        if (funcionarioExisteByCpf || funcionarioExisteById){
-            throw new EntidadeConflictException("Esse usuário já está cadastrado!");
-        }
-
-        return repository.save(funcionario);
-
-    }
-
-    public Funcionario editarFuncionario(int id, int fkEmpresa, Funcionario funcionarioParaEditar){
+    public FuncionarioResponseDto editarFuncionario(int id, int fkEmpresa, FuncionarioRequestDto requestDto){
         Optional<Funcionario> funcionario = repository.findByIdAndFkEmpresa(id, fkEmpresa);
 
         if (funcionario.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("Produto não encontrado na empresa especificada.");
+            throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
         Funcionario funcionarioExiste = funcionario.get();
 
-        validarFuncionario(funcionarioParaEditar);
+        validarFuncionario(requestDto);
 
         funcionarioExiste.setId(id);
-        funcionarioExiste.setCpf(funcionarioParaEditar.getCpf());
-        funcionarioExiste.setNome(funcionarioParaEditar.getNome());
-        funcionarioExiste.setCargo(funcionarioParaEditar.getCargo());
-        funcionarioExiste.setSenha(funcionarioParaEditar.getSenha());
+        funcionarioExiste.setCpf(requestDto.getCpf());
+        funcionarioExiste.setNome(requestDto.getNome());
+        funcionarioExiste.setCargo(requestDto.getCargo());
+        funcionarioExiste.setSenha(requestDto.getSenha());
 
         if (funcionarioExiste.isProprietario()){
-            funcionarioExiste.setAcessoSetorCozinha(funcionarioParaEditar.isAcessoSetorCozinha());
-            funcionarioExiste.setAcessoSetorAtendimento(funcionarioParaEditar.isAcessoSetorAtendimento());
-            funcionarioExiste.setAcessoSetorEstoque(funcionarioParaEditar.isAcessoSetorEstoque());
+            funcionarioExiste.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
+            funcionarioExiste.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
+            funcionarioExiste.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
         }else {
             throw new ValidacaoException("Você não é proprietário para alterar o acesso aos setores");
         }
 
-        return repository.save(funcionarioExiste);
+       return FuncionarioResponseDto.fromEntity(repository.save(funcionarioExiste));
     }
 
-    public void validarFuncionario(Funcionario funcionario){
-        if (funcionario.getNome() == null || funcionario.getNome().trim().isEmpty()){
+    public void validarFuncionario(FuncionarioRequestDto requestDto){
+        if (requestDto.getNome() == null || requestDto.getNome().trim().isEmpty()){
             throw new ValidacaoException("O nome do funcionário é obrigatório");
-        }  if (funcionario.getCpf() == null){
+        }  if (requestDto.getCpf() == null){
             throw new ValidacaoException("O CPF do funcionário é obrigatório");
-        } if (funcionario.getCargo() == null || funcionario.getCargo().trim().isEmpty()){
+        } if (requestDto.getCargo() == null || requestDto.getCargo().trim().isEmpty()){
             throw new ValidacaoException("O cargo do funcionário é obrigatório");
         }
     }

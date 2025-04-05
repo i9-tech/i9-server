@@ -28,6 +28,19 @@ public class ProdutoService {
         return repository.save(produto);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    
+
     public List<Produto> listarPorEmpresa(int fkEmpresa) {
         List<Produto> todosProdutosEmpresa = repository.findByFkEmpresa(fkEmpresa);
 

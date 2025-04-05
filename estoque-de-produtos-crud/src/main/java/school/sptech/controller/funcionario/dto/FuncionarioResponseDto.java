@@ -1,26 +1,43 @@
-package school.sptech.controller.colaborador.dto;
+package school.sptech.controller.funcionario.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 public class FuncionarioResponseDto {
-    private int id;
+
+    //id
+    //fk
+
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
+
+    @NotBlank(message = "O CPF é obrigatório")
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+            message = "O cpf deve ser no formato 999.999.999-99 ")
     private String cpf;
+
+    @NotBlank(message = "O cargo é obrigatório")
     private String cargo;
+
+    @NotBlank(message = "A data de admissão é obrigatória")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    //definir um padrão de armazenamento
     private LocalDate dataAdmissao;
+
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
-    private int fkEmpresa;
 
-    public FuncionarioResponseDto(int id, String nome, String cpf, String cargo,
+    public FuncionarioResponseDto( String nome, String cpf, String cargo,
                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                  boolean acessoSetorAtendimento, boolean proprietario, int fkEmpresa) {
-        this.id = id;
+                                  boolean acessoSetorAtendimento, boolean proprietario) {
+
         this.nome = nome;
         this.cpf = cpf;
         this.cargo = cargo;
@@ -29,35 +46,7 @@ public class FuncionarioResponseDto {
         this.acessoSetorEstoque = acessoSetorEstoque;
         this.acessoSetorAtendimento = acessoSetorAtendimento;
         this.proprietario = proprietario;
-        this.fkEmpresa = fkEmpresa;
-    }
 
-    //convertendo entity em dto
-    public static FuncionarioResponseDto fromEntity(Funcionario funcionario){
-        if (funcionario == null){
-            return null;
-        }
-
-        return new FuncionarioResponseDto(
-                funcionario.getId(),
-                funcionario.getNome(),
-                funcionario.getCpf(),
-                funcionario.getCargo(),
-                funcionario.getDataAdmissao(),
-                funcionario.isAcessoSetorCozinha(),
-                funcionario.isAcessoSetorEstoque(),
-                funcionario.isAcessoSetorAtendimento(),
-                funcionario.isProprietario(),
-                funcionario.getFkEmpresa()
-        );
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -124,11 +113,4 @@ public class FuncionarioResponseDto {
         this.proprietario = proprietario;
     }
 
-    public int getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
-    }
 }

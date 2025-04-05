@@ -11,7 +11,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
    //exemplo de optional e list
    // optional = retorna 0 ou 1 usuario da fkempresa informada
    // list = retorna lista fazia ou com funcionarios
-    Optional<Funcionario> findByIdAndFkEmpresa(int id, int fkEmpresa);
+   Optional<Funcionario> findByIdAndFkEmpresa(int id, int fkEmpresa);
 
     List<Funcionario> findByFkEmpresa(int fkEmpresa);
 
