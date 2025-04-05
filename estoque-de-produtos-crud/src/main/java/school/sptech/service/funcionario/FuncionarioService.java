@@ -1,6 +1,7 @@
 package school.sptech.service.funcionario;
 
 import org.springframework.stereotype.Service;
+import school.sptech.controller.funcionario.dto.FuncionarioMapper;
 import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.entity.funcionario.Funcionario;
@@ -32,10 +33,11 @@ public class FuncionarioService {
         }
 
         // Convertendo DTO para entity
-        Funcionario funcionario = FuncionarioRequestDto.toEntity(requestDto, fkEmpresa);
-
-        funcionario = repository.save(funcionario);
-        return FuncionarioResponseDto.fromEntity(funcionario);
+//        Funcionario funcionario = FuncionarioRequestDto.toEntity(requestDto, fkEmpresa);
+//
+//        funcionario = repository.save(funcionario);
+//        return FuncionarioResponseDto.fromEntity(funcionario);
+        return null;
 
     }
 
@@ -47,9 +49,11 @@ public class FuncionarioService {
             return Collections.emptyList(); // Retorna uma lista vazia
         }
 
-        return todosFuncionariosEmpresa.stream()
-                .map(FuncionarioResponseDto::fromEntity)
-                .collect(Collectors.toList()); // Retorna uma lista com dtos
+//        return todosFuncionariosEmpresa.stream()
+//                .map(FuncionarioResponseDto::fromEntity)
+//                .collect(Collectors.toList()); // Retorna uma lista com dtos
+
+        return null;
     }
 
     public FuncionarioResponseDto buscarFuncionarioPorId(int id, int fkEmpresa) {
@@ -61,7 +65,9 @@ public class FuncionarioService {
         }
 
 
-        return FuncionarioResponseDto.fromEntity(funcionario.get());
+//        return FuncionarioResponseDto.fromEntity(funcionario.get());
+
+        return null;
 
     }
 
@@ -102,7 +108,7 @@ public class FuncionarioService {
             throw new ValidacaoException("Você não é proprietário para alterar o acesso aos setores");
         }
 
-       return FuncionarioResponseDto.fromEntity(repository.save(funcionarioExiste));
+        return FuncionarioMapper.toDto(repository.save(funcionarioExiste));
     }
 
     public void validarFuncionario(FuncionarioRequestDto requestDto){

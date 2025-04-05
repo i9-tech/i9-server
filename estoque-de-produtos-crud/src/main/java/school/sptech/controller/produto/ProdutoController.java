@@ -14,8 +14,8 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
 
-    @PostMapping
-    public ResponseEntity<Produto> cadastrar( @RequestBody Produto produtoParaCadastrar, @PathVariable int fkEmpresa) {
+    @PostMapping("/{fkEmpresa}")
+    public ResponseEntity<Produto> cadastrar(@RequestBody Produto produtoParaCadastrar, @PathVariable int fkEmpresa) {
         Produto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, fkEmpresa);
         return ResponseEntity.status(201).body(produtoCadastrado);
     }

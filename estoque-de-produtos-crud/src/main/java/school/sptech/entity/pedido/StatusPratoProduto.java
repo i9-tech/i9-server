@@ -1,30 +1,23 @@
 package school.sptech.entity.pedido;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "status_prato_produto")
 public class StatusPratoProduto {
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private Boolean statusProduto;
     private Boolean statusPedido;
     private String cozinheiro;
     private int fkPedidoPratoProduto;
 
-    public int getFkPedidoPratoProduto() {
-        return fkPedidoPratoProduto;
-    }
-
-    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
-        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -50,5 +43,13 @@ public class StatusPratoProduto {
 
     public void setCozinheiro(String cozinheiro) {
         this.cozinheiro = cozinheiro;
+    }
+
+    public int getFkPedidoPratoProduto() {
+        return fkPedidoPratoProduto;
+    }
+
+    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
+        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
     }
 }

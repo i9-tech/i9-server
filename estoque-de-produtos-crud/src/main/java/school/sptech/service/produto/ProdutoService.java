@@ -1,6 +1,7 @@
 package school.sptech.service.produto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import school.sptech.entity.produto.Produto;
 import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProdutoService {
 
     @Autowired
