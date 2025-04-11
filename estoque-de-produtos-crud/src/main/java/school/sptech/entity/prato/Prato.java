@@ -1,9 +1,5 @@
 package school.sptech.entity.prato;
 
-<<<<<<< HEAD
-import aj.org.objectweb.asm.commons.Remapper;
-=======
->>>>>>> 68f745151a904fb362fb0fc9affa540a7a4bd68a
 import jakarta.persistence.*;
 
 @Entity
@@ -75,8 +71,5 @@ public class Prato {
     public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
         this.fkPedidoPratoProduto = fkPedidoPratoProduto;
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 68f745151a904fb362fb0fc9affa540a7a4bd68a
 }
