@@ -1,21 +1,13 @@
-package school.sptech.entity.prato;
+package school.sptech.controller.prato.dto;
 
-import aj.org.objectweb.asm.commons.Remapper;
-import jakarta.persistence.*;
+public class RespostaPratoDto {
 
-@Entity
-@Table(name = "prato")
-public class Prato {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private Double valorVenda;
     private String descricao;
     private Boolean disponivel;
-    private int fkFuncionario;
-    private int fkPedidoPratoProduto;
+
 
     public int getId() {
         return id;
@@ -56,21 +48,4 @@ public class Prato {
     public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
     }
-
-    public int getFkFuncionario() {
-        return fkFuncionario;
-    }
-
-    public void setFkFuncionario(int fkFuncionario) {
-        this.fkFuncionario = fkFuncionario;
-    }
-
-    public int getFkPedidoPratoProduto() {
-        return fkPedidoPratoProduto;
-    }
-
-    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
-        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
-    }
-
 }
