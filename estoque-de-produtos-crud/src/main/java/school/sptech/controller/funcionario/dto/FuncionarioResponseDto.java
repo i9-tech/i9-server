@@ -1,34 +1,12 @@
 package school.sptech.controller.funcionario.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import school.sptech.entity.funcionario.Funcionario;
-
 import java.time.LocalDate;
 
 public class FuncionarioResponseDto {
-
-    //id
-    //fk
-
-    @NotBlank(message = "O nome é obrigatório")
     private String nome;
-
-    @NotBlank(message = "O CPF é obrigatório")
-    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
-            message = "O cpf deve ser no formato 999.999.999-99 ")
     private String cpf;
-
-    @NotBlank(message = "O cargo é obrigatório")
     private String cargo;
-
-    @NotBlank(message = "A data de admissão é obrigatória")
-    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
-    //definir um padrão de armazenamento
     private LocalDate dataAdmissao;
-
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
