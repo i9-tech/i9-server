@@ -19,7 +19,9 @@ public class FuncionarioController {
     }
 
     @PostMapping("/{fkEmpresa}")
-    public ResponseEntity<FuncionarioResponseDto> cadastrar(@RequestBody FuncionarioRequestDto requestDto, @PathVariable int fkEmpresa) {
+    public ResponseEntity<FuncionarioResponseDto> cadastrar(
+            @RequestBody FuncionarioRequestDto requestDto,
+            @PathVariable int fkEmpresa) {
         FuncionarioResponseDto responseDto = service.cadastrarFuncionario(requestDto, fkEmpresa);
         return ResponseEntity.status(201).body(responseDto);
     }

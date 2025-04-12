@@ -11,6 +11,7 @@ public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String CNPJ;
     private String endereco;
     private LocalDate dataAtivacao;
