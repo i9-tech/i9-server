@@ -1,13 +1,13 @@
-package school.sptech.colaboradores;
+package school.sptech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ColaboradorApplication {
+public class FuncionarioApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ColaboradorApplication.class, args);
+		SpringApplication.run(FuncionarioApplication.class, args);
 	}
 
 }

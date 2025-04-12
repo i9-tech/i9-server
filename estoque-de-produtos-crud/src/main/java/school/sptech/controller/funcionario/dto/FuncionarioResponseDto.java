@@ -1,17 +1,8 @@
-package school.sptech.colaboradores;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+package school.sptech.controller.funcionario.dto;
 
 import java.time.LocalDate;
 
-@Entity
-public class Colaborador {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class FuncionarioResponseDto {
     private String nome;
     private String cpf;
     private String cargo;
@@ -20,22 +11,20 @@ public class Colaborador {
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
-    private int fkEmpresa;
-    private String senha;
 
+    public FuncionarioResponseDto( String nome, String cpf, String cargo,
+                                  LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                  boolean acessoSetorAtendimento, boolean proprietario) {
 
-    public void gerarSenha() {
-        if (cpf != null) {
-            this.senha = fkEmpresa + "@" + cpf;
-        }
-    }
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cargo = cargo;
+        this.dataAdmissao = dataAdmissao;
+        this.acessoSetorCozinha = acessoSetorCozinha;
+        this.acessoSetorEstoque = acessoSetorEstoque;
+        this.acessoSetorAtendimento = acessoSetorAtendimento;
+        this.proprietario = proprietario;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -70,31 +59,6 @@ public class Colaborador {
         this.dataAdmissao = dataAdmissao;
     }
 
-    public boolean isProprietario() {
-        return proprietario;
-    }
-
-    public void setProprietario(boolean proprietario) {
-        this.proprietario = proprietario;
-    }
-
-    public int getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-
     public boolean isAcessoSetorCozinha() {
         return acessoSetorCozinha;
     }
@@ -118,4 +82,13 @@ public class Colaborador {
     public void setAcessoSetorAtendimento(boolean acessoSetorAtendimento) {
         this.acessoSetorAtendimento = acessoSetorAtendimento;
     }
+
+    public boolean isProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(boolean proprietario) {
+        this.proprietario = proprietario;
+    }
+
 }
