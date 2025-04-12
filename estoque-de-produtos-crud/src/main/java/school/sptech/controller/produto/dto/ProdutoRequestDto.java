@@ -1,54 +1,68 @@
-package school.sptech.entity.produto;
+package school.sptech.controller.produto.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "produto")
-public class Produto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private int codigo;
-    //    @Lob
-//    private byte[] imagem;
-    private String nome;
-    private int quantidade;
-    private LocalDate dataVencimento;
-    private double valorCompra;
-    private double valorUnitario;
-    private int quantidadeMin;
-    private int quantidadeMax;
-    private String descricao;
-    private String categoria;
-    private String setor;
-    private LocalDate dataRegistro;
-    @ManyToOne
-    private Funcionario funcionario;
+public class ProdutoRequestDto {
 
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
+    @NotNull
+    private Integer codigo;
+
+    private String nome;
+
+    @NotNull
+    @Min(1)
+    private Integer quantidade;
+
+    @NotNull
+    @Future
+    private LocalDate dataVencimento;
+
+    @NotNull
+    private Double valorCompra;
+
+    @NotNull
+    private Double valorUnitario;
+
+    @NotNull
+    private Integer quantidadeMin;
+
+    @NotNull
+    private Integer quantidadeMax;
+
+    @NotBlank
+    private String descricao;
+
+    @NotBlank
+    private String categoria;
+
+    @NotBlank
+    private String setor;
+
+    @NotNull
+    private LocalDate dataRegistro;
+
+
+    private Funcionario funcionario;
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
 
-    public Integer getId() {
-        return id;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public int getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -60,11 +74,11 @@ public class Produto {
         this.nome = nome;
     }
 
-    public int getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -76,35 +90,35 @@ public class Produto {
         this.dataVencimento = dataVencimento;
     }
 
-    public double getValorCompra() {
+    public Double getValorCompra() {
         return valorCompra;
     }
 
-    public void setValorCompra(double valorCompra) {
+    public void setValorCompra(Double valorCompra) {
         this.valorCompra = valorCompra;
     }
 
-    public double getValorUnitario() {
+    public Double getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(double valorUnitario) {
+    public void setValorUnitario(Double valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 
-    public int getQuantidadeMin() {
+    public Integer getQuantidadeMin() {
         return quantidadeMin;
     }
 
-    public void setQuantidadeMin(int quantidadeMin) {
+    public void setQuantidadeMin(Integer quantidadeMin) {
         this.quantidadeMin = quantidadeMin;
     }
 
-    public int getQuantidadeMax() {
+    public Integer getQuantidadeMax() {
         return quantidadeMax;
     }
 
-    public void setQuantidadeMax(int quantidadeMax) {
+    public void setQuantidadeMax(Integer quantidadeMax) {
         this.quantidadeMax = quantidadeMax;
     }
 
@@ -139,5 +153,6 @@ public class Produto {
     public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
+
 
 }
