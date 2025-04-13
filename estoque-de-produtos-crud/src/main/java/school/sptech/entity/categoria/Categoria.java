@@ -1,11 +1,12 @@
 package school.sptech.entity.categoria;
 
 import jakarta.persistence.*;
+import school.sptech.controller.categoria.dto.CategoriaListagemDto;
 import school.sptech.entity.empresa.Empresa;
 
 @Entity
 @Table(name = "categoria")
-public class Categoria {
+public class Categoria extends CategoriaListagemDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

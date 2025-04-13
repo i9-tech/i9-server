@@ -4,18 +4,21 @@ import school.sptech.entity.categoria.Categoria;
 
 public class CategoriaMapper {
     public static Categoria transformarEmEntidade(CategoriaCadastroDto categoriaEnviadaDto) {
-        return null;
+        Categoria entidadeCategoria = new Categoria();
+        entidadeCategoria.setNome(categoriaEnviadaDto.getNome());
+        return entidadeCategoria;
     }
 
     public static Categoria transformarEmEntidade(CategoriaAtualizarDto categoriaEnviadaDto) {
-        return null;
+        Categoria entidadeCategoriaParaAtualizar = new Categoria();
+        entidadeCategoriaParaAtualizar.setNome(categoriaEnviadaDto.getNome());
+        return entidadeCategoriaParaAtualizar;
     }
 
-    public static CategoriaListagemDto transformarEmRespostaDto(Categoria entidadeCategoriaResposta) {
-        return null;
+    public static Categoria transformarEmRespostaDto(CategoriaListagemDto entidadeCategoriaResposta) {
+        Categoria entidadeCategoriaParaResposta = new Categoria();
+        entidadeCategoriaParaResposta.setId(entidadeCategoriaResposta.getId());
+        entidadeCategoriaParaResposta.setNome(entidadeCategoriaResposta.getNome());
+        return entidadeCategoriaParaResposta;
     }
-
-    /*
-     * Realizar conversão necessária
-     * */
 }

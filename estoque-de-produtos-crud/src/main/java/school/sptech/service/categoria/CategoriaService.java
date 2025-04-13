@@ -22,7 +22,7 @@ public class CategoriaService {
         return categoriaRepository.save(categoriaParaCadastrar);
     }
 
-    public List<Categoria> listar() {
+    public List<Categoria> listarTodasCategorias() {
         return categoriaRepository.findAll();
     }
 
@@ -35,4 +35,13 @@ public class CategoriaService {
         return categoriaEncontrada.get();
     }
 
+    public void removerCategoria(Integer id) {
+        Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
+
+        if (categoriaEncontrada.isEmpty()) {
+            throw new EntidadeNaoEncontradaException();
+        }
+
+        categoriaRepository.deleteById(id);
+    }
 }
