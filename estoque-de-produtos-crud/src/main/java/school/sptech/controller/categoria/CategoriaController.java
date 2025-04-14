@@ -25,8 +25,8 @@ public class CategoriaController {
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping()
-    public ResponseEntity<CategoriaListagemDto> listagem() {
+    @GetMapping
+    public ResponseEntity<List<CategoriaListagemDto>> listagem() {
         List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias();
         if (buscarCategoria.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -37,7 +37,7 @@ public class CategoriaController {
         for (int i = 0; i < buscarCategoria.size(); i++) {
             respostaCategoriaDto.add(CategoriaMapper.transformarEmRespostaDto(buscarCategoria.get(i)));
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body((CategoriaListagemDto) respostaCategoriaDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(respostaCategoriaDto);
     }
 
     @GetMapping("/{id}")

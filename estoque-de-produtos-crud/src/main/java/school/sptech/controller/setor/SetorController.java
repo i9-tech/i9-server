@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/setor")
+@RequestMapping("/setores")
 public class SetorController {
 
     private final SetorService setorService;

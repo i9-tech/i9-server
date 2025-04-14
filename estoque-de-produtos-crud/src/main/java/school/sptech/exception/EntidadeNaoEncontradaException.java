@@ -10,6 +10,6 @@ public class EntidadeNaoEncontradaException extends RuntimeException {
     }
 
     public EntidadeNaoEncontradaException() {
-        super("A categoria não foi encontrada");
+        super();
     }
 }
