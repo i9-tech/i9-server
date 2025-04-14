@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.controller.setor.dto.SetorAtualizarDto;
 import school.sptech.controller.setor.dto.SetorCadastroDto;
 import school.sptech.controller.setor.dto.SetorListagemDto;
 import school.sptech.controller.setor.dto.SetorMapper;
-import school.sptech.controller.setor.dto.SetorAtualizarDto;
 import school.sptech.entity.setor.Setor;
 import school.sptech.service.setor.SetorService;
 

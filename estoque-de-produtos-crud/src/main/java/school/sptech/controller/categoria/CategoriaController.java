@@ -40,6 +40,19 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body((CategoriaListagemDto) respostaCategoriaDto);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer id) {
+        Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(id);
+
+        if (categoriaEncontrado.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        CategoriaListagemDto respostaListagemIdDto = CategoriaMapper.transformarEmRespostaDto(categoriaEncontrado.get());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
+    }
+
 
     @PostMapping
     public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {

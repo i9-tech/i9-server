@@ -26,6 +26,15 @@ public class CategoriaService {
         return categoriaRepository.findAll();
     }
 
+    public Optional<Categoria> buscarCategoriaPorId(Integer id) {
+        Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
+
+        if (categoriaEncontrada.isEmpty()) {
+            throw new EntidadeNaoEncontradaException();
+        }
+        return categoriaEncontrada;
+    }
+
     public Categoria atualizarCategoria(Integer id, Categoria categoriaParaAtualizar) {
         Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 
