@@ -1,6 +1,7 @@
 package school.sptech.controller.categoria;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
+    @Autowired
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
@@ -53,6 +55,16 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
+    //TENTATIVA POR URI AO DIGITAR
+    @GetMapping
+    public List<Categoria> listar(@RequestParam(required = false) String nome) {
+        if (nome != null && !nome.isEmpty()) {
+            return categoriaService.buscarPorNome(nome);
+        } else {
+            return categoriaService.listarTodasCategorias(); //metodo que retorna todas as categorias
+                                                            //coloquei para teste
+        }
+    }
 
     @PostMapping
     public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {

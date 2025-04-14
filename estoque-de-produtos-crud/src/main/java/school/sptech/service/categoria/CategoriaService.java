@@ -1,5 +1,6 @@
 package school.sptech.service.categoria;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.categoria.Categoria;
 import school.sptech.exception.EntidadeNaoEncontradaException;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Service
 public class CategoriaService {
 
+    @Autowired
     private final CategoriaRepository categoriaRepository;
 
     public CategoriaService(CategoriaRepository categoriaRepository) {
@@ -33,6 +35,11 @@ public class CategoriaService {
             throw new EntidadeNaoEncontradaException();
         }
         return categoriaEncontrada;
+    }
+
+    //TENTATIVA POR URI AO DIGITAR
+    public List<Categoria> buscarPorNome(String nome) {
+        return categoriaRepository.findByNomeContainingIgnoreCase(nome);
     }
 
     public Categoria atualizarCategoria(Integer id, Categoria categoriaParaAtualizar) {
