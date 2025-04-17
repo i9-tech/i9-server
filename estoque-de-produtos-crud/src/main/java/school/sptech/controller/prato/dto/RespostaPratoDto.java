@@ -1,31 +1,22 @@
-package school.sptech.entity.prato;
+package school.sptech.controller.prato.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
 import school.sptech.entity.funcionario.Funcionario;
 
-@Entity
-@Table(name = "prato")
-public class Prato {
+public class RespostaPratoDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
     private String imagem;
     private Double valorVenda;
     private String descricao;
     private Boolean disponivel;
-
     @ManyToOne
     private Funcionario funcionario;
-
     //@ManyToOne
     private String setor;
-
     //@ManyToOne
     private String categoria;
-
-
 
     public int getId() {
         return id;
