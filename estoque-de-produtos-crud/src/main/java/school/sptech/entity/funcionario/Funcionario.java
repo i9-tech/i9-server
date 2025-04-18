@@ -54,7 +54,7 @@ public class Funcionario {
         this.ativo = ativo;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
