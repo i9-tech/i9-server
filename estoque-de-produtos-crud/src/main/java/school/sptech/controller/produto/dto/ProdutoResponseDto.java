@@ -1,39 +1,50 @@
-package school.sptech.entity.produto;
+package school.sptech.controller.produto.dto;
 
-import jakarta.persistence.*;
 import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "produto")
-public class Produto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProdutoResponseDto {
     private Integer id;
-    private int codigo;
-    //    @Lob
-//    private byte[] imagem;
+    private Integer codigo;
     private String nome;
-    private int quantidade;
+    private Integer quantidade;
     private LocalDate dataVencimento;
-    private double valorCompra;
-    private double valorUnitario;
-    private int quantidadeMin;
-    private int quantidadeMax;
+    private Double valorCompra;
+    private Double valorUnitario;
+    private Integer quantidadeMin;
+    private Integer quantidadeMax;
     private String descricao;
     private String categoria;
     private String setor;
     private LocalDate dataRegistro;
-    @ManyToOne
     private Funcionario funcionario;
 
-    public Funcionario getFuncionario() {
-        return funcionario;
+
+    public ProdutoResponseDto(Integer id, String nome, int codigo, int quantidade, LocalDate dataVencimento, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, String categoria, String setor, LocalDate dataRegistro, Funcionario funcionario) {
+        this.id = id; // Atribuindo o ID
+        this.nome = nome;
+        this.codigo = codigo;
+        this.quantidade = quantidade;
+        this.dataVencimento = dataVencimento;
+        this.valorCompra = valorCompra;
+        this.valorUnitario = valorUnitario;
+        this.quantidadeMin = quantidadeMin;
+        this.quantidadeMax = quantidadeMax;
+        this.descricao = descricao;
+        this.categoria = categoria;
+        this.setor = setor;
+        this.dataRegistro = dataRegistro;
+        this.funcionario = funcionario;
     }
+
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
     public Integer getId() {
@@ -44,11 +55,11 @@ public class Produto {
         this.id = id;
     }
 
-    public int getCodigo() {
+    public Integer getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
 
@@ -60,11 +71,11 @@ public class Produto {
         this.nome = nome;
     }
 
-    public int getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -76,35 +87,35 @@ public class Produto {
         this.dataVencimento = dataVencimento;
     }
 
-    public double getValorCompra() {
+    public Double getValorCompra() {
         return valorCompra;
     }
 
-    public void setValorCompra(double valorCompra) {
+    public void setValorCompra(Double valorCompra) {
         this.valorCompra = valorCompra;
     }
 
-    public double getValorUnitario() {
+    public Double getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(double valorUnitario) {
+    public void setValorUnitario(Double valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 
-    public int getQuantidadeMin() {
+    public Integer getQuantidadeMin() {
         return quantidadeMin;
     }
 
-    public void setQuantidadeMin(int quantidadeMin) {
+    public void setQuantidadeMin(Integer quantidadeMin) {
         this.quantidadeMin = quantidadeMin;
     }
 
-    public int getQuantidadeMax() {
+    public Integer getQuantidadeMax() {
         return quantidadeMax;
     }
 
-    public void setQuantidadeMax(int quantidadeMax) {
+    public void setQuantidadeMax(Integer quantidadeMax) {
         this.quantidadeMax = quantidadeMax;
     }
 
@@ -139,5 +150,6 @@ public class Produto {
     public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
+
 
 }

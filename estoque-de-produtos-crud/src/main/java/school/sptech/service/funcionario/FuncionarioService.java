@@ -32,12 +32,11 @@ public class FuncionarioService {
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");
         }
 
-        // Convertendo DTO para entity
-//        Funcionario funcionario = FuncionarioRequestDto.toEntity(requestDto, fkEmpresa);
-//
-//        funcionario = repository.save(funcionario);
-//        return FuncionarioResponseDto.fromEntity(funcionario);
-        return null;
+       //  Convertendo DTO para entity
+        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, fkEmpresa);
+
+        funcionario = repository.save(funcionario);
+        return FuncionarioMapper.toDto(funcionario);
 
     }
 
@@ -49,11 +48,11 @@ public class FuncionarioService {
             return Collections.emptyList(); // Retorna uma lista vazia
         }
 
-//        return todosFuncionariosEmpresa.stream()
-//                .map(FuncionarioResponseDto::fromEntity)
-//                .collect(Collectors.toList()); // Retorna uma lista com dtos
+        return todosFuncionariosEmpresa.stream()
+                .map(FuncionarioMapper::toDto)
+                .collect(Collectors.toList()); // Retorna uma lista com dtos
 
-        return null;
+
     }
 
     public FuncionarioResponseDto buscarFuncionarioPorId(int id, int fkEmpresa) {
@@ -65,9 +64,7 @@ public class FuncionarioService {
         }
 
 
-//        return FuncionarioResponseDto.fromEntity(funcionario.get());
-
-        return null;
+        return FuncionarioMapper.toDto(funcionario.get());
 
     }
 

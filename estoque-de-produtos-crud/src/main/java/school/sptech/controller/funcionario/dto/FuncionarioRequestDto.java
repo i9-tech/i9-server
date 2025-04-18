@@ -9,8 +9,8 @@ import java.time.LocalDate;
 
 public class FuncionarioRequestDto {
 
-
     private Integer id;
+    private Integer fkEmpresa;
 
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
@@ -38,10 +38,11 @@ public class FuncionarioRequestDto {
     message = "A senha deve ter no mínimo 11 caracteres")
     private String senha;
 
-    public FuncionarioRequestDto(Integer id, String nome, String cpf, String cargo,
+    public FuncionarioRequestDto(Integer id, Integer fkEmpresa, String nome, String cpf, String cargo,
                                  LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                  boolean acessoSetorAtendimento, boolean proprietario, String senha) {
         this.id = id;
+        this.fkEmpresa = fkEmpresa;
         this.nome = nome;
         this.cpf = cpf;
         this.cargo = cargo;
@@ -59,6 +60,14 @@ public class FuncionarioRequestDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getFkEmpresa() {
+        return fkEmpresa;
+    }
+
+    public void setFkEmpresa(Integer fkEmpresa) {
+        this.fkEmpresa = fkEmpresa;
     }
 
     public String getNome() {
