@@ -26,7 +26,6 @@ public class FuncionarioMapper {
         funcionario.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
         funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionario.setProprietario(requestDto.isProprietario());
-        funcionario.setFkEmpresa(fkEmpresa);
         funcionario.setSenha(requestDto.getSenha());
 
         return funcionario;

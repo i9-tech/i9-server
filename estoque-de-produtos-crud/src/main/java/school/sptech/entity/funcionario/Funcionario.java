@@ -1,6 +1,7 @@
 package school.sptech.entity.funcionario;
 
 import jakarta.persistence.*;
+import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
 
@@ -19,14 +20,20 @@ public class Funcionario {
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
-    private int fkEmpresa;
+    private boolean ativo = true;
+
     private String senha;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_empresa")
+    private Empresa empresa;
 
-    public void gerarSenha() {
-        if (cpf != null) {
-            this.senha = fkEmpresa + "@" + cpf;
-        }
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public int getId() {
@@ -69,31 +76,6 @@ public class Funcionario {
         this.dataAdmissao = dataAdmissao;
     }
 
-    public boolean isProprietario() {
-        return proprietario;
-    }
-
-    public void setProprietario(boolean proprietario) {
-        this.proprietario = proprietario;
-    }
-
-    public int getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-
     public boolean isAcessoSetorCozinha() {
         return acessoSetorCozinha;
     }
@@ -116,5 +98,29 @@ public class Funcionario {
 
     public void setAcessoSetorAtendimento(boolean acessoSetorAtendimento) {
         this.acessoSetorAtendimento = acessoSetorAtendimento;
+    }
+
+    public boolean isProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(boolean proprietario) {
+        this.proprietario = proprietario;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 }

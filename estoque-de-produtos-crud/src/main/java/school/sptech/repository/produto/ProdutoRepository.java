@@ -10,12 +10,17 @@ import java.util.Optional;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
-    @Query("select produto from Produto produto join produto.funcionario funcionario where funcionario.fkEmpresa = (select funcionario2.fkEmpresa from Funcionario funcionario2 where funcionario2.id = :idFuncionario)")
+    @Query("SELECT p FROM Produto p JOIN p.funcionario f WHERE f.empresa = (SELECT f2.empresa FROM Funcionario f2 WHERE f2.id = :idFuncionario)")
     List<Produto> buscarProdutosDaEmpresaDoFuncionario(@Param("idFuncionario") Integer idFuncionario);
 
     Optional<Produto> findById(Integer id);
 
-    @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where produto.id = :id and funcionarioProduto.fkEmpresa = ( select funcionarioParametro.fkEmpresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
-    Optional<Produto> buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(@Param("id") Integer id, @Param("idFuncionario") Integer idFuncionario);
+    @Query("SELECT produto FROM Produto produto " +
+            "JOIN produto.funcionario funcionarioProduto " +
+            "WHERE produto.id = :id AND funcionarioProduto.empresa = (" +
+            "SELECT funcionarioParametro.empresa FROM Funcionario funcionarioParametro " +
+            "WHERE funcionarioParametro.id = :idFuncionario)")
+    Optional<Produto> buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(@Param("id") Integer id,
+                                                                                       @Param("idFuncionario") Integer idFuncionario);
 
 }

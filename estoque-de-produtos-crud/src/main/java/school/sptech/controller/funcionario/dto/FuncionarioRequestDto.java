@@ -4,13 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
 
 public class FuncionarioRequestDto {
 
     private Integer id;
-    private Integer fkEmpresa;
+    private Empresa empresa;
 
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
@@ -38,11 +39,10 @@ public class FuncionarioRequestDto {
     message = "A senha deve ter no mínimo 11 caracteres")
     private String senha;
 
-    public FuncionarioRequestDto(Integer id, Integer fkEmpresa, String nome, String cpf, String cargo,
+    public FuncionarioRequestDto(Integer id, String nome, String cpf, String cargo,
                                  LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                  boolean acessoSetorAtendimento, boolean proprietario, String senha) {
         this.id = id;
-        this.fkEmpresa = fkEmpresa;
         this.nome = nome;
         this.cpf = cpf;
         this.cargo = cargo;
@@ -54,20 +54,20 @@ public class FuncionarioRequestDto {
         this.senha = senha;
     }
 
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(Integer fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
     }
 
     public String getNome() {
