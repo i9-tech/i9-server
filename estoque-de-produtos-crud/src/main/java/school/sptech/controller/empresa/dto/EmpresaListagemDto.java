@@ -1,18 +1,12 @@
-package school.sptech.entity.empresa;
-
-import jakarta.persistence.*;
+package school.sptech.controller.empresa.dto;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "empresa")
-public class Empresa {
+public class EmpresaListagemDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    private String CNPJ;
+    private String cnpj;
     private String endereco;
     private LocalDate dataCadastro;
     private boolean ativo;
@@ -33,21 +27,17 @@ public class Empresa {
         this.nome = nome;
     }
 
-    public String getCNPJ() {
-        return CNPJ;
+    public String getCnpj() {
+        return cnpj;
     }
 
-    public void setCNPJ(String CNPJ) {
-        this.CNPJ = CNPJ;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
+    public String getEndereco() { return endereco; }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
+    public void setEndereco(String endereco) { this.endereco = endereco; }
 
     public LocalDate getDataCadastro() {
         return dataCadastro;
