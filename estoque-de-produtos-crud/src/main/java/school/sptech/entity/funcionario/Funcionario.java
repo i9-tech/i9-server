@@ -1,6 +1,8 @@
 package school.sptech.entity.funcionario;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
@@ -12,18 +14,34 @@ public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotBlank(message = "O nome é obrigatório")
+    @Size(min = 3, max = 20)
     private String nome;
+
+    @NotBlank(message = "O CPF é obrigatório")
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 999.999.999-99")
     private String cpf;
+
+    @NotBlank(message = "O cargo é obrigatório")
     private String cargo;
+
+    @NotNull(message = "A data de admissão é obrigatória")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataAdmissao;
+
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
     private boolean ativo = true;
 
+    @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres")
     private String senha;
 
+    @NotNull(message = "A empresa vinculada é obrigatória")
     @ManyToOne
     @JoinColumn(name = "fk_empresa")
     private Empresa empresa;

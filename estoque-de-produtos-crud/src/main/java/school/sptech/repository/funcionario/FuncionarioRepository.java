@@ -18,6 +18,8 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
    // list = retorna lista fazia ou com funcionarios
    Optional<Funcionario> findByIdAndEmpresa(int id, Empresa empresa);
 
+    Optional<Funcionario> findByCpf(String cpf);
+
     boolean existsByCpfIgnoreCaseAndEmpresa(String cpf, Empresa empresa);
 
     @Modifying // modificam o estado das entidades no banco

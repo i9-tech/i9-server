@@ -1,42 +1,59 @@
 package school.sptech.controller.funcionario.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.*;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
 
 public class FuncionarioRequestDto {
 
+    @Schema(description = "ID do funcionário usado para atualização", example = "1")
     private Integer id;
+
+    @NotNull(message = "A empresa é obrigatória")
+    @Schema(description = "Empresa vinculada ao funcionário")
     private Empresa empresa;
 
+    @Size(min = 3, max = 20)
+    @Schema(description = "Nome do usuário", example = "Isabela Rosa")
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
     @NotBlank(message = "O CPF é obrigatório")
     @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
             message = "O cpf deve ser no formato 999.999.999-99 ")
+    @Schema(description = "CPF do usuário", example = "123.456.789-00")
     private String cpf;
 
     @NotBlank(message = "O cargo é obrigatório")
+    @Schema(description = "Cargo do funcionário", example = "Cozinheira")
     private String cargo;
 
-    @NotBlank(message = "A data de admissão é obrigatória")
+    @NotNull(message = "A data de admissão é obrigatória")
     @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Schema(description = "Data de admissão do funcionário", example = "17/07/2004")
     //definir um padrão de armazenamento
     private LocalDate dataAdmissao;
 
+    @Schema(description = "Acesso ao setor da cozinha", example = "true")
     private boolean acessoSetorCozinha;
+
+    @Schema(description = "Acesso ao setor do estoque", example = "true")
     private boolean acessoSetorEstoque;
+
+    @Schema(description = "Acesso ao setor do atendimento", example = "true")
     private boolean acessoSetorAtendimento;
+
+    @Schema(description = "Se o funcionário é proprietário", example = "false")
     private boolean proprietario;
 
     @NotBlank(message = "A senha é obrigatória")
     @Size(min = 11,
     message = "A senha deve ter no mínimo 11 caracteres")
+    @Schema(description = "Senha de acesso", example = "10@50234000856")
     private String senha;
 
     public FuncionarioRequestDto(Integer id, String nome, String cpf, String cargo,
