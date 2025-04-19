@@ -8,7 +8,7 @@ import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
 
-public class ProdutoRequestDto {
+public class ProdutoCadastroDto {
 
     @NotNull
     private Integer codigo;
@@ -46,7 +46,6 @@ public class ProdutoRequestDto {
 
     @NotNull
     private LocalDate dataRegistro;
-
 
     private Funcionario funcionario;
 
@@ -153,6 +152,5 @@ public class ProdutoRequestDto {
     public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
-
 
 }
