@@ -111,4 +111,6 @@ public class FuncionarioResponseDto {
         this.proprietario = proprietario;
     }
 
+    public void setId(long id) {
+    }
 }

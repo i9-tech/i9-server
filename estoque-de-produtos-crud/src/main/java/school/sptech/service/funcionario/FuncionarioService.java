@@ -45,7 +45,7 @@ public class FuncionarioService {
 
     private void gerarSenha(FuncionarioRequestDto requestDto) {
         if (requestDto.getCpf() != null && requestDto.getEmpresa() != null) {
-            requestDto.setSenha(requestDto.getEmpresa().getId() + "@" + requestDto.getCpf());
+            requestDto.setSenha(requestDto.getEmpresa().getNome() + "@" + requestDto.getCpf());
         }
     }
 

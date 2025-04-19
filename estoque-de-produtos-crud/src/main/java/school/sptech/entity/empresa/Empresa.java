@@ -11,9 +11,18 @@ public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String nome;
     private String CNPJ;
     private String endereco;
     private LocalDate dataAtivacao;
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
     public Integer getId() {
         return id;
