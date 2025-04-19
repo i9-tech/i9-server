@@ -56,15 +56,15 @@ public class CategoriaController {
     }
 
     //TENTATIVA POR URI AO DIGITAR
-    @GetMapping
-    public List<Categoria> listar(@RequestParam(required = false) String nome) {
-        if (nome != null && !nome.isEmpty()) {
-            return categoriaService.buscarPorNome(nome);
-        } else {
-            return categoriaService.listarTodasCategorias(); //metodo que retorna todas as categorias
-                                                            //coloquei para teste
-        }
-    }
+    // @GetMapping
+    // public List<Categoria> listar(@RequestParam(required = false) String nome) {
+    //     if (nome != null && !nome.isEmpty()) {
+    //         return categoriaService.buscarPorNome(nome);
+    //     } else {
+    //         return categoriaService.listarTodasCategorias(); //metodo que retorna todas as categorias
+    //                                                         //coloquei para teste
+    //     }
+    // }
 
     @PostMapping
     public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {
