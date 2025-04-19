@@ -1,43 +1,49 @@
 package school.sptech.controller.produto.dto;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
 
-public class ProdutoResponseDto {
-    private Integer id;
-    private Integer codigo;
+public class ProdutoEdicaoDto {
+
     private String nome;
+    @NotNull
+    @Min(1)
     private Integer quantidade;
+
+    @NotNull
+    @Future
     private LocalDate dataVencimento;
+
+    @NotNull
     private Double valorCompra;
+
+    @NotNull
     private Double valorUnitario;
+
+    @NotNull
     private Integer quantidadeMin;
+
+    @NotNull
     private Integer quantidadeMax;
+
+    @NotBlank
     private String descricao;
+
+    @NotBlank
     private String categoria;
+
+    @NotBlank
     private String setor;
+
+    @NotNull
     private LocalDate dataRegistro;
+
     private Funcionario funcionario;
-
-
-    public ProdutoResponseDto(Integer id, String nome, int codigo, int quantidade, LocalDate dataVencimento, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, String categoria, String setor, LocalDate dataRegistro, Funcionario funcionario) {
-        this.id = id; // Atribuindo o ID
-        this.nome = nome;
-        this.codigo = codigo;
-        this.quantidade = quantidade;
-        this.dataVencimento = dataVencimento;
-        this.valorCompra = valorCompra;
-        this.valorUnitario = valorUnitario;
-        this.quantidadeMin = quantidadeMin;
-        this.quantidadeMax = quantidadeMax;
-        this.descricao = descricao;
-        this.categoria = categoria;
-        this.setor = setor;
-        this.dataRegistro = dataRegistro;
-        this.funcionario = funcionario;
-    }
-
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
@@ -45,22 +51,6 @@ public class ProdutoResponseDto {
 
     public Funcionario getFuncionario() {
         return funcionario;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -150,6 +140,4 @@ public class ProdutoResponseDto {
     public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
-
-
 }
