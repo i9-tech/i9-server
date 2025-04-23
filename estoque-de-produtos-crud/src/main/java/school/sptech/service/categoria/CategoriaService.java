@@ -37,11 +37,6 @@ public class CategoriaService {
         return categoriaEncontrada;
     }
 
-    //TENTATIVA POR URI AO DIGITAR
-    public List<Categoria> buscarPorNome(String nome) {
-        return categoriaRepository.findByNomeContainingIgnoreCase(nome);
-    }
-
     public Categoria atualizarCategoria(Integer id, Categoria categoriaParaAtualizar) {
         Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 

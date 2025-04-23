@@ -17,6 +17,8 @@ public class Categoria extends CategoriaListagemDto {
     @ManyToOne
     private Empresa empresa;
 
+
+
     public Integer getId() {
         return id;
     }
