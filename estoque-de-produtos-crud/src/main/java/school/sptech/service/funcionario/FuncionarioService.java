@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import school.sptech.controller.funcionario.dto.FuncionarioMapper;
 import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
+import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
@@ -24,25 +25,34 @@ public class FuncionarioService {
         this.repository = repository;
     }
 
-    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, int fkEmpresa){
+    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto,  Empresa empresa){
 
-        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndFkEmpresa(requestDto.getCpf(), fkEmpresa);
+        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa(requestDto.getCpf(), empresa);
 
         if (funcionarioExisteByCpf){
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");
         }
 
-       //  Convertendo DTO para entity
-        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, fkEmpresa);
+        gerarSenha(requestDto);
+
+        //  Convertendo DTO para entity
+        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa.getId());
 
         funcionario = repository.save(funcionario);
         return FuncionarioMapper.toDto(funcionario);
 
     }
 
-    public List<FuncionarioResponseDto> listarPorEmpresa(int fkEmpresa) {
+    private void gerarSenha(FuncionarioRequestDto requestDto) {
+        if (requestDto.getCpf() != null && requestDto.getEmpresa() != null) {
+            requestDto.setSenha(requestDto.getEmpresa().getNome() + "@" + requestDto.getCpf());
+        }
+    }
 
-        List<Funcionario> todosFuncionariosEmpresa = repository.findByFkEmpresa(fkEmpresa);
+
+
+    public List<FuncionarioResponseDto> listarPorEmpresa(Empresa empresa) {
+        List<Funcionario> todosFuncionariosEmpresa = repository.findByEmpresaAndAtivoTrue(empresa);
 
         if (todosFuncionariosEmpresa.isEmpty()) {
             return Collections.emptyList(); // Retorna uma lista vazia
@@ -51,37 +61,34 @@ public class FuncionarioService {
         return todosFuncionariosEmpresa.stream()
                 .map(FuncionarioMapper::toDto)
                 .collect(Collectors.toList()); // Retorna uma lista com dtos
-
-
     }
 
-    public FuncionarioResponseDto buscarFuncionarioPorId(int id, int fkEmpresa) {
-
-        Optional<Funcionario> funcionario = repository.findByIdAndFkEmpresa(id, fkEmpresa);
+    public FuncionarioResponseDto buscarFuncionarioPorId(int id, Empresa empresa) {
+        Optional<Funcionario> funcionario = repository.findByIdAndEmpresa(id, empresa);
 
         if (funcionario.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
-
 
         return FuncionarioMapper.toDto(funcionario.get());
 
     }
 
-    public void removerPorId(int id, int fkEmpresa) {
-
-        Optional<Funcionario> funcionario = repository.findByIdAndFkEmpresa(id, fkEmpresa);
+    public void removerPorId(int id, Empresa empresa) {
+        Optional<Funcionario> funcionario = repository.findByIdAndEmpresa(id, empresa);
 
         if (funcionario.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
-        repository.delete(funcionario.get());
+        Funcionario funcionarioExistente = funcionario.get();
+        repository.softDeleteByIdAndEmpresa(id,empresa);
+
     }
 
 
-    public FuncionarioResponseDto editarFuncionario(int id, int fkEmpresa, FuncionarioRequestDto requestDto){
-        Optional<Funcionario> funcionario = repository.findByIdAndFkEmpresa(id, fkEmpresa);
+    public FuncionarioResponseDto editarFuncionario(int id, Empresa empresa , FuncionarioRequestDto requestDto){
+        Optional<Funcionario> funcionario = repository.findByIdAndEmpresa(id, empresa);
 
         if (funcionario.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
@@ -91,7 +98,6 @@ public class FuncionarioService {
 
         validarFuncionario(requestDto);
 
-        funcionarioExiste.setId(id);
         funcionarioExiste.setCpf(requestDto.getCpf());
         funcionarioExiste.setNome(requestDto.getNome());
         funcionarioExiste.setCargo(requestDto.getCargo());
@@ -117,4 +123,6 @@ public class FuncionarioService {
             throw new ValidacaoException("O cargo do funcionário é obrigatório");
         }
     }
+
+
 }

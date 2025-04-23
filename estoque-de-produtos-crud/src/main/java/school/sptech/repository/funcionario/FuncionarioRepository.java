@@ -1,6 +1,11 @@
 package school.sptech.repository.funcionario;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 
 import java.util.List;
@@ -8,15 +13,19 @@ import java.util.Optional;
 
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
-   //exemplo de optional e list
-   // optional = retorna 0 ou 1 usuario da fkempresa informada
-   // list = retorna lista fazia ou com funcionarios
-   Optional<Funcionario> findByIdAndFkEmpresa(int id, int fkEmpresa);
+    //exemplo de optional e list
+    // optional = retorna 0 ou 1 usuario da fkempresa informada
+    // list = retorna lista fazia ou com funcionarios
+    Optional<Funcionario> findByIdAndEmpresa(int id, Empresa empresa);
 
-    List<Funcionario> findByFkEmpresa(int fkEmpresa);
+    Optional<Funcionario> findByCpf(String cpf);
 
-    boolean existsByCpfIgnoreCaseAndFkEmpresa(String cpf, int fk);
-    boolean existsByIdAndFkEmpresa(Integer id, int fkEmpresa);
+    boolean existsByCpfIgnoreCaseAndEmpresa(String cpf, Empresa empresa);
 
-    void deleteById(Funcionario funcionario);
+    @Modifying // modificam o estado das entidades no banco
+    @Transactional
+    @Query("UPDATE Funcionario f SET f.ativo = false WHERE f.id = :id AND f.empresa = :empresa")
+    void softDeleteByIdAndEmpresa(@Param("id") int id, @Param("empresa") Empresa empresa);
+
+    List<Funcionario> findByEmpresaAndAtivoTrue(Empresa empresa);
 }
