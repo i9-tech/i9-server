@@ -1,6 +1,9 @@
 package school.sptech.entity.funcionario;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
 
@@ -11,25 +14,47 @@ public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotBlank(message = "O nome é obrigatório")
+    @Size(min = 3, max = 20)
     private String nome;
+
+    @NotBlank(message = "O CPF é obrigatório")
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 999.999.999-99")
     private String cpf;
+
+    @NotBlank(message = "O cargo é obrigatório")
     private String cargo;
+
+    @NotNull(message = "A data de admissão é obrigatória")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataAdmissao;
+
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
     private boolean acessoSetorAtendimento;
     private boolean proprietario;
-    private int fkEmpresa;
+    private boolean ativo = true;
+
+    @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres")
     private String senha;
 
+    @NotNull(message = "A empresa vinculada é obrigatória")
+    @ManyToOne
+    @JoinColumn(name = "fk_empresa")
+    private Empresa empresa;
 
-    public void gerarSenha() {
-        if (cpf != null) {
-            this.senha = fkEmpresa + "@" + cpf;
-        }
+    public boolean isAtivo() {
+        return ativo;
     }
 
-    public int getId() {
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public long getId() {
         return id;
     }
 
@@ -69,31 +94,6 @@ public class Funcionario {
         this.dataAdmissao = dataAdmissao;
     }
 
-    public boolean isProprietario() {
-        return proprietario;
-    }
-
-    public void setProprietario(boolean proprietario) {
-        this.proprietario = proprietario;
-    }
-
-    public int getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-
     public boolean isAcessoSetorCozinha() {
         return acessoSetorCozinha;
     }
@@ -116,5 +116,29 @@ public class Funcionario {
 
     public void setAcessoSetorAtendimento(boolean acessoSetorAtendimento) {
         this.acessoSetorAtendimento = acessoSetorAtendimento;
+    }
+
+    public boolean isProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(boolean proprietario) {
+        this.proprietario = proprietario;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 }
