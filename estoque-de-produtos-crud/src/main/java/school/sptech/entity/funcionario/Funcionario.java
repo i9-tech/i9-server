@@ -42,8 +42,8 @@ public class Funcionario {
     private String senha;
 
     @NotNull(message = "A empresa vinculada é obrigatória")
+
     @ManyToOne
-    @JoinColumn(name = "fk_empresa")
     private Empresa empresa;
 
     public boolean isAtivo() {
