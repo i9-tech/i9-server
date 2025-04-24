@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
+
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
@@ -66,14 +66,14 @@ public class CategoriaController {
     //     }
     // }
 
-    @PostMapping
-    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {
-        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro));
-
-        CategoriaListagemDto respostaCategoriaDto = CategoriaMapper.transformarEmRespostaDto(novaCategoria);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(respostaCategoriaDto);
-    }
+//    @PostMapping
+//    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {
+//        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro));
+//
+//        CategoriaListagemDto respostaCategoriaDto = CategoriaMapper.transformarEmRespostaDto(novaCategoria);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(respostaCategoriaDto);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaListagemDto> atualizar(@PathVariable Integer id, @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar) {

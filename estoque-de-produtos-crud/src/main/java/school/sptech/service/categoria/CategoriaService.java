@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import school.sptech.entity.categoria.Categoria;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.categoria.CategoriaRepository;
+import school.sptech.repository.funcionario.FuncionarioRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +14,13 @@ import java.util.Optional;
 public class CategoriaService {
 
     @Autowired
-    private final CategoriaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;@Autowired
 
     public CategoriaService(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public Categoria cadastrarCategoria(Categoria categoriaParaCadastrar) {
+    public Categoria cadastrarCategoria(Categoria categoriaParaCadastrar, Integer idEmpresa) {
         categoriaParaCadastrar.setId(categoriaParaCadastrar.getId());
         return categoriaRepository.save(categoriaParaCadastrar);
     }
