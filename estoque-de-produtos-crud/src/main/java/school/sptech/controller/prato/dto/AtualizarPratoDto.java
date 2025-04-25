@@ -1,39 +1,21 @@
-package school.sptech.entity.prato;
+package school.sptech.controller.prato.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
 import school.sptech.entity.funcionario.Funcionario;
 
-@Entity
-@Table(name = "prato")
-public class Prato {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class AtualizarPratoDto {
     private String nome;
-    private String imagem;
     private Double valorVenda;
+    private String imagem;
     private String descricao;
-    private Boolean disponivel;
+    public boolean disponivel;
 
     @ManyToOne
     private Funcionario funcionario;
-
     //@ManyToOne
     private String setor;
-
     //@ManyToOne
     private String categoria;
-
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getNome() {
         return nome;
@@ -41,14 +23,6 @@ public class Prato {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
     }
 
     public Double getValorVenda() {
@@ -59,6 +33,14 @@ public class Prato {
         this.valorVenda = valorVenda;
     }
 
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
     public String getDescricao() {
         return descricao;
     }
@@ -67,11 +49,11 @@ public class Prato {
         this.descricao = descricao;
     }
 
-    public Boolean getDisponivel() {
+    public boolean isDisponivel() {
         return disponivel;
     }
 
-    public void setDisponivel(Boolean disponivel) {
+    public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
     }
 

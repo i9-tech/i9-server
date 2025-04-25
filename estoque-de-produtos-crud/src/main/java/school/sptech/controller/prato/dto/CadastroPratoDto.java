@@ -1,61 +1,40 @@
-package school.sptech.entity.prato;
+package school.sptech.controller.prato.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import school.sptech.entity.funcionario.Funcionario;
 
-@Entity
-@Table(name = "prato")
-public class Prato {
+public class CadastroPratoDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @NotBlank
     private String nome;
-    private String imagem;
+    @DecimalMin("1.0") @Positive
     private Double valorVenda;
     private String descricao;
-    private Boolean disponivel;
+    private String imagem;
 
     @ManyToOne
     private Funcionario funcionario;
-
     //@ManyToOne
     private String setor;
-
     //@ManyToOne
     private String categoria;
 
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
+    public @NotBlank String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@NotBlank String nome) {
         this.nome = nome;
     }
 
-    public String getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(String imagem) {
-        this.imagem = imagem;
-    }
-
-    public Double getValorVenda() {
+    public @DecimalMin("1.0") @Positive Double getValorVenda() {
         return valorVenda;
     }
 
-    public void setValorVenda(Double valorVenda) {
+    public void setValorVenda(@DecimalMin("1.0") @Positive Double valorVenda) {
         this.valorVenda = valorVenda;
     }
 
@@ -67,12 +46,12 @@ public class Prato {
         this.descricao = descricao;
     }
 
-    public Boolean getDisponivel() {
-        return disponivel;
+    public String getImagem() {
+        return imagem;
     }
 
-    public void setDisponivel(Boolean disponivel) {
-        this.disponivel = disponivel;
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public Funcionario getFuncionario() {
