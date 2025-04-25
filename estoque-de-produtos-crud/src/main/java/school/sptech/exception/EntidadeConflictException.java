@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.CONFLICT)
 public class EntidadeConflictException extends RuntimeException {
 
-    public EntidadeConflictException() {
-    }
-
     public EntidadeConflictException(String message) {
         super(message);
     }

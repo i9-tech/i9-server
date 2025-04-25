@@ -1,6 +1,7 @@
 package school.sptech.entity.prato;
 
 import jakarta.persistence.*;
+import school.sptech.entity.funcionario.Funcionario;
 
 @Entity
 @Table(name = "prato")
@@ -10,11 +11,21 @@ public class Prato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
+    private String imagem;
     private Double valorVenda;
     private String descricao;
     private Boolean disponivel;
-    private int fkFuncionario;
-    private int fkPedidoPratoProduto;
+
+    @ManyToOne
+    private Funcionario funcionario;
+
+    //@ManyToOne
+    private String setor;
+
+    //@ManyToOne
+    private String categoria;
+
+
 
     public int getId() {
         return id;
@@ -30,6 +41,14 @@ public class Prato {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public Double getValorVenda() {
@@ -56,19 +75,27 @@ public class Prato {
         this.disponivel = disponivel;
     }
 
-    public int getFkFuncionario() {
-        return fkFuncionario;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setFkFuncionario(int fkFuncionario) {
-        this.fkFuncionario = fkFuncionario;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
-    public int getFkPedidoPratoProduto() {
-        return fkPedidoPratoProduto;
+    public String getSetor() {
+        return setor;
     }
 
-    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
-        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
+    public void setSetor(String setor) {
+        this.setor = setor;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

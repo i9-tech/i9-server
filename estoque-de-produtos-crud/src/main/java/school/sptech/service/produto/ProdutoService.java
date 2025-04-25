@@ -1,18 +1,23 @@
 package school.sptech.service.produto;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
+import school.sptech.controller.produto.dto.ProdutoMapper;
+import school.sptech.controller.produto.dto.ProdutoCadastroDto;
+import school.sptech.controller.produto.dto.ProdutoListagemDto;
+import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.produto.Produto;
-import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.exception.ValidacaoException;
+import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.produto.ProdutoRepository;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -20,164 +25,153 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
 
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
 
-    public Produto cadastrarProduto(Produto produto, int fkEmpresa){
+    public ProdutoListagemDto cadastrarProduto(@Valid ProdutoCadastroDto produtoCadastroDto, Integer idFuncionario) {
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
-        if (produto.getFkEmpresa() != fkEmpresa) {
-            throw new EntidadeConflictException("Esse usuário já está cadastrado!");
-        }
+        Produto produto = ProdutoMapper.toEntity(produtoCadastroDto);
+        produto.setFuncionario(funcionario);
 
-        return repository.save(produto);
+        Produto produtoCadastrado = repository.save(produto);
+
+        return ProdutoMapper.toDto(produtoCadastrado);
     }
 
+    public List<ProdutoListagemDto> listarProdutoPorEmpresa(Integer idFuncionario) {
 
-
-
-
-
-
-
-
-
-
-
-    
-
-    public List<Produto> listarPorEmpresa(int fkEmpresa) {
-        List<Produto> todosProdutosEmpresa = repository.findByFkEmpresa(fkEmpresa);
-
+        List<Produto> todosProdutosEmpresa = repository.buscarProdutosDaEmpresaDoFuncionario(idFuncionario);
         if (todosProdutosEmpresa.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return todosProdutosEmpresa;
+        return todosProdutosEmpresa.stream()
+                .map(ProdutoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Produto> listarPorNome(String nomeProduto, int fkEmpresa) {
 
-        List<Produto> todosProdutosPorNome = repository.findByNomeProdutoContainingIgnoreCaseAndFkEmpresa(nomeProduto, fkEmpresa);
+    public ProdutoListagemDto editarProduto(Integer id, Integer idFuncionario, @Valid ProdutoEdicaoDto produtoParaEditar) {
+        Optional<Produto> produtoPorEmpresaFuncionario = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
-        if (todosProdutosPorNome.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("Nenhum produto pelo nome %s foi encontrado para a empresa ID: %d", nomeProduto, fkEmpresa));
+        if (produtoPorEmpresaFuncionario.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Produto não encontrado ou não pertence à empresa do funcionário informado.");
         }
 
-        return todosProdutosPorNome;
-    }
+        Produto produtoExiste = produtoPorEmpresaFuncionario.get();
 
-    public List<Produto> listarPorCategoria(String categoriaProduto, int fkEmpresa) {
-
-        List<Produto> todosProdutosPorCategoria = repository.findByCategoriaContainingIgnoreCaseAndFkEmpresa(categoriaProduto, fkEmpresa);
-
-        if (todosProdutosPorCategoria.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("Nenhum produto pela categoria %s foi encontrado para a empresa ID: %d", categoriaProduto, fkEmpresa));
-        }
-
-        return todosProdutosPorCategoria;
-    }
-
-    public List<Produto> listarPorSetor(String setorAlimenticio, int fkEmpresa) {
-
-        List<Produto> todosProdutosPorSetor = repository.findBySetorAlimenticioContainingIgnoreCaseAndFkEmpresa(setorAlimenticio, fkEmpresa);
-
-        if (todosProdutosPorSetor.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("Nenhum produto do setor %s foi encontrado para a empresa ID: %d", setorAlimenticio, fkEmpresa));
-        }
-
-        return todosProdutosPorSetor;
-    }
-
-    public List<Produto> listarEstoqueBaixo(int fkEmpresa) {
-
-        List<Produto> produtos = repository.findByFkEmpresa(fkEmpresa);
-        List<Produto> produtosEstoqueBaixo = new ArrayList<>();
-
-        for (Produto produtoDaVez : produtos) {
-            if (produtoDaVez.getQuantidade() < produtoDaVez.getQuantidadeMin()) {
-                produtosEstoqueBaixo.add(produtoDaVez);
-            }
-        }
-
-        if (produtosEstoqueBaixo.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("Nenhum produto de estoque baixo foi encontrado para a empresa ID: %d", fkEmpresa));
-        }
-
-        return produtosEstoqueBaixo;
-    }
-
-    public List<Produto> listarEstoqueAlto(int fkEmpresa) {
-
-        List<Produto> produtos = repository.findByFkEmpresa(fkEmpresa);
-        List<Produto> produtosEstoqueAlto = new ArrayList<>();
-
-        for (Produto produtoDaVez : produtos) {
-            if (produtoDaVez.getQuantidade() > produtoDaVez.getQuantidadeMax()) {
-                produtosEstoqueAlto.add(produtoDaVez);
-            }
-        }
-
-        if (produtosEstoqueAlto.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("Nenhum produto de estoque alto foi encontrado para a empresa ID: %d", fkEmpresa));
-        }
-
-        return produtosEstoqueAlto;
-    }
-
-    public void removerPorId(int id, int fkEmpresa) {
-
-        Optional<Produto> produto = repository.findByIdAndFkEmpresa(id, fkEmpresa);
-
-        if (produto.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("Produto não encontrado na empresa especificada.");
-        }
-
-        repository.deleteById(produto.get());
-
-    }
-
-    public Produto editarProduto(int id, Produto produtoParaEditar, int fkEmpresa){
-        Optional<Produto> produto = repository.findByIdAndFkEmpresa(id, fkEmpresa);
-
-
-        if (produto.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("Produto não encontrado na empresa especificada.");
-        }
-
-        Produto produtoExiste = produto.get();
-
-        validarProduto(produtoParaEditar);
-
-        produtoExiste.setId(id);
-        produtoExiste.setNomeProduto(produtoParaEditar.getNomeProduto());
+        produtoExiste.setNome(produtoParaEditar.getNome());
+        produtoExiste.setQuantidade(produtoParaEditar.getQuantidade());
         produtoExiste.setDataVencimento(produtoParaEditar.getDataVencimento());
+        produtoExiste.setValorCompra(produtoParaEditar.getValorCompra());
         produtoExiste.setValorUnitario(produtoParaEditar.getValorUnitario());
+        produtoExiste.setQuantidadeMin(produtoParaEditar.getQuantidadeMin());
+        produtoExiste.setQuantidadeMax(produtoParaEditar.getQuantidadeMax());
         produtoExiste.setDescricao(produtoParaEditar.getDescricao());
         produtoExiste.setCategoria(produtoParaEditar.getCategoria());
-        produtoExiste.setSetorAlimenticio(produtoParaEditar.getSetorAlimenticio());
+        produtoExiste.setSetor(produtoParaEditar.getSetor());
+        produtoExiste.setDataRegistro(produtoParaEditar.getDataRegistro());
 
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
-        return repository.save(produtoExiste);
+        produtoExiste.setFuncionario(funcionario);
+
+        ProdutoMapper.atualizarProdutoComDto(produtoExiste, produtoParaEditar);
+        return ProdutoMapper.toDto(repository.save(produtoExiste));
     }
 
-    private void validarProduto(Produto produto){
-        if (produto.getNomeProduto() == null || produto.getNomeProduto().trim().isEmpty()){
-            throw new ValidacaoException("O nome do produto é obrigatório");
+
+    public void removerPorId(Integer id, Integer idFuncionario) {
+        Optional<Produto> produto = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
+
+        if (produto.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Produto não encontrado ou não pertence à empresa do funcionário informado.");
         }
 
-        if (produto.getCategoria() == null || produto.getCategoria().trim().isEmpty()){
-            throw new ValidacaoException("A categoria do produto é obrigatório");
-        }
-
-        if (produto.getSetorAlimenticio() == null || produto.getSetorAlimenticio().trim().isEmpty()){
-            throw new ValidacaoException("O setor alimentício do produto é obrigatório");
-        }
-
-        if (produto.getValorUnitario() <= 0) {
-            throw new ValidacaoException("O valor unitário deve ser maior que zero");
-        }
-
-        if (produto.getDataVencimento() == null){
-            throw new ValidacaoException("A data de vencimento do produto é obrigatório");
-        }
-
+        repository.delete(produto.get());
     }
+
+
+    public Double valorTotalEstoqueProduto(Integer idFuncionario) {
+        Double valorTotal = repository.valorTotalProdutosEstoqueEmpresa(idFuncionario);
+
+        if (valorTotal == null) {
+            valorTotal = 0.0;
+        }
+        return valorTotal;
+    }
+
+    public Double lucroPrevistoEstoqueProduto(Integer idFuncionario) {
+        Double valorTotal = repository.lucroTotalProdutosEstoqueEmpresa(idFuncionario);
+        if (valorTotal == null) {
+            valorTotal = 0.0;
+        }
+
+        return valorTotal;
+    }
+
+
+    public Integer quantidadeProdutoEstoque(Integer idFuncionario) {
+        Integer quantidadeProduto = repository.quantidadeProdutoEstoqueEmpresa(idFuncionario);
+
+        if (quantidadeProduto == null) {
+            quantidadeProduto = 0;
+        }
+        return quantidadeProduto;
+    }
+
+    public Integer quantidadeProdutoEstoqueBaixo(Integer idFuncionario) {
+        Integer quantidadeProduto = repository.quantidadeProdutoEstoqueBaixoEmpresa(idFuncionario);
+
+        if (quantidadeProduto == null) {
+            quantidadeProduto = 0;
+        }
+        return quantidadeProduto;
+    }
+
+    public Integer quantidadeProdutoEstoqueAlto(Integer idFuncionario) {
+        Integer quantidadeProduto = repository.quantidadeProdutoEstoqueAltoEmpresa(idFuncionario);
+
+        if (quantidadeProduto == null) {
+            quantidadeProduto = 0;
+        }
+        return quantidadeProduto;
+    }
+
+    public List<ProdutoListagemDto> listarProdutoPorCategoriaEmpresa(String categoria, Integer idFuncionario) {
+        List<Produto> produtosCategoriaEmpresa = repository.listarProdutoPorCategoriaEmpresa(categoria, idFuncionario);
+        if (produtosCategoriaEmpresa.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return produtosCategoriaEmpresa.stream()
+                .map(ProdutoMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProdutoListagemDto> listarProdutoPorSetorEmpresa(String setor, Integer idFuncionario) {
+        List<Produto> produtosCategoriaEmpresa = repository.listarProdutoPorSetorEmpresa(setor, idFuncionario);
+        if (produtosCategoriaEmpresa.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return produtosCategoriaEmpresa.stream()
+                .map(ProdutoMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProdutoListagemDto> listarProdutoPorNomeEmpresa(String nome, Integer idFuncionario) {
+        List<Produto> produtosNomeEmpresa = repository.listarProdutoPorNomeLikeEmpresa(nome, idFuncionario);
+        if (produtosNomeEmpresa.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return produtosNomeEmpresa.stream()
+                .map(ProdutoMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

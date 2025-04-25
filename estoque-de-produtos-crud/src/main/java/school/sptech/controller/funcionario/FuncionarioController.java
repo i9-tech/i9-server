@@ -1,13 +1,18 @@
 package school.sptech.controller.funcionario;
 
+
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
+
 import school.sptech.service.funcionario.FuncionarioService;
 
 import java.util.List;
+
+//import java.util.List;
 
 @RestController
 @RequestMapping("/colaboradores")
@@ -20,37 +25,33 @@ public class FuncionarioController {
         this.service = service;
     }
 
-    @PostMapping("/{fkEmpresa}")
-    public ResponseEntity<FuncionarioResponseDto> cadastrar(@RequestBody FuncionarioRequestDto requestDto, @PathVariable int fkEmpresa) {
-        FuncionarioResponseDto responseDto = service.cadastrarFuncionario(requestDto, fkEmpresa);
+    @PostMapping("/{idEmpresa}")
+    public ResponseEntity<FuncionarioResponseDto> cadastrar(@Valid @RequestBody FuncionarioRequestDto requestDto, @PathVariable Integer idEmpresa) {
+        FuncionarioResponseDto responseDto = service.cadastrarFuncionario(requestDto, idEmpresa);
         return ResponseEntity.status(201).body(responseDto);
     }
 
-    @GetMapping("/{fkEmpresa}")
-    public ResponseEntity<List<FuncionarioResponseDto>> listarPorEmpresa(@PathVariable int fkEmpresa) {
-        List<FuncionarioResponseDto> responseDto = service.listarPorEmpresa(fkEmpresa);
+    @GetMapping("/{idEmpresa}")
+    public ResponseEntity<List<FuncionarioResponseDto>> listarPorEmpresa(@PathVariable Integer idEmpresa) {
+        List<FuncionarioResponseDto> responseDto = service.listarPorEmpresa(idEmpresa);
         return ResponseEntity.status(200).body(responseDto);
     }
 
-    @GetMapping("/{id}/{fkEmpresa}")
-    public ResponseEntity<FuncionarioResponseDto> buscarFuncionarioPorId(@PathVariable int id, @PathVariable int fkEmpresa) {
-        FuncionarioResponseDto responseDto = service.buscarFuncionarioPorId(id, fkEmpresa);
+    @GetMapping("/{id}/{idEmpresa}")
+    public ResponseEntity<FuncionarioResponseDto> buscarFuncionarioPorId(@PathVariable int id, @PathVariable Integer idEmpresa) {
+        FuncionarioResponseDto responseDto = service.buscarFuncionarioPorId(id, idEmpresa);
         return ResponseEntity.status(200).body(responseDto);
     }
 
-    @DeleteMapping("/{id}/{fkEmpresa}")
-    public ResponseEntity<Void> removerPorId(@PathVariable int id, @PathVariable int fkEmpresa) {
-        service.removerPorId(id, fkEmpresa);
+    @DeleteMapping("/{id}/{idEmpresa}")
+    public ResponseEntity<Void> removerPorId(@PathVariable int id, @PathVariable Integer idEmpresa) {
+        service.removerPorId(id, idEmpresa);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/{fkEmpresa}")
-    public ResponseEntity<FuncionarioResponseDto> editarFuncionario(@PathVariable int id, @RequestBody FuncionarioRequestDto funcionarioParaEditar, @PathVariable int fkEmpresa) {
-        FuncionarioResponseDto responseDto = service.editarFuncionario(id, fkEmpresa, funcionarioParaEditar);
+    @PatchMapping("/{id}/{idEmpresa}")
+    public ResponseEntity<FuncionarioResponseDto> editarFuncionario(@PathVariable int id, @Valid @RequestBody FuncionarioRequestDto funcionarioParaEditar, @PathVariable Integer idEmpresa) {
+        FuncionarioResponseDto responseDto = service.editarFuncionario(id, idEmpresa, funcionarioParaEditar);
         return ResponseEntity.status(200).body(responseDto);
     }
-
-
-
-
 }

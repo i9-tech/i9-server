@@ -1,10 +1,14 @@
 package school.sptech.controller.produto;
 
+
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.entity.produto.Produto;
+import school.sptech.controller.produto.dto.ProdutoCadastroDto;
+import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
+import school.sptech.controller.produto.dto.ProdutoListagemDto;
 import school.sptech.service.produto.ProdutoService;
 import java.util.List;
 
@@ -16,58 +20,76 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
 
-    @PostMapping("/{fkEmpresa}")
-    public ResponseEntity<Produto> cadastrar(@RequestBody Produto produtoParaCadastrar, @PathVariable int fkEmpresa) {
-        Produto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, fkEmpresa);
+    @PostMapping("/{idFuncionario}")
+    public ResponseEntity<ProdutoListagemDto> cadastrar(@Valid @RequestBody ProdutoCadastroDto produtoParaCadastrar, @PathVariable Integer idFuncionario) {
+        ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, idFuncionario);
         return ResponseEntity.status(201).body(produtoCadastrado);
     }
 
-    @GetMapping("/{fkEmpresa}")
-    public ResponseEntity<List<Produto>> listarPorEmpresa(@PathVariable int fkEmpresa) {
-        List<Produto> todosProdutos = service.listarPorEmpresa(fkEmpresa);
-        return ResponseEntity.status(200).body(todosProdutos);
+    @GetMapping("/{idFuncionario}")
+    public ResponseEntity<List<ProdutoListagemDto>> listarProduto(@PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarProdutoPorEmpresa(idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
     }
 
-    @PatchMapping("/{id}/{fkEmpresa}")
-    private ResponseEntity<Produto> editarProduto(@PathVariable int id, @RequestBody Produto produtoParaEditar, @PathVariable int fkEmpresa) {
-        Produto produtoEditado = service.editarProduto(id, produtoParaEditar, fkEmpresa);
-        return ResponseEntity.status(200).body(produtoEditado);
+    @PatchMapping("/{id}/{idFuncionario}")
+    public ResponseEntity<ProdutoListagemDto> editarProduto(@PathVariable Integer id, @Valid @RequestBody ProdutoEdicaoDto produtoParaEditar, @PathVariable Integer idFuncionario) {
+        ProdutoListagemDto responseDto = service.editarProduto(id, idFuncionario, produtoParaEditar);
+        return ResponseEntity.status(200).body(responseDto);
     }
 
-    @DeleteMapping("/{id}/{fkEmpresa}")
-    public ResponseEntity<Void> removerPorId(@PathVariable int id, @PathVariable int fkEmpresa) {
-        service.removerPorId(id, fkEmpresa);
-        return ResponseEntity.status(204).build();
+    @DeleteMapping("/{id}/{idFuncionario}")
+    public ResponseEntity<Void> removerProduto(@PathVariable Integer id, @PathVariable Integer idFuncionario) {
+        service.removerPorId(id, idFuncionario);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/nome/{fkEmpresa}")
-    public ResponseEntity<List<Produto>> listarPorNome(@RequestParam String nomeProduto, @PathVariable int fkEmpresa) {
-        List<Produto> produtosPorNome = service.listarPorNome(nomeProduto, fkEmpresa);
-        return ResponseEntity.status(200).body(produtosPorNome);
+    @GetMapping("/valor-total-estoque/{idFuncionario}")
+    public ResponseEntity<Double> valorTotalEstoque(@PathVariable Integer idFuncionario) {
+        Double valorTotal = service.valorTotalEstoqueProduto(idFuncionario);
+        return ResponseEntity.status(200).body(valorTotal);
     }
 
-    @GetMapping("/categoria/{fkEmpresa}")
-    public ResponseEntity<List<Produto>> listarPorCategoria(@RequestParam String categoriaProduto,  @PathVariable int fkEmpresa) {
-        List<Produto> produtosCategoria = service.listarPorCategoria(categoriaProduto, fkEmpresa);
-        return ResponseEntity.status(200).body(produtosCategoria);
+    @GetMapping("/lucro-previsto-estoque/{idFuncionario}")
+    public ResponseEntity<Double> lucroPrevistoEstoque(@PathVariable Integer idFuncionario) {
+        Double valorTotal = service.lucroPrevistoEstoqueProduto(idFuncionario);
+        return ResponseEntity.status(200).body(valorTotal);
     }
 
-    @GetMapping("/setor/{fkEmpresa}")
-    public ResponseEntity<List<Produto>> listarPorSetor(@RequestParam String setorAlimenticio,  @PathVariable int fkEmpresa) {
-        List<Produto> produtosSetor = service.listarPorSetor(setorAlimenticio, fkEmpresa);
-        return ResponseEntity.status(200).body(produtosSetor);
+    @GetMapping("/quantidade-estoque/{idFuncionario}")
+    public ResponseEntity<Integer> quantidadeProdutosEstoque(@PathVariable Integer idFuncionario) {
+        Integer valorTotal = service.quantidadeProdutoEstoque(idFuncionario);
+        return ResponseEntity.status(200).body(valorTotal);
     }
 
-    @GetMapping("/estoque-baixo/{fkEmpresa}")
-    public ResponseEntity<List<Produto>> listarEstoqueBaixo(@PathVariable int fkEmpresa) {
-        List<Produto> produtosEstoqueBaixo = service.listarEstoqueBaixo(fkEmpresa);
-        return ResponseEntity.status(200).body(produtosEstoqueBaixo);
+    @GetMapping("/quantidade-estoque-baixo/{idFuncionario}")
+    public ResponseEntity<Integer> quantidadeProdutosEstoqueBaixo(@PathVariable Integer idFuncionario) {
+        Integer quantidadeProdutos = service.quantidadeProdutoEstoqueBaixo(idFuncionario);
+        return ResponseEntity.status(200).body(quantidadeProdutos);
     }
 
-    @GetMapping("/estoque-alto/{fkEmpresa}")
-    public ResponseEntity<List<Produto>> listarEstoqueAlto(@PathVariable int fkEmpresa) {
-        List<Produto> produtosEstoqueAlto = service.listarEstoqueAlto(fkEmpresa);
-        return ResponseEntity.status(200).body(produtosEstoqueAlto);
+    @GetMapping("/quantidade-estoque-alto/{idFuncionario}")
+    public ResponseEntity<Integer> quantidadeProdutosEstoqueAlto(@PathVariable Integer idFuncionario) {
+        Integer quantidadeProdutos = service.quantidadeProdutoEstoqueAlto(idFuncionario);
+        return ResponseEntity.status(200).body(quantidadeProdutos);
+    }
+
+    @GetMapping("/categoria/{categoria}/{idFuncionario}")
+    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorCategoria(@PathVariable String categoria, @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarProdutoPorCategoriaEmpresa(categoria, idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
+    }
+
+    @GetMapping("/setor/{setor}/{idFuncionario}")
+    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorSetor(@PathVariable String setor, @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarProdutoPorSetorEmpresa(setor, idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
+    }
+
+    @GetMapping("/nome/{nome}/{idFuncionario}")
+    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorNome(@PathVariable String nome, @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarProdutoPorNomeEmpresa(nome, idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
     }
 
 }

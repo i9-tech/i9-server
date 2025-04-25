@@ -1,6 +1,7 @@
 package school.sptech.entity.produto;
 
 import jakarta.persistence.*;
+import school.sptech.entity.funcionario.Funcionario;
 
 import java.time.LocalDate;
 
@@ -9,44 +10,37 @@ import java.time.LocalDate;
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private int codigo;
-    private String nomeProduto;
+    //    @Lob
+//    private byte[] imagem;
+    private String nome;
+    private int quantidade;
     private LocalDate dataVencimento;
     private double valorCompra;
     private double valorUnitario;
-    private int quantidade;
-    private LocalDate dtRegistro;
-    private String descricao;
-    private String categoria;
-    private String setorAlimenticio;
     private int quantidadeMin;
     private int quantidadeMax;
-    private int fkFuncionario;
-    private int fkEmpresa;
-    private int fkPedidoPratoProduto;
+    private String descricao;
+    private String categoria;
+    private String setor;
+    private LocalDate dataRegistro;
+    @ManyToOne
+    private Funcionario funcionario;
 
-    public int getFkFuncionario() {
-        return fkFuncionario;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setFkFuncionario(int fkFuncionario) {
-        this.fkFuncionario = fkFuncionario;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
-    public int getFkPedidoPratoProduto() {
-        return fkPedidoPratoProduto;
-    }
-
-    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
-        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -58,12 +52,20 @@ public class Produto {
         this.codigo = codigo;
     }
 
-    public String getNomeProduto() {
-        return nomeProduto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
     public LocalDate getDataVencimento() {
@@ -90,20 +92,20 @@ public class Produto {
         this.valorUnitario = valorUnitario;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+    public int getQuantidadeMin() {
+        return quantidadeMin;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantidadeMin(int quantidadeMin) {
+        this.quantidadeMin = quantidadeMin;
     }
 
-    public LocalDate getDtRegistro() {
-        return dtRegistro;
+    public int getQuantidadeMax() {
+        return quantidadeMax;
     }
 
-    public void setDtRegistro(LocalDate dtRegistro) {
-        this.dtRegistro = dtRegistro;
+    public void setQuantidadeMax(int quantidadeMax) {
+        this.quantidadeMax = quantidadeMax;
     }
 
     public String getDescricao() {
@@ -122,44 +124,20 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    public String getSetorAlimenticio() {
-        return setorAlimenticio;
+    public String getSetor() {
+        return setor;
     }
 
-    public void setSetorAlimenticio(String setorAlimenticio) {
-        this.setorAlimenticio = setorAlimenticio;
+    public void setSetor(String setor) {
+        this.setor = setor;
     }
 
-    public int getQuantidadeMin() {
-        return quantidadeMin;
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
     }
 
-    public void setQuantidadeMin(int quantidadeMin) {
-        this.quantidadeMin = quantidadeMin;
-    }
-
-    public int getQuantidadeMax() {
-        return quantidadeMax;
-    }
-
-    public void setQuantidadeMax(int quantidadeMax) {
-        this.quantidadeMax = quantidadeMax;
-    }
-
-    public int getFkColaborador() {
-        return fkFuncionario;
-    }
-
-    public void setFkColaborador(int fkFuncionario) {
-        this.fkFuncionario = fkFuncionario;
-    }
-
-    public int getFkEmpresa() {
-        return fkEmpresa;
-    }
-
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
+    public void setDataRegistro(LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
     }
 
 }
