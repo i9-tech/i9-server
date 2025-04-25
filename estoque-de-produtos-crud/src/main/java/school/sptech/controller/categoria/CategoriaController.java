@@ -20,16 +20,16 @@ import java.util.Optional;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
+
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<CategoriaListagemDto>> listagem() {
-        List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias();
+    @GetMapping({"/idFuncionario"})
+    public ResponseEntity<List<CategoriaListagemDto>> listagem(Integer idFuncionario) {
+        List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias(idFuncionario);
         if (buscarCategoria.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -42,9 +42,9 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(respostaCategoriaDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer id) {
-        Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(id);
+    @GetMapping("/{id}/{idFuncionario}")
+    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer idCategoria, Integer idFuncionario) {
+        Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(idCategoria, idFuncionario);
 
         if (categoriaEncontrado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -55,20 +55,9 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    //TENTATIVA POR URI AO DIGITAR
-    // @GetMapping
-    // public List<Categoria> listar(@RequestParam(required = false) String nome) {
-    //     if (nome != null && !nome.isEmpty()) {
-    //         return categoriaService.buscarPorNome(nome);
-    //     } else {
-    //         return categoriaService.listarTodasCategorias(); //metodo que retorna todas as categorias
-    //                                                         //coloquei para teste
-    //     }
-    // }
-
     @PostMapping
-    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {
-        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro));
+    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro, Integer idFuncionario) {
+        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro), idFuncionario);
 
         CategoriaListagemDto respostaCategoriaDto = CategoriaMapper.transformarEmRespostaDto(novaCategoria);
 

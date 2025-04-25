@@ -25,9 +25,9 @@ public class SetorController {
         this.setorService = setorService;
     }
 
-    @GetMapping()
-    public ResponseEntity<SetorListagemDto> listagem() {
-        List<Setor> buscarSetor = setorService.listarTodosSetores();
+    @GetMapping("/{idFuncionario}")
+    public ResponseEntity<SetorListagemDto> listagem(@PathVariable Integer idFuncionario) {
+        List<Setor> buscarSetor = setorService.listarTodosSetores(idFuncionario);
         if (buscarSetor.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -40,9 +40,9 @@ public class SetorController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body((SetorListagemDto) respostaSetorDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SetorListagemDto> listagemId(@PathVariable Integer id) {
-        Optional<Setor> setorEncontrado = setorService.buscarSetorPorId(id);
+    @GetMapping("/{id}/{idFuncionario}")
+    public ResponseEntity<SetorListagemDto> listagemId(@PathVariable Integer id, Integer idFuncionario) {
+        Optional<Setor> setorEncontrado = setorService.buscarSetorPorId(id, idFuncionario);
 
         if (setorEncontrado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -53,9 +53,9 @@ public class SetorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    @PostMapping
-    public ResponseEntity<SetorListagemDto> cadastrar(@Valid @RequestBody SetorCadastroDto setorParaCadastro) {
-        Setor novoSetor = setorService.cadastrarSetor(SetorMapper.transformarEmRespostaDto(setorParaCadastro));
+    @PostMapping("/{idFuncionario}")
+    public ResponseEntity<SetorListagemDto> cadastrar(@Valid @RequestBody SetorCadastroDto setorParaCadastro, Integer idFuncionario) {
+        Setor novoSetor = setorService.cadastrarSetor(SetorMapper.transformarEmRespostaDto(setorParaCadastro), idFuncionario);
 
         SetorListagemDto respostaSetorDto = SetorMapper.transformarEmRespostaDto(novoSetor);
 
