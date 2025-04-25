@@ -1,38 +1,29 @@
-INSERT INTO funcionario (
-  nome,
-  cpf,
-  cargo,
-  data_admissao,
-  acesso_setor_cozinha,
-  acesso_setor_estoque,
-  acesso_setor_atendimento,
-  proprietario,
-  fk_empresa,
-  senha
-) VALUES
-('Ana Souza', '12345678901', 'Atendente', '2023-01-10', true, false, true, false, 1, '1@12345678901'),
-('Carlos Lima', '98765432100', 'Estoquista', '2022-08-15', false, true, false, false, 1, '1@98765432100'),
-('Mariana Alves', '45612378900', 'Cozinheira', '2021-03-20', true, false, false, false, 1, '1@45612378900'),
-('João Pedro', '32165498700', 'Gerente', '2020-11-01', true, true, true, true, 1, '1@32165498700'),
-('Fernanda Costa', '15935748620', 'Caixa', '2023-06-05', false, false, true, false, 1, '1@15935748620');
 
-INSERT INTO produto (
-  codigo,
-  data_registro,
-  data_vencimento,
-  funcionario_id,
-  quantidade,
-  quantidade_max,
-  quantidade_min,
-  valor_compra,
-  valor_unitario,
-  categoria,
-  descricao,
-  nome,
-  setor
-) VALUES
-(1001, '2025-04-11', '2025-12-31', 1, 50, 100, 10, 15.90, 22.00, 'Alimento', 'Arroz tipo 1 de ótima qualidade', 'Arroz Branco Tipo 1', 'Cozinha'),
-(1002, '2025-04-11', '2025-11-15', 1, 30, 80, 5, 8.50, 12.00, 'Alimento', 'Feijão carioca grão selecionado', 'Feijão Carioca', 'Cozinha'),
-(1003, '2025-04-11', '2026-01-01', 2, 80, 100, 20, 1.20, 2.50, 'Limpeza', 'Detergente para limpeza geral', 'Detergente Neutro', 'Estoque'),
-(1004, '2025-04-11', '2025-06-30', 2, 200, 300, 50, 0.90, 1.50, 'Bebida', 'Água mineral sem gás', 'Água Mineral 500ml', 'Atendimento'),
-(1005, '2025-04-11', '2026-12-31', 5, 40, 70, 10, 2.80, 4.50, 'Limpeza', 'Rolo de papel toalha absorvente', 'Papel Toalha', 'Estoque');
+-- Inserir uma empresa
+INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
+VALUES ('Empresa Exemplo', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true);
+
+-- Inserir outra empresa
+INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
+VALUES ('Outra Empresa', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true);
+
+-- Inserir uma empresa inativa
+INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
+VALUES ('Empresa Inativa', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false);
+
+
+-- Inserir um funcionário
+INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
+VALUES ('João Silva', '123.456.789-00', 'Gerente', '2023-05-15', true, true, true, true, true, 'senha123', 1);
+
+-- Inserir outro funcionário
+INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
+VALUES ('Maria Oliveira', '987.654.321-11', 'Atendente', '2023-08-20', false, false, true, false, true, 'senha456', 1);
+
+-- Inserir um funcionário com acesso ao estoque
+INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
+VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, 'senha789', 3);
+
+-- Inserir um funcionário sem acesso a nenhum setor
+INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
+VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, false, false, true, 'senha012', 2);

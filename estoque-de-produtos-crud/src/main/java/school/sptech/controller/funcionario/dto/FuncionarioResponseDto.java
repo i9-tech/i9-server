@@ -1,20 +1,40 @@
 package school.sptech.controller.funcionario.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
+import java.util.Date;
 
 public class FuncionarioResponseDto {
+
+    @Schema(description = "Nome do usuário", example = "Isabela Rosa")
     private String nome;
+
+    @Schema(description = "CPF do usuário", example = "123.456.789-00")
     private String cpf;
+
+    @Schema(description = "Cargo do usuário", example = "Cozinheira")
     private String cargo;
-    private LocalDate dataAdmissao;
+
+    @Schema(description = "Data de admissão", example = "17/07/2004")
+    private Date dataAdmissao;
+
+    @Schema(description = "Acesso ao setor da cozinha", example = "true")
     private boolean acessoSetorCozinha;
+
+    @Schema(description = "Acesso ao setor do estoque", example = "true")
     private boolean acessoSetorEstoque;
+
+    @Schema(description = "Acesso ao setor do atendimento", example = "true")
     private boolean acessoSetorAtendimento;
+
+    @Schema(description = "Se o funcionário é proprietário", example = "false")
     private boolean proprietario;
 
     public FuncionarioResponseDto( String nome, String cpf, String cargo,
-                                  LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                  boolean acessoSetorAtendimento, boolean proprietario) {
+                                   Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                   boolean acessoSetorAtendimento, boolean proprietario) {
 
         this.nome = nome;
         this.cpf = cpf;
@@ -51,11 +71,11 @@ public class FuncionarioResponseDto {
         this.cargo = cargo;
     }
 
-    public LocalDate getDataAdmissao() {
+    public Date getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(LocalDate dataAdmissao) {
+    public void setDataAdmissao(Date dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 
@@ -90,5 +110,4 @@ public class FuncionarioResponseDto {
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
     }
-
 }
