@@ -1,4 +1,63 @@
 package school.sptech.controller.funcionario.dto;
 
-public class FuncionarioDetalhesDto {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import school.sptech.entity.funcionario.Funcionario;
+
+import java.util.Collection;
+import java.util.List;
+
+public class FuncionarioDetalhesDto implements UserDetails {
+
+    private final String nome;
+    private final String senha;
+
+    public FuncionarioDetalhesDto(Funcionario funcionario, String nome, String senha) {
+        this.nome = nome;
+        this.senha = senha;
+    }
+
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return nome;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

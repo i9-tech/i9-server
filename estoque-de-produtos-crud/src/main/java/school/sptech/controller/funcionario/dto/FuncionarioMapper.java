@@ -49,5 +49,25 @@ public class FuncionarioMapper {
         );
     }
 
+    public static Funcionario of(FuncionarioLoginDto funcionarioLoginDto){
+        Funcionario funcionario = new Funcionario();
+
+        funcionario.setSenha(funcionarioLoginDto.getSenha());
+        funcionario.setCpf(funcionarioLoginDto.getCpf());
+
+        return funcionario;
+    }
+
+    public static FuncionarioTokenDto of(Funcionario funcionario, String token){
+        FuncionarioTokenDto funcionarioTokenDto = new FuncionarioTokenDto();
+
+        funcionarioTokenDto.setToken(token);
+        funcionarioTokenDto.setNome(funcionario.getNome());
+        funcionarioTokenDto.setUserId(funcionario.getId());
+
+        return funcionarioTokenDto;
+    }
+
+
 
 }
