@@ -35,9 +35,13 @@ public class EmpresaListagemDto {
         this.cnpj = cnpj;
     }
 
-    public String getEndereco() { return endereco; }
+    public String getEndereco() {
+        return endereco;
+    }
 
-    public void setEndereco(String endereco) { this.endereco = endereco; }
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 
     public LocalDate getDataCadastro() {
         return dataCadastro;

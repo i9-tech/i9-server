@@ -13,7 +13,7 @@ public class EmpresaMapper {
         Empresa entidadeEmpresa = new Empresa();
 
         entidadeEmpresa.setNome(empresaEnviadaDto.getNome());
-        entidadeEmpresa.setCNPJ(empresaEnviadaDto.getCnpj());
+        entidadeEmpresa.setCnpj(empresaEnviadaDto.getCnpj());
         entidadeEmpresa.setEndereco(empresaEnviadaDto.getEndereco());
         entidadeEmpresa.setDataCadastro(empresaEnviadaDto.getDataCadastro());
         entidadeEmpresa.setAtivo(true);
@@ -34,6 +34,7 @@ public class EmpresaMapper {
 
         entidadeEmpresaParaResposta.setId(entidadeEmpresaResposta.getId());
         entidadeEmpresaParaResposta.setNome(entidadeEmpresaResposta.getNome());
+        entidadeEmpresaParaResposta.setCnpj(entidadeEmpresaResposta.getCnpj());
         entidadeEmpresaParaResposta.setEndereco(entidadeEmpresaResposta.getEndereco());
         entidadeEmpresaParaResposta.setDataCadastro(entidadeEmpresaResposta.getDataCadastro());
         entidadeEmpresaParaResposta.setAtivo(entidadeEmpresaResposta.isAtivo());
@@ -50,6 +51,7 @@ public class EmpresaMapper {
 
             entidadeEmpresaParaResposta.setId(empresaList.get(i).getId());
             entidadeEmpresaParaResposta.setNome(empresaList.get(i).getNome());
+            entidadeEmpresaParaResposta.setCnpj(empresaList.get(i).getCnpj());
             entidadeEmpresaParaResposta.setEndereco(empresaList.get(i).getEndereco());
             entidadeEmpresaParaResposta.setDataCadastro(empresaList.get(i).getDataCadastro());
             entidadeEmpresaParaResposta.setAtivo(empresaList.get(i).isAtivo());

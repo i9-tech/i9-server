@@ -22,7 +22,7 @@ VALUES ('Maria Oliveira', '987.654.321-11', 'Atendente', '2023-08-20', false, fa
 
 -- Inserir um funcionário com acesso ao estoque
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, 'senha789', 3);
+VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, 'senha789', 2);
 
 -- Inserir um funcionário sem acesso a nenhum setor
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
