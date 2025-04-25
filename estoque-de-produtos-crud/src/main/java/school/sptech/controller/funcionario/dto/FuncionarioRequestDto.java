@@ -6,16 +6,9 @@ import jakarta.validation.constraints.*;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class FuncionarioRequestDto {
-
-    @Schema(description = "ID do funcionário usado para atualização", example = "1")
-    private Integer id;
-
-    @NotNull(message = "A empresa é obrigatória")
-    @Schema(description = "Empresa vinculada ao funcionário")
-    private Empresa empresa;
-
     @Size(min = 3, max = 20)
     @Schema(description = "Nome do usuário", example = "Isabela Rosa")
     @NotBlank(message = "O nome é obrigatório")
@@ -33,10 +26,9 @@ public class FuncionarioRequestDto {
 
     @NotNull(message = "A data de admissão é obrigatória")
     @PastOrPresent(message = "A data de admissão não pode ser no futuro")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     @Schema(description = "Data de admissão do funcionário", example = "17/07/2004")
     //definir um padrão de armazenamento
-    private LocalDate dataAdmissao;
+    private Date dataAdmissao;
 
     @Schema(description = "Acesso ao setor da cozinha", example = "true")
     private boolean acessoSetorCozinha;
@@ -56,10 +48,7 @@ public class FuncionarioRequestDto {
     @Schema(description = "Senha de acesso", example = "10@50234000856")
     private String senha;
 
-    public FuncionarioRequestDto(Integer id, String nome, String cpf, String cargo,
-                                 LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                 boolean acessoSetorAtendimento, boolean proprietario, String senha) {
-        this.id = id;
+    public FuncionarioRequestDto(String nome, String cpf, String cargo, Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque, boolean acessoSetorAtendimento, boolean proprietario, String senha) {
         this.nome = nome;
         this.cpf = cpf;
         this.cargo = cargo;
@@ -69,22 +58,6 @@ public class FuncionarioRequestDto {
         this.acessoSetorAtendimento = acessoSetorAtendimento;
         this.proprietario = proprietario;
         this.senha = senha;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -111,11 +84,11 @@ public class FuncionarioRequestDto {
         this.cargo = cargo;
     }
 
-    public LocalDate getDataAdmissao() {
+    public Date getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(LocalDate dataAdmissao) {
+    public void setDataAdmissao(Date dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

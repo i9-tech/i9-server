@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class FuncionarioResponseDto {
 
@@ -17,8 +18,7 @@ public class FuncionarioResponseDto {
     private String cargo;
 
     @Schema(description = "Data de admissão", example = "17/07/2004")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dataAdmissao;
+    private Date dataAdmissao;
 
     @Schema(description = "Acesso ao setor da cozinha", example = "true")
     private boolean acessoSetorCozinha;
@@ -33,7 +33,7 @@ public class FuncionarioResponseDto {
     private boolean proprietario;
 
     public FuncionarioResponseDto( String nome, String cpf, String cargo,
-                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                   Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                    boolean acessoSetorAtendimento, boolean proprietario) {
 
         this.nome = nome;
@@ -71,11 +71,11 @@ public class FuncionarioResponseDto {
         this.cargo = cargo;
     }
 
-    public LocalDate getDataAdmissao() {
+    public Date getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(LocalDate dataAdmissao) {
+    public void setDataAdmissao(Date dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 
@@ -109,8 +109,5 @@ public class FuncionarioResponseDto {
 
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
-    }
-
-    public void setId(long id) {
     }
 }

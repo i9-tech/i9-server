@@ -39,17 +39,16 @@ public class FuncionarioController {
         FuncionarioResponseDto responseDto = service.buscarFuncionarioPorId(id, idEmpresa);
         return ResponseEntity.status(200).body(responseDto);
     }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> removerPorId(@PathVariable int id, @PathVariable Empresa empresa) {
-//        service.removerPorId(id, empresa);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<FuncionarioResponseDto> editarFuncionario(@PathVariable int id, @Valid @RequestBody FuncionarioRequestDto funcionarioParaEditar, @PathVariable Empresa empresa) {
-//        FuncionarioResponseDto responseDto = service.editarFuncionario(id, empresa, funcionarioParaEditar);
-//        return ResponseEntity.status(200).body(responseDto);
-//    }
 
+    @DeleteMapping("/{id}/{idEmpresa}")
+    public ResponseEntity<Void> removerPorId(@PathVariable int id, @PathVariable Integer idEmpresa) {
+        service.removerPorId(id, idEmpresa);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/{idEmpresa}")
+    public ResponseEntity<FuncionarioResponseDto> editarFuncionario(@PathVariable int id, @Valid @RequestBody FuncionarioRequestDto funcionarioParaEditar, @PathVariable Integer idEmpresa) {
+        FuncionarioResponseDto responseDto = service.editarFuncionario(id, idEmpresa, funcionarioParaEditar);
+        return ResponseEntity.status(200).body(responseDto);
+    }
 }

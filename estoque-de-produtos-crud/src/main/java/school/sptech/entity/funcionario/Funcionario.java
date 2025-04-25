@@ -3,9 +3,11 @@ package school.sptech.entity.funcionario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Data;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 
 @Entity
@@ -28,8 +30,7 @@ public class Funcionario {
 
     @NotNull(message = "A data de admissão é obrigatória")
     @PastOrPresent(message = "A data de admissão não pode ser no futuro")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dataAdmissao;
+    private Date dataAdmissao;
 
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
@@ -46,15 +47,7 @@ public class Funcionario {
     @ManyToOne
     private Empresa empresa;
 
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -86,11 +79,11 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    public LocalDate getDataAdmissao() {
+    public Date getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(LocalDate dataAdmissao) {
+    public void setDataAdmissao(Date dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 
@@ -124,6 +117,14 @@ public class Funcionario {
 
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public String getSenha() {

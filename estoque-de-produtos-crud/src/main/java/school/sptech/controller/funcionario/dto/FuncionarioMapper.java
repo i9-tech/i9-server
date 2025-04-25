@@ -1,18 +1,14 @@
 package school.sptech.controller.funcionario.dto;
 
-import lombok.AllArgsConstructor;
+import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
-
-import java.time.LocalDate;
-
 
 public class FuncionarioMapper {
 
     public FuncionarioMapper() {
     }
 
-    //convertendo dto em entity
-    public static Funcionario toEntity(FuncionarioRequestDto requestDto, int fkEmpresa){
+    public static Funcionario toEntity(FuncionarioRequestDto requestDto, Empresa empresa){
         if (requestDto == null){
             return null;
         }
@@ -28,8 +24,12 @@ public class FuncionarioMapper {
         funcionario.setProprietario(requestDto.isProprietario());
         funcionario.setSenha(requestDto.getSenha());
 
+        // Agora setamos a empresa
+        funcionario.setEmpresa(empresa);
+
         return funcionario;
     }
+
 
     //convertendo entity em dto
     public static FuncionarioResponseDto toDto(Funcionario funcionario){
