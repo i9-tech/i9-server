@@ -168,7 +168,7 @@ public class EmpresaController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover empresa existente", description = "Remove uma empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Empresa removida com sucesso", content = @Content),
+            @ApiResponse(responseCode = "204", description = "Empresa removida com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
