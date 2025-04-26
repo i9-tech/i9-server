@@ -16,7 +16,6 @@ public class ProdutoMapper {
         produto.setNome(requestDto.getNome());
         produto.setCodigo(requestDto.getCodigo());
         produto.setQuantidade(requestDto.getQuantidade());
-        produto.setDataVencimento(requestDto.getDataVencimento());
         produto.setValorCompra(requestDto.getValorCompra());
         produto.setValorUnitario(requestDto.getValorUnitario());
         produto.setQuantidadeMin(requestDto.getQuantidadeMin());
@@ -34,7 +33,6 @@ public class ProdutoMapper {
 
         produto.setNome(dto.getNome());
         produto.setQuantidade(dto.getQuantidade());
-        produto.setDataVencimento(dto.getDataVencimento());
         produto.setValorCompra(dto.getValorCompra());
         produto.setValorUnitario(dto.getValorUnitario());
         produto.setQuantidadeMin(dto.getQuantidadeMin());
@@ -57,7 +55,6 @@ public class ProdutoMapper {
                 produto.getNome(),
                 produto.getCodigo(),
                 produto.getQuantidade(),
-                produto.getDataVencimento(),
                 produto.getValorCompra(),
                 produto.getValorUnitario(),
                 produto.getQuantidadeMin(),

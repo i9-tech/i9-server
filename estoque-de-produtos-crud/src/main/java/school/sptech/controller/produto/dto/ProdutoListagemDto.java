@@ -1,6 +1,8 @@
 package school.sptech.controller.produto.dto;
 
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 import java.time.LocalDate;
 
@@ -9,24 +11,22 @@ public class ProdutoListagemDto {
     private Integer codigo;
     private String nome;
     private Integer quantidade;
-    private LocalDate dataVencimento;
     private Double valorCompra;
     private Double valorUnitario;
     private Integer quantidadeMin;
     private Integer quantidadeMax;
     private String descricao;
-    private String categoria;
-    private String setor;
+    private Categoria categoria;
+    private Setor setor;
     private LocalDate dataRegistro;
     private Funcionario funcionario;
 
 
-    public ProdutoListagemDto(Integer id, String nome, int codigo, int quantidade, LocalDate dataVencimento, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, String categoria, String setor, LocalDate dataRegistro, Funcionario funcionario) {
-        this.id = id; // Atribuindo o ID
+    public ProdutoListagemDto(Integer id, String nome, int codigo, int quantidade, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, Categoria categoria, Setor setor, LocalDate dataRegistro, Funcionario funcionario) {
+        this.id = id; 
         this.nome = nome;
         this.codigo = codigo;
         this.quantidade = quantidade;
-        this.dataVencimento = dataVencimento;
         this.valorCompra = valorCompra;
         this.valorUnitario = valorUnitario;
         this.quantidadeMin = quantidadeMin;
@@ -79,14 +79,6 @@ public class ProdutoListagemDto {
         this.quantidade = quantidade;
     }
 
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
     public Double getValorCompra() {
         return valorCompra;
     }
@@ -127,19 +119,19 @@ public class ProdutoListagemDto {
         this.descricao = descricao;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public String getSetor() {
+    public Setor getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Setor setor) {
         this.setor = setor;
     }
 

@@ -22,7 +22,7 @@ VALUES ('Maria Oliveira', '987.654.321-11', 'Atendente', '2023-08-20', false, fa
 
 -- Inserir um funcionário com acesso ao estoque
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, 'senha789', 2);
+VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, 'senha789', 3);
 
 -- Inserir um funcionário sem acesso a nenhum setor
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
@@ -46,3 +46,25 @@ INSERT INTO categoria (nome, funcionario_id) VALUES ('Frituras e Salgados', 3);
 INSERT INTO categoria (nome, funcionario_id) VALUES ('Ingredientes Básicos', 3);
 INSERT INTO categoria (nome, funcionario_id) VALUES ('Descartáveis e Embalagens', 4);
 INSERT INTO categoria (nome, funcionario_id) VALUES ('Produtos de Limpeza', 4);
+
+
+-- PRODUTOS
+INSERT INTO produto (
+    codigo,
+    data_registro,
+    funcionario_id,
+    quantidade,
+    quantidade_max,
+    quantidade_min,
+    valor_compra,
+    valor_unitario,
+    categoria_id,
+    descricao,
+    nome,
+    setor_id
+) VALUES
+(1001, '2025-04-11', 1, 50, 100, 80, 15.90, 22.00, 1, 'Arroz tipo 1 de ótima qualidade', 'Arroz Branco Tipo 1', 1),
+(1002, '2025-04-11', 1, 30, 20, 5, 8.50, 12.00, 2, 'Feijão carioca grão selecionado', 'Feijão Carioca', 1),
+(1003, '2025-04-11', 3, 80, 50, 20, 1.20, 2.50, 3, 'Detergente para limpeza geral', 'Detergente Neutro', 2),
+(1004, '2025-04-11', 3, 200, 300, 50, 0.90, 1.50, 1, 'Água mineral sem gás', 'Água Mineral 500ml', 3),
+(1005, '2025-04-11', 4, 40, 70, 10, 2.80, 4.50, 2, 'Rolo de papel toalha absorvente', 'Papel Toalha', 1);
