@@ -27,3 +27,22 @@ VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, tru
 -- Inserir um funcionário sem acesso a nenhum setor
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
 VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, false, false, true, 'senha012', 2);
+
+
+-- Setores para restaurante/lanchonete vinculados aos funcionários
+INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Quente', 1);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Fria', 1);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Estoque de Alimentos', 3);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Atendimento ao Cliente', 2);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Delivery', 2);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Higienização', 4);
+
+-- Categorias de produtos/ingredientes típicos do ramo alimentício
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Carnes e Proteínas', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Massas e Pizzas', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Bebidas', 2);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Sobremesas', 2);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Frituras e Salgados', 3);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Ingredientes Básicos', 3);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Descartáveis e Embalagens', 4);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Produtos de Limpeza', 4);

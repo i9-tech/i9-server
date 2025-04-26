@@ -27,23 +27,19 @@ public class CategoriaController {
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping({"/idFuncionario"})
-    public ResponseEntity<List<CategoriaListagemDto>> listagem(Integer idFuncionario) {
+    @GetMapping({"/{idFuncionario}"})
+    public ResponseEntity<List<CategoriaListagemDto>> listagem(@PathVariable Integer idFuncionario) {
         List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias(idFuncionario);
         if (buscarCategoria.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        List<CategoriaListagemDto> respostaCategoriaDto = new ArrayList<>();
-
-        for (int i = 0; i < buscarCategoria.size(); i++) {
-            respostaCategoriaDto.add(CategoriaMapper.transformarEmRespostaDto(buscarCategoria.get(i)));
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(respostaCategoriaDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(CategoriaMapper.transformarEmRespostaListaDto(buscarCategoria));
     }
 
     @GetMapping("/{id}/{idFuncionario}")
-    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer idCategoria, Integer idFuncionario) {
+    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer idCategoria, @PathVariable Integer idFuncionario) {
         Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(idCategoria, idFuncionario);
 
         if (categoriaEncontrado.isEmpty()) {
@@ -55,8 +51,8 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    @PostMapping
-    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro, Integer idFuncionario) {
+    @PostMapping("/{idFuncionario}")
+    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro, @PathVariable Integer idFuncionario) {
         Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro), idFuncionario);
 
         CategoriaListagemDto respostaCategoriaDto = CategoriaMapper.transformarEmRespostaDto(novaCategoria);

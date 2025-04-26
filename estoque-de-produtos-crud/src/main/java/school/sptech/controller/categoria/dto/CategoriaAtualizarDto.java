@@ -14,11 +14,11 @@ public class CategoriaAtualizarDto {
     @ManyToOne
     private Funcionario funcionario;
 
-    public String getNome() {
+    public @NotBlank(message = "O nome não pode estar em branco") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@NotBlank(message = "O nome não pode estar em branco") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String nome) {
         this.nome = nome;
     }
 

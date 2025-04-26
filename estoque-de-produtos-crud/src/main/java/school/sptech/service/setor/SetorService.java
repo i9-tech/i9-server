@@ -52,15 +52,18 @@ public class SetorService {
         if (setorEncontrado.isEmpty()) {
             throw new EntidadeNaoEncontradaException("O setor não foi encontrado");
         }
-        return setorEncontrado.get();
+
+        setorParaAtualizar.setId(id);
+        return setorRepository.save(setorParaAtualizar);
     }
 
     public void removerSetor(Integer id) {
         Optional<Setor> setorEncontrado = setorRepository.findById(id);
 
         if (setorEncontrado.isEmpty()) {
-            throw new EntidadeNaoEncontradaException();
+            throw new EntidadeNaoEncontradaException("O setor não foi encontrado");
         }
+
         setorRepository.deleteById(id);
     }
 }

@@ -7,7 +7,7 @@ import school.sptech.entity.funcionario.Funcionario;
 
 @Entity
 @Table(name = "setor")
-public class Setor extends SetorListagemDto {
+public class Setor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

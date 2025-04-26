@@ -45,7 +45,8 @@ public class EmpresaService {
         if (empresaEncontrada.isEmpty()) {
             throw new EntidadeNaoEncontradaException("A empresa não foi encontrada");
         }
-        return empresaEncontrada.get();
+        empresaParaAtualizar.setId(id);
+        return empresaRepository.save(empresaParaAtualizar);
     }
 
     public void removerEmpresa(Integer id) {

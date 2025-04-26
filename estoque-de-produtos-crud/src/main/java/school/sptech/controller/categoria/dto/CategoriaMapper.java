@@ -2,6 +2,9 @@ package school.sptech.controller.categoria.dto;
 
 import school.sptech.entity.categoria.Categoria;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CategoriaMapper {
     public static Categoria transformarEmEntidade(CategoriaCadastroDto categoriaEnviadaDto) {
         Categoria entidadeCategoria = new Categoria();
@@ -19,6 +22,22 @@ public class CategoriaMapper {
         Categoria entidadeCategoriaParaResposta = new Categoria();
         entidadeCategoriaParaResposta.setId(entidadeCategoriaResposta.getId());
         entidadeCategoriaParaResposta.setNome(entidadeCategoriaResposta.getNome());
+        entidadeCategoriaParaResposta.setFuncionario(entidadeCategoriaResposta.getFuncionario());
         return entidadeCategoriaParaResposta;
+    }
+
+    public static List<CategoriaListagemDto> transformarEmRespostaListaDto(List<Categoria> entidadeCategoriaResposta) {
+
+        List<CategoriaListagemDto> respostasDto = new ArrayList<>();
+
+        for (int i = 0; i < entidadeCategoriaResposta.size(); i++) {
+        CategoriaListagemDto dtoCategoriaParaResposta = new CategoriaListagemDto();
+        dtoCategoriaParaResposta.setId(entidadeCategoriaResposta.get(i).getId());
+        dtoCategoriaParaResposta.setNome(entidadeCategoriaResposta.get(i).getNome());
+        dtoCategoriaParaResposta.setFuncionario(entidadeCategoriaResposta.get(i).getFuncionario());
+        respostasDto.add(dtoCategoriaParaResposta);
+        }
+
+        return respostasDto;
     }
 }
