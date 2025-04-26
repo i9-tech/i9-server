@@ -8,7 +8,7 @@ import school.sptech.entity.produto.Produto;
 
 @Entity
 @Table(name = "categoria")
-public class Categoria extends CategoriaListagemDto {
+public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

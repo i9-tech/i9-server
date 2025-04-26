@@ -18,8 +18,8 @@ public class CategoriaMapper {
         return entidadeCategoriaParaAtualizar;
     }
 
-    public static Categoria transformarEmRespostaDto(CategoriaListagemDto entidadeCategoriaResposta) {
-        Categoria entidadeCategoriaParaResposta = new Categoria();
+    public static CategoriaListagemDto transformarEmRespostaDto(Categoria entidadeCategoriaResposta) {
+        CategoriaListagemDto entidadeCategoriaParaResposta = new CategoriaListagemDto();
         entidadeCategoriaParaResposta.setId(entidadeCategoriaResposta.getId());
         entidadeCategoriaParaResposta.setNome(entidadeCategoriaResposta.getNome());
         entidadeCategoriaParaResposta.setFuncionario(entidadeCategoriaResposta.getFuncionario());
