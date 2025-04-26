@@ -9,6 +9,7 @@ import school.sptech.controller.produto.dto.ProdutoCadastroDto;
 import school.sptech.controller.produto.dto.ProdutoListagemDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.produto.Produto;
+import school.sptech.entity.setor.Setor;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.produto.ProdutoRepository;
@@ -64,7 +65,6 @@ public class ProdutoService {
 
         produtoExiste.setNome(produtoParaEditar.getNome());
         produtoExiste.setQuantidade(produtoParaEditar.getQuantidade());
-        produtoExiste.setDataVencimento(produtoParaEditar.getDataVencimento());
         produtoExiste.setValorCompra(produtoParaEditar.getValorCompra());
         produtoExiste.setValorUnitario(produtoParaEditar.getValorUnitario());
         produtoExiste.setQuantidadeMin(produtoParaEditar.getQuantidadeMin());
@@ -141,8 +141,8 @@ public class ProdutoService {
         return quantidadeProduto;
     }
 
-    public List<ProdutoListagemDto> listarProdutoPorCategoriaEmpresa(String categoria, Integer idFuncionario) {
-        List<Produto> produtosCategoriaEmpresa = repository.listarProdutoPorCategoriaEmpresa(categoria, idFuncionario);
+    public List<ProdutoListagemDto> listarProdutoPorCategoriaEmpresa(Integer categoriaId, Integer idFuncionario) {
+        List<Produto> produtosCategoriaEmpresa = repository.listarProdutoPorCategoriaEmpresa(categoriaId, idFuncionario);
         if (produtosCategoriaEmpresa.isEmpty()) {
             return Collections.emptyList();
         }
@@ -152,8 +152,8 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProdutoListagemDto> listarProdutoPorSetorEmpresa(String setor, Integer idFuncionario) {
-        List<Produto> produtosCategoriaEmpresa = repository.listarProdutoPorSetorEmpresa(setor, idFuncionario);
+    public List<ProdutoListagemDto> listarProdutoPorSetorEmpresa(Integer setorId, Integer idFuncionario) {
+        List<Produto> produtosCategoriaEmpresa = repository.listarProdutoPorSetorEmpresa(setorId, idFuncionario);
         if (produtosCategoriaEmpresa.isEmpty()) {
             return Collections.emptyList();
         }

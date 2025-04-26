@@ -17,9 +17,6 @@ public class Categoria extends CategoriaListagemDto {
     private String nome;
 
     @ManyToOne
-    private Empresa empresa;
-
-    @ManyToOne
     private Funcionario funcionario;
 
     public Funcionario getFuncionario() {
@@ -44,14 +41,6 @@ public class Categoria extends CategoriaListagemDto {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
     }
 }
 

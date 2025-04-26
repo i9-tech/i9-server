@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.produto.dto.ProdutoCadastroDto;
 import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
 import school.sptech.controller.produto.dto.ProdutoListagemDto;
+import school.sptech.entity.setor.Setor;
 import school.sptech.service.produto.ProdutoService;
 import java.util.List;
 
@@ -74,15 +75,15 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(quantidadeProdutos);
     }
 
-    @GetMapping("/categoria/{categoria}/{idFuncionario}")
-    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorCategoria(@PathVariable String categoria, @PathVariable Integer idFuncionario) {
-        List<ProdutoListagemDto> responseDto = service.listarProdutoPorCategoriaEmpresa(categoria, idFuncionario);
+    @GetMapping("/categoria/{idFuncionario}")
+    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorCategoria(@RequestParam Integer categoriaId, @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarProdutoPorCategoriaEmpresa(categoriaId, idFuncionario);
         return ResponseEntity.status(200).body(responseDto);
     }
 
-    @GetMapping("/setor/{setor}/{idFuncionario}")
-    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorSetor(@PathVariable String setor, @PathVariable Integer idFuncionario) {
-        List<ProdutoListagemDto> responseDto = service.listarProdutoPorSetorEmpresa(setor, idFuncionario);
+    @GetMapping("/setor/{idFuncionario}")
+    public ResponseEntity<List<ProdutoListagemDto>> listarProdutosPorSetor(@RequestParam Integer setorId, @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarProdutoPorSetorEmpresa(setorId, idFuncionario);
         return ResponseEntity.status(200).body(responseDto);
     }
 
