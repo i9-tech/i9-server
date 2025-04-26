@@ -38,7 +38,7 @@ public class CategoriaController {
                 .body(CategoriaMapper.transformarEmRespostaListaDto(buscarCategoria));
     }
 
-    @GetMapping("/{id}/{idFuncionario}")
+    @GetMapping("/{idCategoria}/{idFuncionario}")
     public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer idCategoria, @PathVariable Integer idFuncionario) {
         Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(idCategoria, idFuncionario);
 

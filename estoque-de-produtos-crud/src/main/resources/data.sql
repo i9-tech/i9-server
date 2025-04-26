@@ -68,3 +68,60 @@ INSERT INTO produto (
 (1003, '2025-04-11', 3, 80, 50, 20, 1.20, 2.50, 3, 'Detergente para limpeza geral', 'Detergente Neutro', 2),
 (1004, '2025-04-11', 3, 200, 300, 50, 0.90, 1.50, 1, 'Água mineral sem gás', 'Água Mineral 500ml', 3),
 (1005, '2025-04-11', 4, 40, 70, 10, 2.80, 4.50, 2, 'Rolo de papel toalha absorvente', 'Papel Toalha', 1);
+
+-- PRATOS
+INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
+VALUES ('Hambúrguer Artesanal', 'imagens/hamburguer.jpg', 35.50, 'Pão artesanal, carne angus, queijo cheddar.', true, 1, 1, 1);
+
+INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
+VALUES ('Pizza Margherita', 'imagens/pizza_margherita.jpg', 42.00, 'Mussarela de búfala, tomate e manjericão.', true, 2, 2, 2);
+
+INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
+VALUES ('Cerveja Artesanal', 'imagens/cerveja.jpg', 18.00, 'Cerveja puro malte artesanal.', true, 3, 3, 3);
+
+INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
+VALUES ('Salada Caesar', 'imagens/salada_caesar.jpg', 27.50, 'Alface, parmesão, frango grelhado e croutons.', true, 1, 1, 4);
+
+INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
+VALUES ('Brownie de Chocolate', 'imagens/brownie.jpg', 15.00, 'Brownie de chocolate com sorvete de creme.', true, 2, 2, 5);
+
+
+-- ITENS CARRINHO
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
+VALUES ('venda2', 1, 1); -- Produto 1 (Arroz Branco Tipo 1)
+
+-- Inserir Item Carrinho com Produto
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
+VALUES ('venda2', 2, 1); -- Produto 2 (Feijão Carioca)
+
+-- Inserir Item Carrinho com Produto
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
+VALUES ('venda2', 3, 2); -- Produto 3 (Detergente Neutro)
+
+-- Inserir Item Carrinho com Produto
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
+VALUES ('venda2', 4, 3); -- Produto 4 (Água Mineral 500ml)
+
+-- Inserir Item Carrinho com Produto
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
+VALUES ('venda2', 5, 4); -- Produto 5 (Papel Toalha)
+
+-- Inserir Item Carrinho com Prato
+INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_unitario)
+VALUES ('venda2', 1, 1, 'Sem cebola', 35.50); -- Prato 1 (Hambúrguer Artesanal)
+
+-- Inserir Item Carrinho com Prato
+INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_unitario)
+VALUES ('venda2', 2, 1, 'Com extra queijo', 42.00); -- Prato 2 (Pizza Margherita)
+
+-- Inserir Item Carrinho com Prato
+INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_unitario)
+VALUES ('venda2', 3, 2, 'Sem gelo', 18.00); -- Prato 3 (Cerveja Artesanal)
+
+-- Inserir Item Carrinho com Prato
+INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_unitario)
+VALUES ('venda2', 4, 3, 'Sem croutons', 27.50); -- Prato 4 (Salada Caesar)
+
+-- Inserir Item Carrinho com Prato
+INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_unitario)
+VALUES ('venda2', 5, 4, 'Com sorvete de morango', 15.00); -- Prato 5 (Brownie de Chocolate)

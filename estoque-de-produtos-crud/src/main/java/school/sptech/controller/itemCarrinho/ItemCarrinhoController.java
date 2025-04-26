@@ -6,6 +6,7 @@ import school.sptech.controller.itemCarrinho.dto.AdicionarPratoItemCarrinhoDto;
 import school.sptech.controller.itemCarrinho.dto.AdicionarProdutoItemCarrinhoDto;
 import school.sptech.controller.itemCarrinho.dto.ItemCarrinhoListagemDto;
 import school.sptech.controller.itemCarrinho.dto.ItemCarrinhoMapper;
+import school.sptech.entity.prato.Prato;
 import school.sptech.service.itemCarrinho.ItemCarrinhoService;
 
 import java.util.List;
@@ -20,41 +21,46 @@ public class ItemCarrinhoController {
         this.itemCarrinhoService = itemCarrinhoService;
     }
 
-    @PostMapping("/prato")
+    @PostMapping("/prato/{idFuncionario}")
     public ResponseEntity<ItemCarrinhoListagemDto> adicionarPrato(
-            @RequestBody AdicionarPratoItemCarrinhoDto request
+            @RequestBody AdicionarPratoItemCarrinhoDto request,
+            @PathVariable Integer idFuncionario
             ) {
         return ResponseEntity
                 .ok(ItemCarrinhoMapper.
                         toPratoResponseDto(
-                                itemCarrinhoService.adicionarPrato(
-                                        ItemCarrinhoMapper.toEntity(request))));
+                                itemCarrinhoService.adicionarPrato(ItemCarrinhoMapper.toEntity(request), idFuncionario)));
     }
 
-    @PostMapping("/produto")
+    @PostMapping("/produto/{idFuncionario}")
     public ResponseEntity<ItemCarrinhoListagemDto> adicionarProduto(
-            @RequestBody AdicionarProdutoItemCarrinhoDto request
+            @RequestBody AdicionarProdutoItemCarrinhoDto request,
+            @PathVariable Integer idFuncionario
     ) {
         return ResponseEntity
                 .ok(ItemCarrinhoMapper.
                         toProdutoResponseDto(
                                 itemCarrinhoService.adicionarProduto(
-                                        ItemCarrinhoMapper.toEntity(request))));
+                                        ItemCarrinhoMapper.toEntity(request), idFuncionario)));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ItemCarrinhoListagemDto>> listarItens(){
+    @GetMapping("/{venda}/{idFuncionario}")
+    public ResponseEntity<List<ItemCarrinhoListagemDto>> listarItens(
+            @PathVariable String venda,
+            @PathVariable Integer idFuncionario
+    ){
         return ResponseEntity
                 .ok(ItemCarrinhoMapper.
                         toResponseDtoList(
-                                itemCarrinhoService.listarItens()));
+                                itemCarrinhoService.listarItens(venda, idFuncionario)));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/{venda}")
     public ResponseEntity<Void> removerItem(
-            @PathVariable Integer id
+            @PathVariable Integer id,
+            @PathVariable String venda
     ) {
-        itemCarrinhoService.removerItem(id);
+        itemCarrinhoService.removerItem(id, venda);
         return ResponseEntity.ok().build();
     }
 }
