@@ -12,8 +12,8 @@ import school.sptech.entity.funcionario.Funcionario;
         description = "DTO para transferência de novos dados do setor para atualização.")
 public class SetorAtualizarDto {
 
-    @NotBlank(message = "O nome não pode estar em branco")
-    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
+    @NotBlank(message = "O nome não pode estar em branco.")
+    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
     @Schema(
             description = "Nome do setor desejado. Não é possível criar mais de um setor com o mesmo nome.",
             example = "Lanchonete",

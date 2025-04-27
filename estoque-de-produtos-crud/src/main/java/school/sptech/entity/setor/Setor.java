@@ -17,7 +17,7 @@ public class Setor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(
-            description = "Identificador único do setor",
+            description = "Identificador único do setor.",
             example = "1",
             type = "integer"
     )

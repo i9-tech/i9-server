@@ -16,7 +16,7 @@ public class FuncionarioRequestDto {
     @Size(min = 3, max = 20)
     @NotBlank(message = "O nome é obrigatório")
     @Schema(
-            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa",
+            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
             example = "Agatha Nunes",
             type = "string"
     )
@@ -41,8 +41,8 @@ public class FuncionarioRequestDto {
     )
     private String cargo;
 
-    @NotNull(message = "A data de admissão é obrigatória")
-    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    @NotNull(message = "A data de admissão é obrigatória.")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro.")
     @Schema(
             description = "Data em que a pessoa empregada foi admitida. A data não pode estar no futuro.",
             example = "2025-04-26T16:45:32.000Z",
@@ -80,11 +80,11 @@ public class FuncionarioRequestDto {
     )
     private boolean proprietario;
 
-    @NotBlank(message = "A senha é obrigatória")
+    @NotBlank(message = "A senha é obrigatória.")
     @Size(min = 11,
-            message = "A senha deve ter no mínimo 11 caracteres")
+            message = "A senha deve ter no mínimo 11 caracteres.")
     @Schema(
-            description = "Senha que dará acesso ao sistema para a pessoa contratada",
+            description = "Senha que dará acesso ao sistema para a pessoa contratada.",
             hidden = true,
             type = "string"
     )

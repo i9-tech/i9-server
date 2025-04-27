@@ -9,7 +9,7 @@ public class FuncionarioMapper {
     public FuncionarioMapper() {
     }
 
-    @Operation(summary = "Transforma um DTO de requisição de funcionário em entidade de funcionário",
+    @Operation(summary = "Transforma um DTO de requisição de funcionário em entidade de funcionário.",
             description = "Converte os dados de um DTO de requisição de funcionário em uma entidade de funcionário para persistência no banco de dados.")
     public static Funcionario toEntity(FuncionarioRequestDto requestDto, Empresa empresa){
         if (requestDto == null){
@@ -35,8 +35,8 @@ public class FuncionarioMapper {
 
 
 
-    @Operation(summary = "Transforma uma entidade de funcionario em DTO de resposta",
-            description = "Converte os dados de uma entidade de funcionario em um DTO de resposta para ser enviado na resposta da API.")
+    @Operation(summary = "Transforma uma entidade de funcionário em DTO de resposta.",
+            description = "Converte os dados de uma entidade de funcionário em um DTO de resposta para ser enviado na resposta da API.")
     //convertendo entity em dto
     public static FuncionarioResponseDto toDto(Funcionario funcionario){
         if (funcionario == null){

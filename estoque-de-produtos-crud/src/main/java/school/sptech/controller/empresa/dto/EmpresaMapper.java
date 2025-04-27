@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EmpresaMapper {
 
-    @Operation(summary = "Transforma um DTO de cadastro de empresa em entidade de empresa",
+    @Operation(summary = "Transforma um DTO de cadastro de empresa em entidade de empresa.",
             description = "Converte os dados de um DTO de cadastro de empresa em uma entidade de empresa para persistência no banco de dados.")
     public static Empresa transformarEmEntidade(EmpresaCadastroDto empresaEnviadaDto) {
         Empresa entidadeEmpresa = new Empresa();
@@ -24,7 +24,7 @@ public class EmpresaMapper {
         return entidadeEmpresa;
     }
 
-    @Operation(summary = "Transforma um DTO de atualização de empresa em entidade de empresa",
+    @Operation(summary = "Transforma um DTO de atualização de empresa em entidade de empresa.",
             description = "Converte os dados de um DTO de atualização de empresa em uma entidade de empresa para atualizar os dados existentes no banco de dados.")
     public static Empresa transformarEmEntidade(EmpresaAtualizarDto empresaEnviadaDto) {
         Empresa entidadeEmpresaParaAtualizar = new Empresa();
@@ -35,7 +35,7 @@ public class EmpresaMapper {
         return entidadeEmpresaParaAtualizar;
     }
 
-    @Operation(summary = "Transforma uma entidade de empresa em DTO de resposta",
+    @Operation(summary = "Transforma uma entidade de empresa em DTO de resposta.",
             description = "Converte os dados de uma entidade de empresa em um DTO de resposta para ser enviado na resposta da API.")
     public static EmpresaListagemDto transformarEmRespostaDto(Empresa entidadeEmpresaResposta) {
         EmpresaListagemDto entidadeEmpresaParaResposta = new EmpresaListagemDto();
@@ -50,7 +50,7 @@ public class EmpresaMapper {
         return entidadeEmpresaParaResposta;
     }
 
-    @Operation(summary = "Transforma uma lista de entidades de empresa em uma lista de DTOs de resposta",
+    @Operation(summary = "Transforma uma lista de entidades de empresa em uma lista de DTOs de resposta.",
             description = "Converte uma lista de entidades de empresa em uma lista de DTOs de resposta para ser enviado na resposta da API.")
     public static List<EmpresaListagemDto> transformarEmRespostaDtoList(List<Empresa> empresaList) {
 

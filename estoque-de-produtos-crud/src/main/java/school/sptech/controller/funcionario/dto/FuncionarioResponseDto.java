@@ -9,7 +9,7 @@ import java.util.Date;
 public class FuncionarioResponseDto {
 
     @Schema(
-            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa",
+            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
             example = "Agatha Nunes",
             type = "string"
     )

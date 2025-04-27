@@ -17,14 +17,14 @@ import java.time.LocalDate;
 public class ProdutoListagemDto {
 
     @Schema(
-            description = "Identificador único do produto",
+            description = "Identificador único do produto.",
             example = "1",
             type = "integer"
     )
     private Integer id;
 
     @Schema(
-            description = "Código de identificação do produto",
+            description = "Código de identificação do produto.",
             example = "0122339475",
             type = "int"
     )
@@ -32,7 +32,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Nome do produto a ser cadastrado",
+            description = "Nome do produto a ser cadastrado.",
             example = "Bolinho Ana Maria",
             type = "string"
     )
@@ -40,7 +40,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Quantidade a ser cadastrada do produto informado. Deve ser maior que 0 e menor que a quantidade máxima",
+            description = "Quantidade a ser cadastrada do produto informado. Deve ser maior que 0 e menor que a quantidade máxima.",
             example = "15",
             type = "int"
     )
@@ -48,7 +48,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Valor que produto foi comprado. Deve ser menor que o valor de venda",
+            description = "Valor que produto foi comprado. Deve ser menor que o valor de venda.",
             example = "3.00",
             type = "double"
     )
@@ -56,7 +56,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Valor que produto comprado será vendido. Deve ser maior que o valor de compra",
+            description = "Valor que produto comprado será vendido. Deve ser maior que o valor de compra.",
             example = "5.00",
             type = "double"
     )
@@ -64,7 +64,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Quantidade mínima do estoque. Esse valor serve de parâmetro para possíveis aletras de estoque baixo. Deve ser menor que a quantidade máxima",
+            description = "Quantidade mínima do estoque. Esse valor serve de parâmetro para possíveis alertas de estoque baixo. Deve ser menor que a quantidade máxima.",
             example = "3",
             type = "int"
     )
@@ -72,7 +72,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Quantidade máxima do estoque. Esse valor serve de parâmetro para possíveis aletras de estoque superlotado. Deve ser maior que a quantidade mínima",
+            description = "Quantidade máxima do estoque. Esse valor serve de parâmetro para possíveis alertas de estoque superlotado. Deve ser maior que a quantidade mínima",
             example = "30",
             type = "int"
     )
@@ -80,7 +80,7 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto",
+            description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto.",
             example = "O Bolinho Ana Maria é um produto de confeitaria, embalado individualmente, ideal para lanches rápidos.",
             type = "string",
             nullable = true
@@ -88,7 +88,7 @@ public class ProdutoListagemDto {
     private String descricao;
 
     @Schema(
-            description = "Data em que o produto foi registrado no sistema da empresa. A data não pode ser informada no futuro",
+            description = "Data em que o produto foi registrado no sistema da empresa. A data não pode ser informada no futuro.",
             example = "2025-04-25",
             format = "date",
             type = "string"
@@ -97,14 +97,14 @@ public class ProdutoListagemDto {
 
 
     @Schema(
-            description = "Setor que o produto pertencerá. É necessário informar setor e categoria para cadastro de produto",
+            description = "Setor que o produto pertencerá. É necessário informar setor e categoria para cadastro de produto.",
             implementation = SetorListagemDto.class
     )
     private Setor setor;
 
 
     @Schema(
-            description = "Categoria que o produto pertencerá. É necessário informar uma categoria existente do setor anteriormente informado",
+            description = "Categoria que o produto pertencerá. É necessário informar uma categoria existente do setor anteriormente informado.",
             implementation = CategoriaListagemDto.class
     )
     private Categoria categoria;

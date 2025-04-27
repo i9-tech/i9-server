@@ -11,7 +11,7 @@ import school.sptech.entity.funcionario.Funcionario;
 public class SetorListagemDto {
 
     @Schema(
-            description = "Identificador único do setor",
+            description = "Identificador único do setor.",
             example = "1",
             type = "integer"
     )

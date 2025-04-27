@@ -12,8 +12,8 @@ import school.sptech.entity.funcionario.Funcionario;
         description = "DTO para transferência de novos dados da categoria para atualização.")
 public class CategoriaAtualizarDto {
 
-    @NotBlank(message = "O nome não pode estar em branco")
-    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
+    @NotBlank(message = "O nome não pode estar em branco.")
+    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
     @Schema(
             description = "Nome da categoria desejada. É possível existir mais de um tipo de categoria por setor.",
             example = "Sobremesas",
@@ -28,11 +28,11 @@ public class CategoriaAtualizarDto {
     )
     private Funcionario funcionario;
 
-    public @NotBlank(message = "O nome não pode estar em branco") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String getNome() {
+    public @NotBlank(message = "O nome não pode estar em branco.") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.") String getNome() {
         return nome;
     }
 
-    public void setNome(@NotBlank(message = "O nome não pode estar em branco") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String nome) {
+    public void setNome(@NotBlank(message = "O nome não pode estar em branco.") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.") String nome) {
         this.nome = nome;
     }
 

@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/empresas")
-@Tag(name = "Empresas", description = "Operações relacionadas as empresas")
+@Tag(name = "Empresas", description = "Operações relacionadas as empresas.")
 public class EmpresaController {
 
     private final EmpresaService empresaService;
@@ -36,8 +36,8 @@ public class EmpresaController {
     @PostMapping
     @Operation(summary = "Cadastrar nova empresa", description = "Cadastra uma nova empresa na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados",
+            @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -60,7 +60,7 @@ public class EmpresaController {
     @GetMapping
     @Operation(summary = "Listar empresas", description = "Lista todas as empresas presentes na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empresas listadas com sucesso",
+            @ApiResponse(responseCode = "200", description = "Empresas listadas com sucesso.",
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(
                             example = """
@@ -82,11 +82,11 @@ public class EmpresaController {
                     "ativo": true
                   }
                 ]""")))),
-            @ApiResponse(responseCode = "404", description = "Empresas não encontradas",
+            @ApiResponse(responseCode = "404", description = "Empresas não encontradas.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "Não foi encontrada nenhuma empresa"
+              "mensagem": "Não foi encontrada nenhuma empresa."
             }
             """))
             )
@@ -101,12 +101,12 @@ public class EmpresaController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar empresa por ID", description = "Retorna uma empresa presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empresa encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Empresa com ID não encontrada",
+            @ApiResponse(responseCode = "200", description = "Empresa encontrada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Empresa com ID não encontrada.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "A empresa não foi encontrada nesse ID"
+              "mensagem": "A empresa não foi encontrada nesse ID."
             }
             """))
             )
@@ -123,7 +123,7 @@ public class EmpresaController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar empresa existente", description = "Atualiza uma empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso",
+            @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -136,7 +136,7 @@ public class EmpresaController {
             }
             """))
             ),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados",
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -144,11 +144,11 @@ public class EmpresaController {
             }
             """))
             ),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada",
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "A empresa não foi encontrada"
+              "mensagem": "A empresa não foi encontrada."
             }
             """))
             )
@@ -156,7 +156,7 @@ public class EmpresaController {
     public ResponseEntity<EmpresaListagemDto> atualizar(
             @Parameter(description = "ID da empresa", example = "1", required = true)
             @PathVariable Integer id,
-            @Parameter(description = "Dados da empresa para atualização", required = true)
+            @Parameter(description = "Dados da empresa para atualização.", required = true)
             @Valid @RequestBody EmpresaAtualizarDto empresaParaAtualizar) {
         Empresa entidadeParaAtualizar = empresaService.atualizarEmpresa(id, EmpresaMapper.transformarEmEntidade(empresaParaAtualizar));
 
@@ -168,12 +168,12 @@ public class EmpresaController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover empresa existente", description = "Remove uma empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Empresa removida com sucesso", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Empresa não encontrada",
+            @ApiResponse(responseCode = "204", description = "Empresa removida com sucesso.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "A empresa não foi encontrada"
+              "mensagem": "A empresa não foi encontrada."
             }
             """)))
     })

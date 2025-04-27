@@ -19,16 +19,16 @@ public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(
-            description = "Identificador único do funcionário",
+            description = "Identificador único do funcionário.",
             example = "1",
             type = "integer"
     )
     private int id;
 
-    @NotBlank(message = "O nome é obrigatório")
+    @NotBlank(message = "O nome é obrigatório.")
     @Size(min = 3, max = 20)
     @Schema(
-            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa",
+            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
             example = "Agatha Nunes",
             type = "string"
     )
@@ -44,7 +44,7 @@ public class Funcionario {
     )
     private String cpf;
 
-    @NotBlank(message = "O cargo é obrigatório")
+    @NotBlank(message = "O cargo é obrigatório.")
     @Schema(
             description = "Cargo da pessoa contratada pela empresa.",
             example = "Atendente",
@@ -52,8 +52,8 @@ public class Funcionario {
     )
     private String cargo;
 
-    @NotNull(message = "A data de admissão é obrigatória")
-    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
+    @NotNull(message = "A data de admissão é obrigatória.")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro.")
     @Schema(
             description = "Data em que a pessoa empregada foi admitida. A data não pode estar no futuro.",
             example = "2025-04-26T16:45:32.000Z",
@@ -97,16 +97,16 @@ public class Funcionario {
     )
     private boolean ativo = true;
 
-    @NotBlank(message = "A senha é obrigatória")
-    @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres")
+    @NotBlank(message = "A senha é obrigatória.")
+    @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres.")
     @Schema(
-            description = "Senha que dará acesso ao sistema para a pessoa contratada",
+            description = "Senha que dará acesso ao sistema para a pessoa contratada.",
             hidden = true,
             type = "string"
     )
     private String senha;
 
-    @NotNull(message = "A empresa vinculada é obrigatória")
+    @NotNull(message = "A empresa vinculada é obrigatória.")
     @ManyToOne
     @Schema(
             description = "Empresa associada à pessoa contratada.",

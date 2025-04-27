@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CategoriaMapper {
 
-    @Operation(summary = "Transforma um DTO de cadastro de categoria em entidade de categoria",
+    @Operation(summary = "Transforma um DTO de cadastro de categoria em entidade de categoria.",
             description = "Converte os dados de um DTO de cadastro de categoria em uma entidade de categoria para persistência no banco de dados.")
     public static Categoria transformarEmEntidade(CategoriaCadastroDto categoriaEnviadaDto) {
         Categoria entidadeCategoria = new Categoria();
@@ -16,7 +16,7 @@ public class CategoriaMapper {
         return entidadeCategoria;
     }
 
-    @Operation(summary = "Transforma um DTO de atualização de categoria em entidade de categoria",
+    @Operation(summary = "Transforma um DTO de atualização de categoria em entidade de categoria.",
             description = "Converte os dados de um DTO de atualização de categoria em uma entidade de categoria para atualizar os dados existentes no banco de dados.")
     public static Categoria transformarEmEntidade(CategoriaAtualizarDto categoriaEnviadaDto) {
         Categoria entidadeCategoriaParaAtualizar = new Categoria();
@@ -24,7 +24,7 @@ public class CategoriaMapper {
         return entidadeCategoriaParaAtualizar;
     }
 
-    @Operation(summary = "Transforma uma entidade de categoria em DTO de resposta",
+    @Operation(summary = "Transforma uma entidade de categoria em DTO de resposta.",
             description = "Converte os dados de uma entidade de categoria em um DTO de resposta para ser enviado na resposta da API.")
     public static CategoriaListagemDto transformarEmRespostaDto(Categoria entidadeCategoriaResposta) {
         CategoriaListagemDto entidadeCategoriaParaResposta = new CategoriaListagemDto();
@@ -34,7 +34,7 @@ public class CategoriaMapper {
         return entidadeCategoriaParaResposta;
     }
 
-    @Operation(summary = "Transforma uma lista de entidades de categoria em uma lista de DTOs de resposta",
+    @Operation(summary = "Transforma uma lista de entidades de categoria em uma lista de DTOs de resposta.",
             description = "Converte uma lista de entidades de categoria em uma lista de DTOs de resposta para ser enviado na resposta da API.")
     public static List<CategoriaListagemDto> transformarEmRespostaListaDto(List<Categoria> entidadeCategoriaResposta) {
 
@@ -47,7 +47,6 @@ public class CategoriaMapper {
         dtoCategoriaParaResposta.setFuncionario(entidadeCategoriaResposta.get(i).getFuncionario());
         respostasDto.add(dtoCategoriaParaResposta);
         }
-
         return respostasDto;
     }
 }

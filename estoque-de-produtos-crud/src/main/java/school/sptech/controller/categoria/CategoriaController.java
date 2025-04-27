@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/categorias")
-@Tag(name = "Categorias", description = "Operações relacionadas as categorias de produtos e pratos")
+@Tag(name = "Categorias", description = "Operações relacionadas as categorias de produtos e pratos.")
 public class CategoriaController {
 
     private final CategoriaService categoriaService;
@@ -38,7 +38,7 @@ public class CategoriaController {
     @GetMapping({"/{idFuncionario}"})
     @Operation(summary = "Listar categorias", description = "Lista todas as categorias presentes na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Categorias listadas com sucesso",
+            @ApiResponse(responseCode = "200", description = "Categorias listadas com sucesso.",
                     content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(
                                     example = """
@@ -74,7 +74,7 @@ public class CategoriaController {
                       }
                     }
                 ]""")))),
-            @ApiResponse(responseCode = "404", description = "Empresas não encontradas",
+            @ApiResponse(responseCode = "404", description = "Empresas não encontradas.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -84,7 +84,7 @@ public class CategoriaController {
             )
     })
     public ResponseEntity<List<CategoriaListagemDto>> listagem(
-            @Parameter(description = "Identificação de funcionário que está cadastrando categoria", required = true)
+            @Parameter(description = "Identificação do funcionário que está cadastrando categoria.", required = true)
             @PathVariable Integer idFuncionario) {
         List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias(idFuncionario);
         if (buscarCategoria.isEmpty()) {
@@ -98,12 +98,12 @@ public class CategoriaController {
     @GetMapping("/{id}/{idFuncionario}")
     @Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Categoria com ID não encontrada",
+            @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Categoria com ID não encontrada.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "A categoria não foi encontrada nesse ID"
+              "mensagem": "A categoria não foi encontrada nesse ID."
             }
             """))
             )
@@ -123,8 +123,8 @@ public class CategoriaController {
     @PostMapping("/{idFuncionario}")
     @Operation(summary = "Cadastrar nova categoria", description = "Cadastra uma nova categoria na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados",
+            @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -134,9 +134,9 @@ public class CategoriaController {
             )
     })
     public ResponseEntity<CategoriaListagemDto> cadastrar(
-            @Parameter(description = "Dados da categoria para cadastro", required = true)
+            @Parameter(description = "Dados da categoria para cadastro.", required = true)
             @Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro,
-            @Parameter(description = "Identificação de funcionário que está cadastrando categoria", required = true)
+            @Parameter(description = "Identificação do funcionário que está cadastrando categoria.", required = true)
             @PathVariable Integer idFuncionario) {
         Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro), idFuncionario);
 
@@ -149,7 +149,7 @@ public class CategoriaController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar categoria existente", description = "Atualiza uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso",
+            @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
              {
@@ -164,7 +164,7 @@ public class CategoriaController {
              }
             """))
             ),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados",
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -172,11 +172,11 @@ public class CategoriaController {
             }
             """))
             ),
-            @ApiResponse(responseCode = "404", description = "Categoria não encontrada",
+            @ApiResponse(responseCode = "404", description = "Categoria não encontrada.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "A categoria não foi encontrada"
+              "mensagem": "A categoria não foi encontrada."
             }
             """))
             )
@@ -184,7 +184,7 @@ public class CategoriaController {
     public ResponseEntity<CategoriaListagemDto> atualizar(
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Integer id,
-            @Parameter(description = "Dados da categoria para atualização", required = true)
+            @Parameter(description = "Dados da categoria para atualização.", required = true)
             @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar) {
         Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar));
 
@@ -196,17 +196,17 @@ public class CategoriaController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover categoria existente", description = "Remove uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Categoria removida com sucesso", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Categoria não encontrada",
+            @ApiResponse(responseCode = "201", description = "Categoria removida com sucesso.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Categoria não encontrada.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "A categoria não foi encontrada"
+              "mensagem": "A categoria não foi encontrada."
             }
             """)))
     })
     public ResponseEntity<CategoriaListagemDto> remover(
-            @Parameter(description = "ID da categoria", example = "1", required = true)
+            @Parameter(description = "ID da categoria.", example = "1", required = true)
             @PathVariable Integer id) {
         categoriaService.removerCategoria(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

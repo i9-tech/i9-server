@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/setores")
-@Tag(name = "Setores", description = "Operações relacionadas aos setores de produtos e serviços")
+@Tag(name = "Setores", description = "Operações relacionadas aos setores de produtos e serviços.")
 public class SetorController {
 
     private final SetorService setorService;
@@ -72,7 +72,7 @@ public class SetorController {
                     }
                   }
                 ]""")))),
-            @ApiResponse(responseCode = "404", description = "Setores não encontrados",
+            @ApiResponse(responseCode = "404", description = "Setores não encontrados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -82,7 +82,7 @@ public class SetorController {
             )
     })
     public ResponseEntity<List<SetorListagemDto>> listagem(
-            @Parameter(description = "Identificação de funcionário que está cadastrando setor", required = true)
+            @Parameter(description = "Identificação do funcionário que está cadastrando setor.", required = true)
             @PathVariable Integer idFuncionario) {
         List<Setor> buscarSetor = setorService.listarTodosSetores(idFuncionario);
         if (buscarSetor.isEmpty()) {
@@ -96,8 +96,8 @@ public class SetorController {
     @GetMapping("/{idSetor}/{idFuncionario}")
     @Operation(summary = "Buscar setor por ID", description = "Retorna um setor presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Setor encontrado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Setor com ID não encontrado",
+            @ApiResponse(responseCode = "200", description = "Setor encontrado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Setor com ID não encontrado.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -123,8 +123,8 @@ public class SetorController {
     @PostMapping("/{idFuncionario}")
     @Operation(summary = "Cadastrar novo setor", description = "Cadastra um novo setor na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Setor cadastrado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados",
+            @ApiResponse(responseCode = "201", description = "Setor cadastrado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -134,9 +134,9 @@ public class SetorController {
             )
     })
     public ResponseEntity<SetorListagemDto> cadastrar(
-            @Parameter(description = "Dados do setor para cadastro", required = true)
+            @Parameter(description = "Dados do setor para cadastro.", required = true)
             @Valid @RequestBody SetorCadastroDto setorParaCadastro,
-            @Parameter(description = "Identificação de funcionário que está cadastrando setor", required = true)
+            @Parameter(description = "Identificação do funcionário que está cadastrando setor.", required = true)
             @PathVariable Integer idFuncionario) {
         Setor novoSetor = setorService.cadastrarSetor(SetorMapper.transformarEmEntidade(setorParaCadastro), idFuncionario);
 
@@ -148,7 +148,7 @@ public class SetorController {
     @PutMapping("/{idSetor}")
     @Operation(summary = "Atualizar setor existente", description = "Atualiza um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Setor atualizado com sucesso",
+            @ApiResponse(responseCode = "200", description = "Setor atualizado com sucesso.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
              {
@@ -163,7 +163,7 @@ public class SetorController {
              }
             """))
             ),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados",
+            @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
@@ -171,19 +171,19 @@ public class SetorController {
             }
             """))
             ),
-            @ApiResponse(responseCode = "404", description = "Setor não encontrado",
+            @ApiResponse(responseCode = "404", description = "Setor não encontrado.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "O setor não foi encontrado"
+              "mensagem": "O setor não foi encontrado."
             }
             """))
             )
     })
     public ResponseEntity<SetorListagemDto> atualizar(
-            @Parameter(description = "ID do setor", example = "1", required = true)
+            @Parameter(description = "ID do setor.", example = "1", required = true)
             @PathVariable Integer idSetor,
-            @Parameter(description = "Dados do setor para atualização", required = true)
+            @Parameter(description = "Dados do setor para atualização.", required = true)
             @Valid @RequestBody SetorAtualizarDto setorParaAtualizar) {
         Setor entidadeParaAtualizar = setorService.atualizarSetor(idSetor, SetorMapper.transformarEmEntidade(setorParaAtualizar));
 
@@ -195,12 +195,12 @@ public class SetorController {
     @DeleteMapping("/{idSetor}")
     @Operation(summary = "Remover setor existente", description = "Remove um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Setor removido com sucesso", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Setor não encontrado",
+            @ApiResponse(responseCode = "201", description = "Setor removido com sucesso.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Setor não encontrado.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "O setor não foi encontrado"
+              "mensagem": "O setor não foi encontrado."
             }
             """)))
 

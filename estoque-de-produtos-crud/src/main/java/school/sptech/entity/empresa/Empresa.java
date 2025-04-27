@@ -16,14 +16,14 @@ public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(
-            description = "Identificador único da empresa",
+            description = "Identificador único da empresa.",
             example = "1",
             type = "integer"
     )
     private Integer id;
 
     @Schema(
-            description = "Nome fantasia ou razão social da empresa",
+            description = "Nome fantasia ou razão social da empresa.",
             example = "Restaurante Tauá",
             type = "string"
     )
@@ -39,7 +39,7 @@ public class Empresa {
     private String cnpj;
 
     @Schema(
-            description = "Endereço físico ou comercial da empresa",
+            description = "Endereço físico ou comercial da empresa.",
             example = "Rua Haddock Lobo, 595 - Consolação, São Paulo - SP",
             type = "string"
     )

@@ -18,7 +18,7 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(
-            description = "Identificador único da categoria",
+            description = "Identificador único da categoria.",
             example = "1",
             type = "integer"
     )

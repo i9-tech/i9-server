@@ -11,14 +11,14 @@ import java.time.LocalDate;
 public class EmpresaListagemDto {
 
     @Schema(
-            description = "Identificador único da empresa",
+            description = "Identificador único da empresa.",
             example = "1",
             type = "integer"
     )
     private Integer id;
 
     @Schema(
-            description = "Nome fantasia ou razão social da empresa",
+            description = "Nome fantasia ou razão social da empresa.",
             example = "Restaurante Tauá",
             type = "string"
     )

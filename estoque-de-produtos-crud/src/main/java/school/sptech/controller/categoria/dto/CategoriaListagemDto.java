@@ -10,7 +10,7 @@ import school.sptech.entity.funcionario.Funcionario;
         description = "DTO para transferência de dados da categoria para listagem.")
 public class CategoriaListagemDto {
     @Schema(
-            description = "Identificador único da categoria",
+            description = "Identificador único da categoria.",
             example = "1",
             type = "integer"
     )

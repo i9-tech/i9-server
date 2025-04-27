@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SetorMapper {
 
-    @Operation(summary = "Transforma um DTO de cadastro de setor em entidade de setor",
+    @Operation(summary = "Transforma um DTO de cadastro de setor em entidade de setor.",
             description = "Converte os dados de um DTO de cadastro de empresa em uma entidade de setor para persistência no banco de dados.")
     public static Setor transformarEmEntidade(SetorCadastroDto setorEnviadoDto) {
         Setor entidadeSetor = new Setor();
@@ -16,7 +16,7 @@ public class SetorMapper {
         return entidadeSetor;
     }
 
-    @Operation(summary = "Transforma um DTO de atualização de setor em entidade de empresa",
+    @Operation(summary = "Transforma um DTO de atualização de setor em entidade de empresa.",
             description = "Converte os dados de um DTO de atualização de setor em uma entidade de setor para atualizar os dados existentes no banco de dados.")
     public static Setor transformarEmEntidade(SetorAtualizarDto setorEnviadoDto) {
         Setor entidadeSetorParaAtualizar = new Setor();
@@ -24,7 +24,7 @@ public class SetorMapper {
         return entidadeSetorParaAtualizar;
     }
 
-    @Operation(summary = "Transforma uma entidade de setor em DTO de resposta",
+    @Operation(summary = "Transforma uma entidade de setor em DTO de resposta.",
             description = "Converte os dados de uma entidade de setor em um DTO de resposta para ser enviado na resposta da API.")
     public static SetorListagemDto transformarEmRespostaDto(Setor entidadeSetorResposta) {
         SetorListagemDto dtoSetorParaResposta = new SetorListagemDto();
@@ -34,7 +34,7 @@ public class SetorMapper {
         return dtoSetorParaResposta;
     }
 
-    @Operation(summary = "Transforma uma lista de entidades de setor em uma lista de DTOs de resposta",
+    @Operation(summary = "Transforma uma lista de entidades de setor em uma lista de DTOs de resposta.",
             description = "Converte uma lista de entidades de setor em uma lista de DTOs de resposta para ser enviado na resposta da API.")
     public static List<SetorListagemDto> transformarEmListaRespostaDto(List<Setor> entidadesSetorResposta) {
         List<SetorListagemDto> respostasEmDto = new ArrayList<>();
