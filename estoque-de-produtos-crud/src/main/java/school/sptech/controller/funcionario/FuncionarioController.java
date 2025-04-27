@@ -2,6 +2,7 @@ package school.sptech.controller.funcionario;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.funcionario.dto.*;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/colaboradores")
+@Tag(name = "Funcionários", description = "Operações relacionadas aos funcionários")
 public class FuncionarioController {
 
     private final FuncionarioService service;

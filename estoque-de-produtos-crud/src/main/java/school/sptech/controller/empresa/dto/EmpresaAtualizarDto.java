@@ -13,19 +13,19 @@ public class EmpresaAtualizarDto {
     @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
     private String nome;
 
-    public String getEndereco() {
+    public @NotBlank(message = "O endereco não pode estar em branco") @Size(max = 100, message = "O endereco deve ter no máximo 100 caracteres") String getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(@NotBlank(message = "O endereco não pode estar em branco") @Size(max = 100, message = "O endereco deve ter no máximo 100 caracteres") String endereco) {
         this.endereco = endereco;
     }
 
-    public String getNome() {
+    public @NotBlank(message = "O nome não pode estar em branco") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@NotBlank(message = "O nome não pode estar em branco") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String nome) {
         this.nome = nome;
     }
 }

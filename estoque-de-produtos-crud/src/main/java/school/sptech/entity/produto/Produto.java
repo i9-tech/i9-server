@@ -1,7 +1,9 @@
 package school.sptech.entity.produto;
 
 import jakarta.persistence.*;
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 import java.time.LocalDate;
 
@@ -16,14 +18,18 @@ public class Produto {
 //    private byte[] imagem;
     private String nome;
     private int quantidade;
-    private LocalDate dataVencimento;
     private double valorCompra;
     private double valorUnitario;
     private int quantidadeMin;
     private int quantidadeMax;
     private String descricao;
-    private String categoria;
-    private String setor;
+
+    @ManyToOne
+    private Categoria categoria;
+
+    @ManyToOne
+    private Setor setor;
+
     private LocalDate dataRegistro;
     @ManyToOne
     private Funcionario funcionario;
@@ -68,14 +74,6 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
-    }
-
     public double getValorCompra() {
         return valorCompra;
     }
@@ -116,19 +114,19 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public String getSetor() {
+    public Setor getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Setor setor) {
         this.setor = setor;
     }
 

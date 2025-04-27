@@ -11,7 +11,6 @@ import school.sptech.controller.setor.dto.SetorMapper;
 import school.sptech.entity.setor.Setor;
 import school.sptech.service.setor.SetorService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,24 +24,20 @@ public class SetorController {
         this.setorService = setorService;
     }
 
-    @GetMapping()
-    public ResponseEntity<SetorListagemDto> listagem() {
-        List<Setor> buscarSetor = setorService.listarTodosSetores();
+    @GetMapping("/{idFuncionario}")
+    public ResponseEntity<List<SetorListagemDto>> listagem(@PathVariable Integer idFuncionario) {
+        List<Setor> buscarSetor = setorService.listarTodosSetores(idFuncionario);
         if (buscarSetor.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        List<SetorListagemDto> respostaSetorDto = new ArrayList<>();
-
-        for (int i = 0; i < buscarSetor.size(); i++) {
-            respostaSetorDto.add(SetorMapper.transformarEmRespostaDto(buscarSetor.get(i)));
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body((SetorListagemDto) respostaSetorDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(SetorMapper.transformarEmListaRespostaDto(buscarSetor));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SetorListagemDto> listagemId(@PathVariable Integer id) {
-        Optional<Setor> setorEncontrado = setorService.buscarSetorPorId(id);
+    @GetMapping("/{idSetor}/{idFuncionario}")
+    public ResponseEntity<SetorListagemDto> listagemId(@PathVariable Integer idSetor, @PathVariable Integer idFuncionario) {
+        Optional<Setor> setorEncontrado = setorService.buscarSetorPorId(idSetor, idFuncionario);
 
         if (setorEncontrado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -53,27 +48,27 @@ public class SetorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    @PostMapping
-    public ResponseEntity<SetorListagemDto> cadastrar(@Valid @RequestBody SetorCadastroDto setorParaCadastro) {
-        Setor novoSetor = setorService.cadastrarSetor(SetorMapper.transformarEmRespostaDto(setorParaCadastro));
+    @PostMapping("/{idFuncionario}")
+    public ResponseEntity<SetorListagemDto> cadastrar(@PathVariable Integer idFuncionario, @Valid @RequestBody SetorCadastroDto setorParaCadastro) {
+        Setor novoSetor = setorService.cadastrarSetor(SetorMapper.transformarEmEntidade(setorParaCadastro), idFuncionario);
 
         SetorListagemDto respostaSetorDto = SetorMapper.transformarEmRespostaDto(novoSetor);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaSetorDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SetorListagemDto> atualizar(@PathVariable Integer id, @Valid @RequestBody SetorAtualizarDto setorParaAtualizar) {
-        Setor entidadeParaAtualizar = setorService.atualizarSetor(id, SetorMapper.transformarEmEntidade(setorParaAtualizar));
+    @PutMapping("/{idSetor}")
+    public ResponseEntity<SetorListagemDto> atualizar(@PathVariable Integer idSetor, @Valid @RequestBody SetorAtualizarDto setorParaAtualizar) {
+        Setor entidadeParaAtualizar = setorService.atualizarSetor(idSetor, SetorMapper.transformarEmEntidade(setorParaAtualizar));
 
         SetorListagemDto repsostaAtualizadaDto = SetorMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(repsostaAtualizadaDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<SetorListagemDto> remover(@PathVariable Integer id) {
-        setorService.removerSetor(id);
+    @DeleteMapping("/{idSetor}")
+    public ResponseEntity<SetorListagemDto> remover(@PathVariable Integer idSetor) {
+        setorService.removerSetor(idSetor);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

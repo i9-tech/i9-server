@@ -1,10 +1,11 @@
 package school.sptech.controller.produto.dto;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 import java.time.LocalDate;
 
@@ -18,10 +19,6 @@ public class ProdutoCadastroDto {
     @NotNull
     @Min(1)
     private Integer quantidade;
-
-    @NotNull
-    @Future
-    private LocalDate dataVencimento;
 
     @NotNull
     private Double valorCompra;
@@ -38,11 +35,9 @@ public class ProdutoCadastroDto {
     @NotBlank
     private String descricao;
 
-    @NotBlank
-    private String categoria;
+    private Categoria categoria;
 
-    @NotBlank
-    private String setor;
+    private Setor setor;
 
     @NotNull
     private LocalDate dataRegistro;
@@ -79,14 +74,6 @@ public class ProdutoCadastroDto {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
-    }
-
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
-    }
-
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
     }
 
     public Double getValorCompra() {
@@ -129,19 +116,20 @@ public class ProdutoCadastroDto {
         this.descricao = descricao;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public String getSetor() {
+
+    public Setor getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Setor setor) {
         this.setor = setor;
     }
 

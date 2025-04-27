@@ -20,31 +20,27 @@ import java.util.Optional;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    @Autowired
+
     private final CategoriaService categoriaService;
 
     public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<CategoriaListagemDto>> listagem() {
-        List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias();
+    @GetMapping({"/{idFuncionario}"})
+    public ResponseEntity<List<CategoriaListagemDto>> listagem(@PathVariable Integer idFuncionario) {
+        List<Categoria> buscarCategoria = categoriaService.listarTodasCategorias(idFuncionario);
         if (buscarCategoria.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        List<CategoriaListagemDto> respostaCategoriaDto = new ArrayList<>();
-
-        for (int i = 0; i < buscarCategoria.size(); i++) {
-            respostaCategoriaDto.add(CategoriaMapper.transformarEmRespostaDto(buscarCategoria.get(i)));
-        }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(respostaCategoriaDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(CategoriaMapper.transformarEmRespostaListaDto(buscarCategoria));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer id) {
-        Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(id);
+    @GetMapping("/{idCategoria}/{idFuncionario}")
+    public ResponseEntity<CategoriaListagemDto> listagemId(@PathVariable Integer idCategoria, @PathVariable Integer idFuncionario) {
+        Optional<Categoria> categoriaEncontrado = categoriaService.buscarCategoriaPorId(idCategoria, idFuncionario);
 
         if (categoriaEncontrado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -55,20 +51,9 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    //TENTATIVA POR URI AO DIGITAR
-    // @GetMapping
-    // public List<Categoria> listar(@RequestParam(required = false) String nome) {
-    //     if (nome != null && !nome.isEmpty()) {
-    //         return categoriaService.buscarPorNome(nome);
-    //     } else {
-    //         return categoriaService.listarTodasCategorias(); //metodo que retorna todas as categorias
-    //                                                         //coloquei para teste
-    //     }
-    // }
-
-    @PostMapping
-    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro) {
-        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro));
+    @PostMapping("/{idFuncionario}")
+    public ResponseEntity<CategoriaListagemDto> cadastrar(@Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro, @PathVariable Integer idFuncionario) {
+        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro), idFuncionario);
 
         CategoriaListagemDto respostaCategoriaDto = CategoriaMapper.transformarEmRespostaDto(novaCategoria);
 

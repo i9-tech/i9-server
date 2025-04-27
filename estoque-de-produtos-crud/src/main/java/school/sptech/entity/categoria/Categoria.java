@@ -3,10 +3,12 @@ package school.sptech.entity.categoria;
 import jakarta.persistence.*;
 import school.sptech.controller.categoria.dto.CategoriaListagemDto;
 import school.sptech.entity.empresa.Empresa;
+import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.produto.Produto;
 
 @Entity
 @Table(name = "categoria")
-public class Categoria extends CategoriaListagemDto {
+public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +17,15 @@ public class Categoria extends CategoriaListagemDto {
     private String nome;
 
     @ManyToOne
-    private Empresa empresa;
+    private Funcionario funcionario;
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
 
     public Integer getId() {
         return id;
@@ -31,14 +41,6 @@ public class Categoria extends CategoriaListagemDto {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
     }
 }
 

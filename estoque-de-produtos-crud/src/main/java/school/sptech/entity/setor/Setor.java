@@ -3,10 +3,11 @@ package school.sptech.entity.setor;
 import jakarta.persistence.*;
 import school.sptech.controller.setor.dto.SetorListagemDto;
 import school.sptech.entity.empresa.Empresa;
+import school.sptech.entity.funcionario.Funcionario;
 
 @Entity
 @Table(name = "setor")
-public class Setor extends SetorListagemDto {
+public class Setor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +16,7 @@ public class Setor extends SetorListagemDto {
     private String nome;
 
     @ManyToOne
-    private Empresa empresa;
+    private Funcionario funcionario;
 
     public Integer getId() {
         return id;
@@ -33,11 +34,11 @@ public class Setor extends SetorListagemDto {
         this.nome = nome;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 }
