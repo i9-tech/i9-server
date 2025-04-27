@@ -38,6 +38,11 @@ public class FuncionarioController {
         return ResponseEntity.status(200).body(funcionarioTokenDto);
     }
 
+    @PostMapping("/login/criptografar")
+    public ResponseEntity<String> criptografarSenha(@RequestParam String senha) {
+        return ResponseEntity.ok(service.criptografar(senha));
+    }
+
 
     @GetMapping("/{idEmpresa}")
     @SecurityRequirement(name = "Bearer")
@@ -63,6 +68,5 @@ public class FuncionarioController {
         FuncionarioResponseDto responseDto = service.editarFuncionario(id, idEmpresa, funcionarioParaEditar);
         return ResponseEntity.status(200).body(responseDto);
     }
-
 
 }

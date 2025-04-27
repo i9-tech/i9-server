@@ -1,33 +1,36 @@
 
 -- Inserir uma empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
-VALUES ('Empresa Exemplo', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true);
+VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true);
 
 -- Inserir outra empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
-VALUES ('Outra Empresa', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true);
+VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true);
 
 -- Inserir uma empresa inativa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
-VALUES ('Empresa Inativa', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false);
+VALUES ('Ygonna Bolos', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false);
 
 
 -- Inserir um funcionário
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('João Silva', '12345678900', 'Gerente', '2023-05-15', true, true, true, true, true, 'senha123', 1);
+VALUES ('João Silva', '123.456.789-00', 'Gerente', '2023-05-15', true, true, true, true, true, '$2a$10$G2/SarKppek1QTyQ0fw1Le.DwFHuw5st2bai9T2edfysLey2BwmYC', 1);
+                                                                                                -- senha: 12345678900@taua
 
 -- Inserir outro funcionário
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('Maria Oliveira', '987.654.321-11', 'Atendente', '2023-08-20', false, false, true, false, true, 'senha456', 1);
+VALUES ('Maria Oliveira', '987.654.321-11', 'Atendente', '2023-08-20', false, false, true, false, true, '$2a$10$.6TQeLGsSZQaw4sgI3lwrezCIDmYAfPaOSwIVjrIBhIxassLU4bW2', 1);
+                                                                                                         -- senha: 98765432111@taua
 
 -- Inserir um funcionário com acesso ao estoque
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, 'senha789', 3);
+VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, true, false, false, true, '$2a$10$P1Tas.U/mjNwN15QG704I.4fr2Udv55gZcLM8HIdz18VL7EDqYquS', 3);
+                                                                                                        -- senha: 11122233344@tai
 
 -- Inserir um funcionário sem acesso a nenhum setor
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, false, false, true, 'senha012', 2);
-
+VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, false, false, true, '$2a$10$xUpX3.bXqE5RtOuSZtNYZ.3BJdn9ZWfQUgq9INkqvq9g2cvNDwI0G', 2);
+                                                                                                    -- senha: 55566677788@tai
 
 -- Setores para restaurante/lanchonete vinculados aos funcionários
 INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Quente', 1);

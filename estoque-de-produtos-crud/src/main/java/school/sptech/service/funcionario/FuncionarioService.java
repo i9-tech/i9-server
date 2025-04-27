@@ -47,6 +47,10 @@ public class FuncionarioService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    public String criptografar(String senha) {
+        return passwordEncoder.encode(senha);
+    }
+
     public FuncionarioTokenDto autenticar(Funcionario funcionario) {
 
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
