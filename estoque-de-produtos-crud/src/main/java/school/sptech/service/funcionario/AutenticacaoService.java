@@ -20,14 +20,13 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         Optional<Funcionario> funcionario = repository.findByCpf(username);
 
         if (funcionario.isEmpty()) {
-
             throw new UsernameNotFoundException(String.format("usuario: %s nao encontrado", username));
         }
 
         return new FuncionarioDetalhesDto(funcionario.get());
     }
+
 }
