@@ -52,8 +52,8 @@ public class FuncionarioMapper {
     public static Funcionario of(FuncionarioLoginDto funcionarioLoginDto){
         Funcionario funcionario = new Funcionario();
 
-        funcionario.setSenha(funcionarioLoginDto.getSenha());
         funcionario.setCpf(funcionarioLoginDto.getCpf());
+        funcionario.setSenha(funcionarioLoginDto.getSenha());
 
         return funcionario;
     }
@@ -61,9 +61,10 @@ public class FuncionarioMapper {
     public static FuncionarioTokenDto of(Funcionario funcionario, String token){
         FuncionarioTokenDto funcionarioTokenDto = new FuncionarioTokenDto();
 
-        funcionarioTokenDto.setToken(token);
-        funcionarioTokenDto.setNome(funcionario.getNome());
         funcionarioTokenDto.setUserId(funcionario.getId());
+        funcionarioTokenDto.setNome(funcionario.getNome());
+        funcionarioTokenDto.setCpf(funcionario.getCpf());
+        funcionarioTokenDto.setToken(token);
 
         return funcionarioTokenDto;
     }

@@ -6,17 +6,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.service.funcionario.AutenticacaoService;
 
 public class AutenticacaoProvider implements AuthenticationProvider {
 
-   private final AutenticacaoService funcionarioAutenticacaoService;
+    private final AutenticacaoService usuarioAutorizacaoService;
     private final PasswordEncoder passwordEncoder;
 
-    public AutenticacaoProvider(AutenticacaoService funcionarioAutenticacaoService, PasswordEncoder passwordEncoder) {
-        this.funcionarioAutenticacaoService = funcionarioAutenticacaoService;
+    public AutenticacaoProvider(AutenticacaoService usuarioAutorizacaoService, PasswordEncoder passwordEncoder) {
+        this.usuarioAutorizacaoService = usuarioAutorizacaoService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -26,17 +25,17 @@ public class AutenticacaoProvider implements AuthenticationProvider {
         final String username = authentication.getName();
         final String password = authentication.getCredentials().toString();
 
-        UserDetails userDetails = this.funcionarioAutenticacaoService.loadUserByUsername(username);
+        UserDetails userDetails = this.usuarioAutorizacaoService.loadUserByUsername(username);
 
-        if (this.passwordEncoder.matches(password, userDetails.getPassword())){
+        if (this.passwordEncoder.matches(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         } else {
-            throw new BadCredentialsException("Usuário ou senha inválidos");
+            throw new BadCredentialsException("Usuário ou Senha inválidos");
         }
     }
 
     @Override
-    public boolean supports(Class<?> authentication) {
+    public boolean supports(final Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }

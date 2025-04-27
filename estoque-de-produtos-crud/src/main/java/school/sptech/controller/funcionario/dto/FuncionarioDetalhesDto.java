@@ -23,17 +23,9 @@ public class FuncionarioDetalhesDto implements UserDetails {
         return nome;
     }
 
-    public String getSenha() {
-        return senha;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return null;
     }
 
     @Override
@@ -43,7 +35,7 @@ public class FuncionarioDetalhesDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nome;
+        return cpf;
     }
 
     @Override

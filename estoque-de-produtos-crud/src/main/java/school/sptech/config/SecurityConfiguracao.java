@@ -83,7 +83,7 @@ public class SecurityConfiguracao {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(            new AutenticacaoProvider(autenticacaoService, NoOpPasswordEncoder.getInstance()));
+        authenticationManagerBuilder.authenticationProvider(new AutenticacaoProvider(autenticacaoService, passwordEncoder()));
         return authenticationManagerBuilder.build();
     }
 
@@ -103,8 +103,8 @@ public class SecurityConfiguracao {
     }
 
     @Bean
-    public PasswordEncoder noPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

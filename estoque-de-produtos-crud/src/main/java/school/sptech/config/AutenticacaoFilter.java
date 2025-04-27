@@ -17,6 +17,7 @@ import school.sptech.service.funcionario.AutenticacaoService;
 import java.io.IOException;
 import java.util.Objects;
 
+
 public class AutenticacaoFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AutenticacaoFilter.class);

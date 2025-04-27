@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import school.sptech.config.GerenciadorTokenJwt;
 import school.sptech.controller.funcionario.dto.FuncionarioMapper;
 import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
@@ -47,24 +48,22 @@ public class FuncionarioService {
     private AuthenticationManager authenticationManager;
 
     public FuncionarioTokenDto autenticar(Funcionario funcionario) {
-        // Cria o token de autenticação com CPF e senha
-        final UsernamePasswordAuthenticationToken credentials =
-                new UsernamePasswordAuthenticationToken(funcionario.getCpf(), funcionario.getSenha());
 
-        // Faz a autenticação
-        final Authentication authentication = authenticationManager.authenticate(credentials);
+        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
+                funcionario.getCpf(), funcionario.getSenha());
 
-        // Busca o funcionário autenticado
-        Funcionario funcionarioAutenticado = repository.findByCpf(funcionario.getCpf())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
+        final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
-        // Seta o funcionário autenticado no contexto de segurança
+        Funcionario funcionarioAutenticado =
+                repository.findByCpf(funcionario.getCpf())
+                        .orElseThrow(
+                                () -> new ResponseStatusException(404, "CPF do usuário não cadastrado", null)
+                        );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Gera o token JWT
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
-        // Retorna o DTO de token com as informações
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
