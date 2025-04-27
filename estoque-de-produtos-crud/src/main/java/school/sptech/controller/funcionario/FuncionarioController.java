@@ -1,16 +1,14 @@
 package school.sptech.controller.funcionario;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
-import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
-
+import school.sptech.controller.funcionario.dto.*;
+import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.service.funcionario.FuncionarioService;
 
 import java.util.List;
-
-//import java.util.List;
 
 @RestController
 @RequestMapping("/colaboradores")
@@ -23,12 +21,24 @@ public class FuncionarioController {
     }
 
     @PostMapping("/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<FuncionarioResponseDto> cadastrar(@Valid @RequestBody FuncionarioRequestDto requestDto, @PathVariable Integer idEmpresa) {
         FuncionarioResponseDto responseDto = service.cadastrarFuncionario(requestDto, idEmpresa);
         return ResponseEntity.status(201).body(responseDto);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<FuncionarioTokenDto> login(@RequestBody FuncionarioLoginDto funcionarioLoginDto) {
+
+        final Funcionario funcionario = FuncionarioMapper.of(funcionarioLoginDto);
+        FuncionarioTokenDto funcionarioTokenDto = this.service.autenticar(funcionario);
+
+        return ResponseEntity.status(200).body(funcionarioTokenDto);
+    }
+
+
     @GetMapping("/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<FuncionarioResponseDto>> listarPorEmpresa(@PathVariable Integer idEmpresa) {
         List<FuncionarioResponseDto> responseDto = service.listarPorEmpresa(idEmpresa);
         return ResponseEntity.status(200).body(responseDto);
@@ -51,4 +61,6 @@ public class FuncionarioController {
         FuncionarioResponseDto responseDto = service.editarFuncionario(id, idEmpresa, funcionarioParaEditar);
         return ResponseEntity.status(200).body(responseDto);
     }
+
+
 }

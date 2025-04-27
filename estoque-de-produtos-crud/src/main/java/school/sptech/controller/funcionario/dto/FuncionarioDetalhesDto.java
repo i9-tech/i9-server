@@ -11,12 +11,13 @@ public class FuncionarioDetalhesDto implements UserDetails {
 
     private final String nome;
     private final String senha;
+    private final String cpf;
 
-    public FuncionarioDetalhesDto(Funcionario funcionario, String nome, String senha) {
-        this.nome = nome;
-        this.senha = senha;
+    public FuncionarioDetalhesDto(Funcionario funcionario) {
+        this.nome = funcionario.getNome();
+        this.cpf = funcionario.getCpf();
+        this.senha = funcionario.getSenha();
     }
-
 
     public String getNome() {
         return nome;
@@ -24,6 +25,10 @@ public class FuncionarioDetalhesDto implements UserDetails {
 
     public String getSenha() {
         return senha;
+    }
+
+    public String getCpf() {
+        return cpf;
     }
 
     @Override

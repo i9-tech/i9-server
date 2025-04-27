@@ -6,13 +6,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.service.funcionario.AutenticacaoService;
 
 public class AutenticacaoProvider implements AuthenticationProvider {
 
    private final AutenticacaoService funcionarioAutenticacaoService;
-   private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public AutenticacaoProvider(AutenticacaoService funcionarioAutenticacaoService, PasswordEncoder passwordEncoder) {
         this.funcionarioAutenticacaoService = funcionarioAutenticacaoService;

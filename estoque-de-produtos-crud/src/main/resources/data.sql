@@ -14,7 +14,7 @@ VALUES ('Empresa Inativa', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-0
 
 -- Inserir um funcionário
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-VALUES ('João Silva', '123.456.789-00', 'Gerente', '2023-05-15', true, true, true, true, true, 'senha123', 1);
+VALUES ('João Silva', '12345678900', 'Gerente', '2023-05-15', true, true, true, true, true, 'senha123', 1);
 
 -- Inserir outro funcionário
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
