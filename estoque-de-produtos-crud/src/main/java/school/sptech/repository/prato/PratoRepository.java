@@ -1,6 +1,7 @@
 package school.sptech.repository.prato;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import school.sptech.entity.prato.Prato;
@@ -27,4 +28,7 @@ public interface PratoRepository extends JpaRepository<Prato, Integer> {
     @Query("SELECT prato FROM Prato prato JOIN prato.funcionario funcionarioPrato WHERE LOWER(prato.nome) LIKE LOWER(CONCAT('%', :nome, '%')) AND funcionarioPrato.empresa = (SELECT funcionarioParametro.empresa FROM Funcionario funcionarioParametro WHERE funcionarioParametro.id = :idFuncionario)")
     List<Prato> listarPratoPorNomeLikeEmpresa(@Param("nome") String nome, @Param("idFuncionario") Integer idFuncionario);
 
+    @Modifying
+    @Query("UPDATE ItemCarrinho ic SET ic.prato = NULL WHERE ic.prato.id = :pratoId")
+    void desvincularPratoDosItens(@Param("pratoId") Integer pratoId);
 }

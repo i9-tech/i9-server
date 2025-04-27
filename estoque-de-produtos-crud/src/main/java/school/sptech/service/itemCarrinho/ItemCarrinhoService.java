@@ -1,5 +1,6 @@
 package school.sptech.service.itemCarrinho;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
@@ -55,13 +56,21 @@ public class ItemCarrinhoService {
         return itemCarrinhoRepository.save(produtoCarrinho);
     }
 
+    @Transactional
     public void removerItem(Integer id, String venda) {
-        if (itemCarrinhoRepository.buscarItemPorIdEVenda(id, venda).isEmpty()) {
-            throw new EntidadeNaoEncontradaException("Item não existe nesse carrinho!");
+        ItemCarrinho itemCarrinho = itemCarrinhoRepository.buscarItemPorIdEVenda(id, venda)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Item não existe nesse carrinho!"));
+
+        if (itemCarrinho.getPrato() != null) {
+            itemCarrinhoRepository.desvincularPratoDosItens(itemCarrinho.getPrato().getId());
+        }
+        if (itemCarrinho.getProduto() != null) {
+            itemCarrinhoRepository.desvincularProdutoDosItens(itemCarrinho.getProduto().getId());
         }
 
         itemCarrinhoRepository.deleteById(id);
     }
+
 
     public List<ItemCarrinho> listarItens(String venda, Integer idFuncionario) {
         List<ItemCarrinho> itens = itemCarrinhoRepository.buscarItensCarrinhoPorVendaEFuncionario(venda, idFuncionario);

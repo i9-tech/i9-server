@@ -1,5 +1,6 @@
 package school.sptech.service.prato;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.prato.Prato;
@@ -50,11 +51,13 @@ public class PratoService {
         return pratoRepository.save(prato);
     }
 
+    @Transactional
     public void deletarPrato(Integer id, Integer idFuncionario) {
         if (pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).isEmpty()) {
             throw new EntidadeNaoEncontradaException("Prato não encontrado!");
         }
 
+        pratoRepository.desvincularPratoDosItens(id);
         pratoRepository.deleteById(id);
     }
 

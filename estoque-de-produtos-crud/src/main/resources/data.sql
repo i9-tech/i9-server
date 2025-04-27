@@ -87,24 +87,24 @@ VALUES ('Brownie de Chocolate', 'imagens/brownie.jpg', 15.00, 'Brownie de chocol
 
 
 -- ITENS CARRINHO
-INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
-VALUES ('venda2', 1, 1); -- Produto 1 (Arroz Branco Tipo 1)
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id, valor_unitario)
+VALUES ('venda2', 1, 1, 22); -- Produto 1 (Arroz Branco Tipo 1)
 
 -- Inserir Item Carrinho com Produto
-INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
-VALUES ('venda2', 2, 1); -- Produto 2 (Feijão Carioca)
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id, valor_unitario)
+VALUES ('venda2', 2, 1, 12); -- Produto 2 (Feijão Carioca)
 
 -- Inserir Item Carrinho com Produto
-INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
-VALUES ('venda2', 3, 2); -- Produto 3 (Detergente Neutro)
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id, valor_unitario)
+VALUES ('venda2', 3, 2, 2.5); -- Produto 3 (Detergente Neutro)
 
 -- Inserir Item Carrinho com Produto
-INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
-VALUES ('venda2', 4, 3); -- Produto 4 (Água Mineral 500ml)
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id, valor_unitario)
+VALUES ('venda2', 4, 3, 1.5); -- Produto 4 (Água Mineral 500ml)
 
 -- Inserir Item Carrinho com Produto
-INSERT INTO item_carrinho (venda, produto_id, funcionario_id)
-VALUES ('venda2', 5, 4); -- Produto 5 (Papel Toalha)
+INSERT INTO item_carrinho (venda, produto_id, funcionario_id, valor_unitario)
+VALUES ('venda2', 5, 4, 4.5); -- Produto 5 (Papel Toalha)
 
 -- Inserir Item Carrinho com Prato
 INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_unitario)
