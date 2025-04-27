@@ -18,9 +18,8 @@ public class FuncionarioResponseDto {
     private String cargo;
 
     @Schema(description = "Data de admissão", example = "17/07/2004")
-    private Date dataAdmissao;
+    private LocalDate dataAdmissao;
 
-    @Schema(description = "Acesso ao setor da cozinha", example = "true")
     private boolean acessoSetorCozinha;
 
     @Schema(description = "Acesso ao setor do estoque", example = "true")
@@ -33,7 +32,7 @@ public class FuncionarioResponseDto {
     private boolean proprietario;
 
     public FuncionarioResponseDto( String nome, String cpf, String cargo,
-                                   Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                    boolean acessoSetorAtendimento, boolean proprietario) {
 
         this.nome = nome;
@@ -71,11 +70,11 @@ public class FuncionarioResponseDto {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

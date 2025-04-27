@@ -3,9 +3,18 @@ package school.sptech.controller.funcionario.dto;
 public class FuncionarioTokenDto {
 
     private Integer userId;
+    private Integer empresaId;
     private String nome;
     private String token;
 
+
+    public Integer getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(Integer empresaId) {
+        this.empresaId = empresaId;
+    }
 
     public Integer getUserId() {
         return userId;

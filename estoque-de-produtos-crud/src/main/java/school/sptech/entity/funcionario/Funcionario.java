@@ -30,7 +30,7 @@ public class Funcionario {
 
     @NotNull(message = "A data de admissão é obrigatória")
     @PastOrPresent(message = "A data de admissão não pode ser no futuro")
-    private Date dataAdmissao;
+    private LocalDate dataAdmissao;
 
     private boolean acessoSetorCozinha;
     private boolean acessoSetorEstoque;
@@ -79,11 +79,11 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

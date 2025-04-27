@@ -62,6 +62,7 @@ public class FuncionarioMapper {
         FuncionarioTokenDto funcionarioTokenDto = new FuncionarioTokenDto();
 
         funcionarioTokenDto.setUserId(funcionario.getId());
+        funcionarioTokenDto.setEmpresaId(funcionario.getEmpresa().getId());
         funcionarioTokenDto.setNome(funcionario.getNome());
         funcionarioTokenDto.setToken(token);
 

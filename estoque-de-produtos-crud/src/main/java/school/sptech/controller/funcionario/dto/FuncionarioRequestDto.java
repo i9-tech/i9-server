@@ -3,6 +3,7 @@ package school.sptech.controller.funcionario.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import org.springframework.cglib.core.Local;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class FuncionarioRequestDto {
     @PastOrPresent(message = "A data de admissão não pode ser no futuro")
     @Schema(description = "Data de admissão do funcionário", example = "17/07/2004")
     //definir um padrão de armazenamento
-    private Date dataAdmissao;
+    private LocalDate dataAdmissao;
 
     @Schema(description = "Acesso ao setor da cozinha", example = "true")
     private boolean acessoSetorCozinha;
@@ -48,17 +49,6 @@ public class FuncionarioRequestDto {
     @Schema(description = "Senha de acesso", example = "10@50234000856")
     private String senha;
 
-    public FuncionarioRequestDto(String nome, String cpf, String cargo, Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque, boolean acessoSetorAtendimento, boolean proprietario, String senha) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.cargo = cargo;
-        this.dataAdmissao = dataAdmissao;
-        this.acessoSetorCozinha = acessoSetorCozinha;
-        this.acessoSetorEstoque = acessoSetorEstoque;
-        this.acessoSetorAtendimento = acessoSetorAtendimento;
-        this.proprietario = proprietario;
-        this.senha = senha;
-    }
 
     public String getNome() {
         return nome;
@@ -84,11 +74,11 @@ public class FuncionarioRequestDto {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 
