@@ -1,6 +1,7 @@
 package school.sptech.repository.produto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import school.sptech.entity.produto.Produto;
@@ -43,4 +44,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("SELECT produto FROM Produto produto JOIN produto.funcionario funcionarioProduto WHERE LOWER(produto.nome) LIKE LOWER(CONCAT('%', :nome, '%')) AND funcionarioProduto.empresa = (SELECT funcionarioParametro.empresa FROM Funcionario funcionarioParametro WHERE funcionarioParametro.id = :idFuncionario)")
     List<Produto> listarProdutoPorNomeLikeEmpresa(@Param("nome") String categoria, @Param("idFuncionario") Integer idFuncionario);
 
+    @Modifying
+    @Query("UPDATE ItemCarrinho ic SET ic.produto = NULL WHERE ic.produto.id = :produtoId")
+    void desvincularProdutoDosItens(@Param("produtoId") Integer produtoId);
 }

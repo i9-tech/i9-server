@@ -1,5 +1,6 @@
 package school.sptech.service.produto;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,6 +85,7 @@ public class ProdutoService {
     }
 
 
+    @Transactional
     public void removerPorId(Integer id, Integer idFuncionario) {
         Optional<Produto> produto = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
@@ -91,6 +93,7 @@ public class ProdutoService {
             throw new EntidadeNaoEncontradaException("Produto não encontrado ou não pertence à empresa do funcionário informado.");
         }
 
+        repository.desvincularProdutoDosItens(id);
         repository.delete(produto.get());
     }
 

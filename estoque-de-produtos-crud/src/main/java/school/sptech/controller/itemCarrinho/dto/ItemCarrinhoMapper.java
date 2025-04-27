@@ -11,11 +11,12 @@ public class ItemCarrinhoMapper {
         ItemCarrinho entity = new ItemCarrinho();
 
         entity.setId(entity.getId());
+        entity.setVenda(dto.getVenda());
         entity.setPrato(dto.getPrato());
         entity.setProduto(null);
         entity.setObservacao(dto.getObservacao());
-        entity.setValorUnitario(dto.getValorUnitario());
         entity.setFuncionario(dto.getFuncionario());
+        entity.setValorUnitario(entity.getPrato().getValorVenda());
 
         return entity;
     }
@@ -24,11 +25,11 @@ public class ItemCarrinhoMapper {
         ItemCarrinho entity = new ItemCarrinho();
 
         entity.setId(entity.getId());
+        entity.setVenda(dto.getVenda());
         entity.setProduto(dto.getProduto());
         entity.setPrato(null);
         entity.setObservacao(null);
-        entity.setValorUnitario(dto.getValorUnitario());
-        entity.setFuncionario(dto.getFuncionario());
+        entity.setValorUnitario(entity.getProduto().getValorUnitario());
 
         return entity;
     }
@@ -39,7 +40,7 @@ public class ItemCarrinhoMapper {
         response.setId(entity.getId());
         response.setPrato(entity.getPrato());
         response.setObservacao(entity.getObservacao());
-        response.setValorUnitario(entity.getValorUnitario());
+        response.setValorUnitario(entity.getPrato().getValorVenda());
         response.setFuncionario(entity.getFuncionario());
 
         return response;
@@ -50,7 +51,7 @@ public class ItemCarrinhoMapper {
 
         response.setId(entity.getId());
         response.setProduto(entity.getProduto());
-        response.setValorUnitario(entity.getValorUnitario());
+        response.setValorUnitario(entity.getProduto().getValorUnitario());
         response.setFuncionario(entity.getFuncionario());
 
         return response;

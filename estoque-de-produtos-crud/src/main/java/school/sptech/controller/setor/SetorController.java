@@ -36,7 +36,7 @@ public class SetorController {
     }
 
     @GetMapping("/{idSetor}/{idFuncionario}")
-    public ResponseEntity<SetorListagemDto> listagemId(@PathVariable Integer idSetor, Integer idFuncionario) {
+    public ResponseEntity<SetorListagemDto> listagemId(@PathVariable Integer idSetor, @PathVariable Integer idFuncionario) {
         Optional<Setor> setorEncontrado = setorService.buscarSetorPorId(idSetor, idFuncionario);
 
         if (setorEncontrado.isEmpty()) {
