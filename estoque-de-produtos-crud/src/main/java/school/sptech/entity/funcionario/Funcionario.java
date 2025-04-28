@@ -60,7 +60,8 @@ public class Funcionario {
             format = "date-time",
             type = "string"
     )
-    private Date dataAdmissao;
+    private LocalDate dataAdmissao;
+
 
     @Schema(
             description = "Indica se a pessoa tem acesso ao setor da cozinha. 'true' define acesso, 'false' restringe o acesso.",
@@ -146,11 +147,11 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

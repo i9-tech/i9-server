@@ -1,6 +1,7 @@
 package school.sptech.controller.funcionario;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -12,14 +13,11 @@ import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
-import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
-
+import school.sptech.controller.funcionario.dto.*;
+import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.service.funcionario.FuncionarioService;
 
 import java.util.List;
-
-//import java.util.List;
 
 @RestController
 @RequestMapping("/colaboradores")
@@ -33,6 +31,7 @@ public class FuncionarioController {
     }
 
     @PostMapping("/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar novo funcionário", description = "Cadastra um novo funcionário na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Funcionário cadastrado com sucesso."),
@@ -55,7 +54,23 @@ public class FuncionarioController {
         return ResponseEntity.status(201).body(responseDto);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<FuncionarioTokenDto> login(@RequestBody FuncionarioLoginDto funcionarioLoginDto) {
+
+        final Funcionario funcionario = FuncionarioMapper.of(funcionarioLoginDto);
+        FuncionarioTokenDto funcionarioTokenDto = this.service.autenticar(funcionario);
+
+        return ResponseEntity.status(200).body(funcionarioTokenDto);
+    }
+
+    @PostMapping("/login/criptografar")
+    public ResponseEntity<String> criptografarSenha(@RequestParam String senha) {
+        return ResponseEntity.ok(service.criptografar(senha));
+    }
+
+
     @GetMapping("/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar funcionários", description = "Lista todos os funcionários de uma determinada empresa presentes na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Funcionários listados com sucesso.",
@@ -188,4 +203,5 @@ public class FuncionarioController {
         FuncionarioResponseDto responseDto = service.editarFuncionario(id, idEmpresa, funcionarioParaEditar);
         return ResponseEntity.status(200).body(responseDto);
     }
+
 }
