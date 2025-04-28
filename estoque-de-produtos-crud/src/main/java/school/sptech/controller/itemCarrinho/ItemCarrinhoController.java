@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class ItemCarrinhoController {
     }
 
     @PostMapping("/prato/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Adicionar prato ao carrinho", description = "Adiciona um prato ao carrinho de um funcionário.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Prato adicionado ao carrinho com sucesso.",
@@ -88,6 +90,7 @@ public class ItemCarrinhoController {
     }
 
     @PostMapping("/produto/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Adicionar produto ao carrinho", description = "Adiciona um produto ao carrinho de um funcionário.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produto adicionado ao carrinho com sucesso.",
@@ -154,6 +157,7 @@ public class ItemCarrinhoController {
     }
 
     @GetMapping("/{venda}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar itens do carrinho", description = "Lista todos os itens presentes em um carrinho de venda específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pratos listados com sucesso.",
@@ -236,6 +240,7 @@ public class ItemCarrinhoController {
     }
 
     @DeleteMapping("/{id}/{venda}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover item do carrinho", description = "Remove um item específico do carrinho de venda.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Item removido do carrinho com sucesso.", content = @Content),

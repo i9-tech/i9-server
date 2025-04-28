@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ public class SetorController {
     }
 
     @GetMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar setores", description = "Lista todos os setores presentes na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Setores listados com sucesso",
@@ -94,6 +96,7 @@ public class SetorController {
     }
 
     @GetMapping("/{idSetor}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar setor por ID", description = "Retorna um setor presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Setor encontrado com sucesso."),
@@ -121,6 +124,7 @@ public class SetorController {
     }
 
     @PostMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar novo setor", description = "Cadastra um novo setor na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Setor cadastrado com sucesso."),
@@ -146,6 +150,7 @@ public class SetorController {
     }
 
     @PutMapping("/{idSetor}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar setor existente", description = "Atualiza um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Setor atualizado com sucesso.",
@@ -193,6 +198,7 @@ public class SetorController {
     }
 
     @DeleteMapping("/{idSetor}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover setor existente", description = "Remove um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Setor removido com sucesso.", content = @Content),

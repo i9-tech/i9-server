@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class PratoController {
     }
 
     @GetMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar pratos", description = "Lista todos os pratos de uma determinada empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pratos listados com sucesso.",
@@ -98,6 +100,7 @@ public class PratoController {
     }
 
     @PostMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar novo prato", description = "Cadastra um novo prato para uma determinada empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Prato cadastrado com sucesso."),
@@ -123,6 +126,7 @@ public class PratoController {
     }
 
     @PutMapping("/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar prato existente de determinada empresa", description = "Atualiza os dados de um prato existente de determinada empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Prato atualizado com sucesso.",
@@ -174,6 +178,7 @@ public class PratoController {
     }
 
     @DeleteMapping("/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover prato", description = "Remove um prato da base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Prato removido com sucesso.", content = @Content),
@@ -197,6 +202,7 @@ public class PratoController {
     }
 
     @GetMapping("/buscar/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar pratos por nome", description = "Busca pratos pelo nome em uma determinada empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pratos encontrados com sucesso.",
@@ -257,6 +263,7 @@ public class PratoController {
     }
 
     @GetMapping("/categoria/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar pratos por categoria", description = "Lista os pratos de uma determinada categoria em uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pratos da categoria encontrados com sucesso.",
@@ -301,6 +308,7 @@ public class PratoController {
     }
 
     @GetMapping("/setor/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar pratos por setor", description = "Lista os pratos de um determinado setor em uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pratos do setor encontrados com sucesso.",

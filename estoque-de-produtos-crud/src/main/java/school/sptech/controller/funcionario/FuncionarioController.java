@@ -116,6 +116,7 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{id}/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar funcionário por ID", description = "Retorna um funcionário de uma determinada empresa presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Funcionário encontrado com sucesso."),
@@ -138,6 +139,7 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("/{id}/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover funcionário existente em uma empresa específica", description = "Remove um funcionário de determinada empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Funcionário removido com sucesso.", content = @Content),
@@ -159,6 +161,7 @@ public class FuncionarioController {
     }
 
     @PatchMapping("/{id}/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar funcionário existente em determinada empresa", description = "Atualiza um funcionário de uma determinada empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Funcionário atualizado com sucesso.",
