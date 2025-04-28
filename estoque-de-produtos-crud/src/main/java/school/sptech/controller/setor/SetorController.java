@@ -145,7 +145,7 @@ public class SetorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaSetorDto);
     }
 
-    @PutMapping("/{idSetor}")
+    @PutMapping("/{idSetor}/{idFuncionario}")
     @Operation(summary = "Atualizar setor existente", description = "Atualiza um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Setor atualizado com sucesso.",
@@ -184,8 +184,10 @@ public class SetorController {
             @Parameter(description = "ID do setor.", example = "1", required = true)
             @PathVariable Integer idSetor,
             @Parameter(description = "Dados do setor para atualização.", required = true)
-            @Valid @RequestBody SetorAtualizarDto setorParaAtualizar) {
-        Setor entidadeParaAtualizar = setorService.atualizarSetor(idSetor, SetorMapper.transformarEmEntidade(setorParaAtualizar));
+            @Valid @RequestBody SetorAtualizarDto setorParaAtualizar,
+            @Parameter(description = "ID do funcionário encarregado pela atualização.", example = "1", required = true)
+            @PathVariable Integer idFuncionario) {
+        Setor entidadeParaAtualizar = setorService.atualizarSetor(idSetor, SetorMapper.transformarEmEntidade(setorParaAtualizar), idFuncionario);
 
         SetorListagemDto respostaAtualizadaDto = SetorMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
@@ -207,8 +209,13 @@ public class SetorController {
     })
     public ResponseEntity<SetorListagemDto> remover(
             @Parameter(description = "ID do setor", example = "1", required = true)
-            @PathVariable Integer idSetor) {
-        setorService.removerSetor(idSetor);
+            @PathVariable Integer idSetor,
+            @Parameter(description = "ID do funcionário responsável pela remoção do setor.", example = "1", required = true)
+            @PathVariable Integer idFuncionario
+            ) {
+
+
+        setorService.removerSetor(idSetor, idFuncionario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -147,7 +147,7 @@ public class CategoriaController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/{idFuncionario}")
     @Operation(summary = "Atualizar categoria existente", description = "Atualiza uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso.",
@@ -186,8 +186,11 @@ public class CategoriaController {
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Integer id,
             @Parameter(description = "Dados da categoria para atualização.", required = true)
-            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar) {
-        Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar));
+            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar,
+            @Parameter(description = "ID do funcionário encarregado pela atualização.", example = "1", required = true)
+            @PathVariable Integer idFuncionario
+            ) {
+        Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar), idFuncionario);
 
         CategoriaListagemDto respostaAtualizadaDto = CategoriaMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
@@ -208,8 +211,11 @@ public class CategoriaController {
     })
     public ResponseEntity<CategoriaListagemDto> remover(
             @Parameter(description = "ID da categoria.", example = "1", required = true)
-            @PathVariable Integer id) {
-        categoriaService.removerCategoria(id);
+            @PathVariable Integer id,
+            @Parameter(description = "ID do funcionário responsável pela remoção da categoria.", example = "1", required = true)
+            @PathVariable Integer idFuncionario
+            ) {
+        categoriaService.removerCategoria(id, idFuncionario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
