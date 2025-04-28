@@ -1,6 +1,7 @@
 package school.sptech.controller.prato;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pratos")
+@Tag(name = "Pratos", description = "Operações relacionadas aos pratos.")
 public class PratoController {
 
     private final PratoService pratoService;

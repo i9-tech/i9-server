@@ -1,5 +1,6 @@
 package school.sptech.controller.itemCarrinho;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.itemCarrinho.dto.AdicionarPratoItemCarrinhoDto;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/itens-carrinho")
+@Tag(name = "Itens Carrinho", description = "Operações relacionadas aos itens em um carrinho de venda.")
 public class ItemCarrinhoController {
 
     private final ItemCarrinhoService itemCarrinhoService;
