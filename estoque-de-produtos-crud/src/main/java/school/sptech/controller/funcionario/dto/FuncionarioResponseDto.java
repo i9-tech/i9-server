@@ -8,32 +8,66 @@ import java.util.Date;
 
 public class FuncionarioResponseDto {
 
-    @Schema(description = "Nome do usuário", example = "Isabela Rosa")
+    @Schema(
+            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
+            example = "Agatha Nunes",
+            type = "string"
+    )
     private String nome;
 
-    @Schema(description = "CPF do usuário", example = "123.456.789-00")
+    @Schema(
+            description = "CPF da pessoa empregada. Precisa ser informado com formatação.",
+            example = "999.999.999-99",
+            maxLength = 14,
+            type = "string"
+    )
     private String cpf;
 
-    @Schema(description = "Cargo do usuário", example = "Cozinheira")
+    @Schema(
+            description = "Cargo da pessoa contratada pela empresa.",
+            example = "Atendente",
+            type = "string"
+    )
     private String cargo;
 
-    @Schema(description = "Data de admissão", example = "17/07/2004")
-    private Date dataAdmissao;
+    @Schema(
+            description = "Data em que a pessoa empregada foi admitida. A data não pode estar no futuro.",
+            example = "2025-04-26T16:45:32.000Z",
+            format = "date-time",
+            type = "string"
+    )
+    private LocalDate dataAdmissao;
 
-    @Schema(description = "Acesso ao setor da cozinha", example = "true")
+    @Schema(
+            description = "Indica se a pessoa tem acesso ao setor da cozinha. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean acessoSetorCozinha;
 
-    @Schema(description = "Acesso ao setor do estoque", example = "true")
+    @Schema(
+            description = "Indica se a pessoa tem acesso ao setor de estoque. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean acessoSetorEstoque;
 
-    @Schema(description = "Acesso ao setor do atendimento", example = "true")
+    @Schema(
+            description = "Indica se a pessoa tem acesso ao setor de atendimento. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean acessoSetorAtendimento;
 
-    @Schema(description = "Se o funcionário é proprietário", example = "false")
+    @Schema(
+            description = "Indica se a pessoa tem acesso proprietário ao sistema, uma permissão que dá acesso a todos os setores e funcionalidades. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean proprietario;
 
     public FuncionarioResponseDto( String nome, String cpf, String cargo,
-                                   Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                    boolean acessoSetorAtendimento, boolean proprietario) {
 
         this.nome = nome;
@@ -71,11 +105,11 @@ public class FuncionarioResponseDto {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

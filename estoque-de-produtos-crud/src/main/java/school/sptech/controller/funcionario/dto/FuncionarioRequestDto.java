@@ -3,62 +3,94 @@ package school.sptech.controller.funcionario.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import org.springframework.cglib.core.Local;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
 import java.util.Date;
 
+@Schema(
+        name = "FuncionarioRequestDto",
+        description = "DTO para transferência de dados cadastrais ou de atualização do funcionário.")
 public class FuncionarioRequestDto {
+
     @Size(min = 3, max = 20)
-    @Schema(description = "Nome do usuário", example = "Isabela Rosa")
     @NotBlank(message = "O nome é obrigatório")
+    @Schema(
+            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
+            example = "Agatha Nunes",
+            type = "string"
+    )
     private String nome;
 
     @NotBlank(message = "O CPF é obrigatório")
     @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
             message = "O cpf deve ser no formato 999.999.999-99 ")
-    @Schema(description = "CPF do usuário", example = "123.456.789-00")
+    @Schema(
+            description = "CPF da pessoa empregada. Precisa ser informado com formatação.",
+            example = "999.999.999-99",
+            maxLength = 14,
+            type = "string"
+    )
     private String cpf;
 
     @NotBlank(message = "O cargo é obrigatório")
-    @Schema(description = "Cargo do funcionário", example = "Cozinheira")
+    @Schema(
+            description = "Cargo da pessoa contratada pela empresa.",
+            example = "Atendente",
+            type = "string"
+    )
     private String cargo;
 
-    @NotNull(message = "A data de admissão é obrigatória")
-    @PastOrPresent(message = "A data de admissão não pode ser no futuro")
-    @Schema(description = "Data de admissão do funcionário", example = "17/07/2004")
+    @NotNull(message = "A data de admissão é obrigatória.")
+    @PastOrPresent(message = "A data de admissão não pode ser no futuro.")
+    @Schema(
+            description = "Data em que a pessoa empregada foi admitida. A data não pode estar no futuro.",
+            example = "2025-04-26T16:45:32.000Z",
+            format = "date-time",
+            type = "string"
+    )
     //definir um padrão de armazenamento
-    private Date dataAdmissao;
+    private LocalDate dataAdmissao;
 
-    @Schema(description = "Acesso ao setor da cozinha", example = "true")
+    @Schema(
+            description = "Indica se a pessoa tem acesso ao setor da cozinha. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean acessoSetorCozinha;
 
-    @Schema(description = "Acesso ao setor do estoque", example = "true")
+    @Schema(
+            description = "Indica se a pessoa tem acesso ao setor de estoque. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean acessoSetorEstoque;
 
-    @Schema(description = "Acesso ao setor do atendimento", example = "true")
+    @Schema(
+            description = "Indica se a pessoa tem acesso ao setor de atendimento. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean acessoSetorAtendimento;
 
-    @Schema(description = "Se o funcionário é proprietário", example = "false")
+    @Schema(
+            description = "Indica se a pessoa tem acesso proprietário ao sistema, uma permissão que dá acesso a todos os setores e funcionalidades. 'true' define acesso, 'false' restringe o acesso.",
+            example = "true",
+            type = "boolean"
+    )
     private boolean proprietario;
 
-    @NotBlank(message = "A senha é obrigatória")
+    @NotBlank(message = "A senha é obrigatória.")
     @Size(min = 11,
-            message = "A senha deve ter no mínimo 11 caracteres")
-    @Schema(description = "Senha de acesso", example = "10@50234000856")
+            message = "A senha deve ter no mínimo 11 caracteres.")
+    @Schema(
+            description = "Senha que dará acesso ao sistema para a pessoa contratada.",
+            hidden = true,
+            type = "string"
+    )
     private String senha;
 
-    public FuncionarioRequestDto(String nome, String cpf, String cargo, Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque, boolean acessoSetorAtendimento, boolean proprietario, String senha) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.cargo = cargo;
-        this.dataAdmissao = dataAdmissao;
-        this.acessoSetorCozinha = acessoSetorCozinha;
-        this.acessoSetorEstoque = acessoSetorEstoque;
-        this.acessoSetorAtendimento = acessoSetorAtendimento;
-        this.proprietario = proprietario;
-        this.senha = senha;
-    }
 
     public String getNome() {
         return nome;
@@ -84,11 +116,11 @@ public class FuncionarioRequestDto {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

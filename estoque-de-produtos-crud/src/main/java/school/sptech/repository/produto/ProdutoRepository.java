@@ -1,9 +1,11 @@
 package school.sptech.repository.produto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import school.sptech.entity.produto.Produto;
+import school.sptech.entity.setor.Setor;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +35,16 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("select count(produto) from Produto produto join produto.funcionario funcionario where produto.quantidade > produto.quantidadeMax and funcionario.empresa = (select funcionario2.empresa from Funcionario funcionario2 where funcionario2.id = :idFuncionario)")
     Integer quantidadeProdutoEstoqueAltoEmpresa(Integer idFuncionario);
 
-    @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where LOWER(produto.categoria) = LOWER(:categoria) and funcionarioProduto.empresa = ( select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
-    List<Produto> listarProdutoPorCategoriaEmpresa(@Param("categoria") String categoria, @Param("idFuncionario") Integer idFuncionario);
+    @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where produto.categoria.id = :categoriaId and funcionarioProduto.empresa = ( select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
+    List<Produto> listarProdutoPorCategoriaEmpresa(@Param("categoriaId") Integer categoriaId, @Param("idFuncionario") Integer idFuncionario);
 
-    @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where LOWER(produto.setor) = LOWER(:setor) and funcionarioProduto.empresa = ( select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
-    List<Produto> listarProdutoPorSetorEmpresa(@Param("setor") String setor, @Param("idFuncionario") Integer idFuncionario);
+    @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where produto.setor.id = :setorId and funcionarioProduto.empresa = ( select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
+    List<Produto> listarProdutoPorSetorEmpresa(@Param("setorId") Integer setorId, @Param("idFuncionario") Integer idFuncionario);
 
     @Query("SELECT produto FROM Produto produto JOIN produto.funcionario funcionarioProduto WHERE LOWER(produto.nome) LIKE LOWER(CONCAT('%', :nome, '%')) AND funcionarioProduto.empresa = (SELECT funcionarioParametro.empresa FROM Funcionario funcionarioParametro WHERE funcionarioParametro.id = :idFuncionario)")
     List<Produto> listarProdutoPorNomeLikeEmpresa(@Param("nome") String categoria, @Param("idFuncionario") Integer idFuncionario);
 
+    @Modifying
+    @Query("UPDATE ItemCarrinho ic SET ic.produto = NULL WHERE ic.produto.id = :produtoId")
+    void desvincularProdutoDosItens(@Param("produtoId") Integer produtoId);
 }

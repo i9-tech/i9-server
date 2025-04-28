@@ -1,7 +1,9 @@
 package school.sptech.entity.prato;
 
 import jakarta.persistence.*;
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 @Entity
 @Table(name = "prato")
@@ -19,12 +21,11 @@ public class Prato {
     @ManyToOne
     private Funcionario funcionario;
 
-    //@ManyToOne
-    private String setor;
+    @ManyToOne
+    private Setor setor;
 
-    //@ManyToOne
-    private String categoria;
-
+    @ManyToOne
+    private Categoria categoria;
 
 
     public int getId() {
@@ -83,19 +84,19 @@ public class Prato {
         this.funcionario = funcionario;
     }
 
-    public String getSetor() {
+    public Setor getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Setor setor) {
         this.setor = setor;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 }

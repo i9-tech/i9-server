@@ -51,7 +51,9 @@ public class CategoriaService {
         if (categoriaEncontrada.isEmpty()) {
             throw new EntidadeNaoEncontradaException("A categoria não foi encontrada");
         }
-        return categoriaEncontrada.get();
+
+        categoriaParaAtualizar.setId(id);
+        return categoriaRepository.save(categoriaParaAtualizar);
     }
 
     public void removerCategoria(Integer id) {

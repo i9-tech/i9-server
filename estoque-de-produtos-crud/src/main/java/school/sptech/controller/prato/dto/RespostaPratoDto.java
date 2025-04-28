@@ -1,7 +1,9 @@
 package school.sptech.controller.prato.dto;
 
 import jakarta.persistence.ManyToOne;
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 public class RespostaPratoDto {
 
@@ -13,10 +15,10 @@ public class RespostaPratoDto {
     private Boolean disponivel;
     @ManyToOne
     private Funcionario funcionario;
-    //@ManyToOne
-    private String setor;
-    //@ManyToOne
-    private String categoria;
+    @ManyToOne
+    private Setor setor;
+    @ManyToOne
+    private Categoria categoria;
 
     public int getId() {
         return id;
@@ -74,19 +76,19 @@ public class RespostaPratoDto {
         this.funcionario = funcionario;
     }
 
-    public String getSetor() {
+    public Setor getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Setor setor) {
         this.setor = setor;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 }
