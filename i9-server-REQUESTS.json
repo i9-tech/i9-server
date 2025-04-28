@@ -48,7 +48,7 @@ collection:
         meta:
           id: req_82aad87f0d8742dd8d811e76704207c4
           created: 1745619452187
-          modified: 1745630943679
+          modified: 1745867208690
           isPrivate: false
           sortKey: -1745630940347
         method: GET
@@ -59,6 +59,9 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -91,12 +94,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: localhost:8080/empresas/1
+      - url: localhost:8080/empresas/3
         name: Atualizar Empresas
         meta:
           id: req_1b8042a7f17f4cc0bcf760a52fa8bae2
           created: 1745705217252
-          modified: 1745705925890
+          modified: 1745867171718
           isPrivate: false
           sortKey: -1745630940272
         method: PUT
@@ -112,6 +115,9 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -219,12 +225,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: localhost:8080/setores/1
+      - url: localhost:8080/setores/1/1
         name: Atualizar Setores
         meta:
           id: req_d5bc004c553a44da8f15fc53239b2179
           created: 1745705878493
-          modified: 1745705891146
+          modified: 1745865991612
           isPrivate: false
           sortKey: -1745630945488.75
         method: PUT
@@ -239,6 +245,9 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -283,13 +292,15 @@ collection:
         meta:
           id: req_1b50d7488f484e6b87b7023a38ac2a5d
           created: 1745619442247
-          modified: 1745631474116
+          modified: 1745877769396
           isPrivate: false
           sortKey: -1745630986578
         method: GET
         headers:
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -298,12 +309,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: localhost:8080/categorias/1
+      - url: localhost:8080/categorias/3
         name: Cadastrar Categorias
         meta:
           id: req_83467e2fb9b44097acd44ba632632c0f
           created: 1745631464532
-          modified: 1745698703814
+          modified: 1745868586281
           isPrivate: false
           sortKey: -1745630973746
         method: POST
@@ -318,6 +329,9 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEuMjIyLjMzMy00NCIsImF1dGhvcml0aWVzIjoiUk9MRV9FU1RPUVVFIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjpmYWxzZSwiYWNlc3NvU2V0b3JFc3RvcXVlIjp0cnVlLCJhY2Vzc29TZXRvckF0ZW5kaW1lbnRvIjpmYWxzZSwicHJvcHJpZXRhcmlvIjpmYWxzZSwiaWF0IjoxNzQ1ODY4Mzk5LCJleHAiOjE3NDk0NjgzOTl9.oqqqUu1F0-27H4fV4l-BZQGqvzVLiKAa7DKAwMtF-GBExLKPLxlru-GeKMlOWpORjzJ7mqE04YcNyIVlLZB-fg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -326,12 +340,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: localhost:8080/categorias/1
+      - url: localhost:8080/categorias/1/3
         name: Atualizar Categorias
         meta:
           id: req_e8ac2e3fcf8a4290a36edb2f93ecffc5
           created: 1745706010488
-          modified: 1745706050259
+          modified: 1745868549932
           isPrivate: false
           sortKey: -1745630967330
         method: PUT
@@ -346,6 +360,9 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEuMjIyLjMzMy00NCIsImF1dGhvcml0aWVzIjoiUk9MRV9FU1RPUVVFIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjpmYWxzZSwiYWNlc3NvU2V0b3JFc3RvcXVlIjp0cnVlLCJhY2Vzc29TZXRvckF0ZW5kaW1lbnRvIjpmYWxzZSwicHJvcHJpZXRhcmlvIjpmYWxzZSwiaWF0IjoxNzQ1ODY4Mzk5LCJleHAiOjE3NDk0NjgzOTl9.oqqqUu1F0-27H4fV4l-BZQGqvzVLiKAa7DKAwMtF-GBExLKPLxlru-GeKMlOWpORjzJ7mqE04YcNyIVlLZB-fg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -379,13 +396,16 @@ collection:
         meta:
           id: req_e28471cd501a4509bbd664c281019c98
           created: 1745706028272
-          modified: 1745706035137
+          modified: 1745871294291
           isPrivate: false
           sortKey: -1745630964122
         method: DELETE
         headers:
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -406,13 +426,16 @@ collection:
         meta:
           id: req_c50c4d6ca2304ac897ae3fb04edfdee1
           created: 1745631017802
-          modified: 1745631450435
+          modified: 1745869309270
           isPrivate: false
           sortKey: -1745631025308
         method: GET
         headers:
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -426,7 +449,7 @@ collection:
         meta:
           id: req_fbd5c43c97534c5282b390ae65ad10cf
           created: 1745697153222
-          modified: 1745705559838
+          modified: 1745778569933
           isPrivate: false
           sortKey: -1745631005943
         method: POST
@@ -447,8 +470,19 @@ collection:
         headers:
           - name: Content-Type
             value: application/json
+            id: pair_08e08ad92cac40f5a4a4066ea257794b
           - name: User-Agent
             value: insomnia/11.0.1
+            id: pair_1dbf3657182d4391bd827f39a518bcff
+          - id: pair_11bc1884dae14120b64f852655ecafa0
+            name: TOKEN
+            value: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1NzY5NTc1LCJleHAiOjE3NDkzNjk1NzV9.kqfduXIYbCCLMyRXnydYULHsncNPojyeGAnSUbO77WtBWchZbavyyHgMtxhlwrmaCzpdj4v_739p5xjk54X2xg
+            disabled: false
+          - id: pair_8b698414b246441d809df2f3eb3b2f17
+            disabled: false
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1Nzc4NTYwLCJleHAiOjE3NDkzNzg1NjB9.keJQY61Lx5bGba9ubCb9cO_TH9Lyo68frxTssrp6tSyyjHtSbZsw9ymiSa2B6tSAEw_7eop8ISNPKE6lqacCTA
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -502,7 +536,7 @@ collection:
         meta:
           id: req_4439c3bafac74419acd700c9a7dd1e79
           created: 1745705722662
-          modified: 1745705731238
+          modified: 1745869222831
           isPrivate: false
           sortKey: -1745630996260.5
         method: PATCH
@@ -510,7 +544,7 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "nome": "Pedro",
+              "nome": "Arroz",
               "cpf": "133.356.389-00",
               "cargo": "Cozinheiro",
               "dataAdmissao": "2025-04-25",
@@ -525,6 +559,9 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -642,12 +679,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: localhost:8080/pratos/1/1
+      - url: localhost:8080/pratos/2/1
         name: Deletar Pratos
         meta:
           id: req_bd9e5229bb6e4a20ac6da452c4203b4e
           created: 1745706331299
-          modified: 1745706362252
+          modified: 1745715845850
           isPrivate: false
           sortKey: -1745638735711.75
         method: DELETE
@@ -749,13 +786,20 @@ collection:
         meta:
           id: req_21d3c196d22a4985a794abe3cf456784
           created: 1745693194802
-          modified: 1745695789345
+          modified: 1745872885210
           isPrivate: false
           sortKey: -1745693199259
         method: GET
+        body:
+          mimeType: application/json
         headers:
+          - name: Content-Type
+            value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEuMjIyLjMzMy00NCIsImF1dGhvcml0aWVzIjoiUk9MRV9FU1RPUVVFIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjpmYWxzZSwiYWNlc3NvU2V0b3JFc3RvcXVlIjp0cnVlLCJhY2Vzc29TZXRvckF0ZW5kaW1lbnRvIjpmYWxzZSwicHJvcHJpZXRhcmlvIjpmYWxzZSwiaWF0IjoxNzQ1ODY4Mzk5LCJleHAiOjE3NDk0NjgzOTl9.oqqqUu1F0-27H4fV4l-BZQGqvzVLiKAa7DKAwMtF-GBExLKPLxlru-GeKMlOWpORjzJ7mqE04YcNyIVlLZB-fg
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -769,7 +813,7 @@ collection:
         meta:
           id: req_ff53216168c54ee6a1f378ce726d23d1
           created: 1745693345168
-          modified: 1745695796421
+          modified: 1745771822382
           isPrivate: false
           sortKey: -1745692953898.5
         method: POST
@@ -782,7 +826,6 @@ collection:
                 "id": 2
               },
               "observacao": "Sem cebola, por favor",
-              "valorUnitario": 29.90,
               "funcionario": {
                 "id": 1
               }
@@ -792,6 +835,8 @@ collection:
             value: application/json
           - name: User-Agent
             value: insomnia/11.0.1
+        authentication:
+          type: bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -861,12 +906,12 @@ collection:
       modified: 1745697095248
       sortKey: -1745661832758
     children:
-      - url: localhost:8080/produtos/1
+      - url: localhost:8080/produtos/4
         name: Listar Produtos
         meta:
           id: req_5aa1611152604422b0435031f7d94b10
           created: 1745700174996
-          modified: 1745700267169
+          modified: 1745716152393
           isPrivate: false
           sortKey: -1745700183275
         method: GET
@@ -983,12 +1028,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: localhost:8080/produtos/5/1
+      - url: localhost:8080/produtos/1/3
         name: Deletar Produtos
         meta:
           id: req_f2502841dc9e4d069c9c06e326c830ba
           created: 1745707088627
-          modified: 1745707146009
+          modified: 1745712255490
           isPrivate: false
           sortKey: -1745694072261
         method: DELETE
@@ -1185,6 +1230,76 @@ collection:
       created: 1745697106196
       modified: 1745697121908
       sortKey: -1745646399552.5
+  - name: JWT
+    meta:
+      id: fld_62aac87e8abe416aa4418ba56013452e
+      created: 1745759731375
+      modified: 1745873191447
+      sortKey: -1745759731375
+    children:
+      - url: localhost:8080/colaboradores/login
+        name: Realizar Login
+        meta:
+          id: req_6ff6fe3380af4715bc097c42d1b06d42
+          created: 1745759742543
+          modified: 1745869121200
+          isPrivate: false
+          sortKey: -1745763283114
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cpf": "111.222.333-44",	
+              "senha": "11122233344@tai"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/colaboradores/login/criptografar
+        name: Criptografar Senha
+        meta:
+          id: req_b6aafe1648a345c6b482053b0af059ee
+          created: 1745763291988
+          modified: 1745763632987
+          isPrivate: false
+          sortKey: -1745731733194.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cpf": "987.654.321-11",	
+              "senha": "123456"
+            }
+        parameters:
+          - id: pair_f575ce099a83469bb96479744a1aa7f1
+            name: senha
+            value: 55566677788@tai
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
