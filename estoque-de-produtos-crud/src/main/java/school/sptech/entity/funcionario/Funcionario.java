@@ -7,6 +7,7 @@ import school.sptech.controller.empresa.dto.EmpresaListagemDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.entity.empresa.Empresa;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
