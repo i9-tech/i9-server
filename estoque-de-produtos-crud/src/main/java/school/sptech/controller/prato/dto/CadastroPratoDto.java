@@ -4,7 +4,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 public class CadastroPratoDto {
 
@@ -17,10 +19,10 @@ public class CadastroPratoDto {
 
     @ManyToOne
     private Funcionario funcionario;
-    //@ManyToOne
-    private String setor;
-    //@ManyToOne
-    private String categoria;
+    @ManyToOne
+    private Setor setor;
+    @ManyToOne
+    private Categoria categoria;
 
     public @NotBlank String getNome() {
         return nome;
@@ -62,19 +64,19 @@ public class CadastroPratoDto {
         this.funcionario = funcionario;
     }
 
-    public String getSetor() {
+    public Setor getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Setor setor) {
         this.setor = setor;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 }

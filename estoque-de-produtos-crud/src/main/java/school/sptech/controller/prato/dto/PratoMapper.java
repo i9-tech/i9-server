@@ -24,12 +24,12 @@ public class PratoMapper {
         return entity;
     }
 
-    public static Prato toEntity(AtualizarPratoDto dto, Integer id) {
+    public static Prato toEntity(AtualizarPratoDto dto) {
         if (dto == null) {
             return null;
         }
         Prato entity = new Prato();
-        entity.setId(id);
+
         entity.setNome(dto.getNome());
         entity.setImagem(dto.getImagem());
         entity.setValorVenda(dto.getValorVenda());

@@ -95,7 +95,8 @@ public class CategoriaController {
                 .body(CategoriaMapper.transformarEmRespostaListaDto(buscarCategoria));
     }
 
-    @GetMapping("/{id}/{idFuncionario}")
+
+    @GetMapping("/{idCategoria}/{idFuncionario}")
     @Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso."),
