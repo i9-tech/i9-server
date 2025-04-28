@@ -3,6 +3,7 @@ package school.sptech.controller.funcionario.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import org.springframework.cglib.core.Local;
 import school.sptech.entity.empresa.Empresa;
 
 import java.time.LocalDate;
@@ -50,7 +51,7 @@ public class FuncionarioRequestDto {
             type = "string"
     )
     //definir um padrão de armazenamento
-    private Date dataAdmissao;
+    private LocalDate dataAdmissao;
 
     @Schema(
             description = "Indica se a pessoa tem acesso ao setor da cozinha. 'true' define acesso, 'false' restringe o acesso.",
@@ -90,17 +91,6 @@ public class FuncionarioRequestDto {
     )
     private String senha;
 
-    public FuncionarioRequestDto(String nome, String cpf, String cargo, Date dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque, boolean acessoSetorAtendimento, boolean proprietario, String senha) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.cargo = cargo;
-        this.dataAdmissao = dataAdmissao;
-        this.acessoSetorCozinha = acessoSetorCozinha;
-        this.acessoSetorEstoque = acessoSetorEstoque;
-        this.acessoSetorAtendimento = acessoSetorAtendimento;
-        this.proprietario = proprietario;
-        this.senha = senha;
-    }
 
     public String getNome() {
         return nome;
@@ -126,11 +116,11 @@ public class FuncionarioRequestDto {
         this.cargo = cargo;
     }
 
-    public Date getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(Date dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 

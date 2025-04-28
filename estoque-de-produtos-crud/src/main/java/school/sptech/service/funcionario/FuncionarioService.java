@@ -1,16 +1,25 @@
 package school.sptech.service.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import school.sptech.config.GerenciadorTokenJwt;
 import school.sptech.controller.funcionario.dto.FuncionarioMapper;
 import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 
+import school.sptech.controller.funcionario.dto.FuncionarioTokenDto;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
+import school.sptech.exception.SenhaInvalidaException;
 import school.sptech.exception.ValidacaoException;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
@@ -20,16 +29,46 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 public class FuncionarioService {
 
-    private FuncionarioRepository repository;
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    public FuncionarioService(FuncionarioRepository repository) {
-        this.repository = repository;
+    @Autowired
+    private FuncionarioRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GerenciadorTokenJwt gerenciadorTokenJwt;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    public String criptografar(String senha) {
+        return passwordEncoder.encode(senha);
+    }
+
+    public FuncionarioTokenDto autenticar(Funcionario funcionario) {
+
+        final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
+                funcionario.getCpf(), funcionario.getSenha());
+
+        final Authentication authentication = this.authenticationManager.authenticate(credentials);
+
+        Funcionario funcionarioAutenticado =
+                repository.findByCpf(funcionario.getCpf())
+                        .orElseThrow(
+                                () -> new ResponseStatusException(404, "CPF do usuário não cadastrado", null)
+                        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        final String token = gerenciadorTokenJwt.generateToken(authentication);
+
+        return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
     public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, Integer idEmpresa){
@@ -43,13 +82,15 @@ public class FuncionarioService {
         Empresa empresa = empresaRepository.findById(idEmpresa)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
 
+        String senhaCriptografada = passwordEncoder.encode(requestDto.getSenha());
+        requestDto.setSenha(senhaCriptografada);
+
         Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
 
         funcionario = repository.save(funcionario);
         return FuncionarioMapper.toDto(funcionario);
 
     }
-
 
     public List<FuncionarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
         List<Funcionario> todosFuncionariosEmpresa = repository.findByEmpresaIdAndAtivoTrue(idEmpresa);
@@ -116,6 +157,5 @@ public class FuncionarioService {
             throw new ValidacaoException("O cargo do funcionário é obrigatório");
         }
     }
-
 
 }

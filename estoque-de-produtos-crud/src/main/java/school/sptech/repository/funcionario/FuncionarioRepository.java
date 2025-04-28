@@ -25,4 +25,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     List<Funcionario> findByEmpresaIdAndAtivoTrue(Integer idEmpresa);
 
+    Optional<Funcionario> findByCpf(String cpf);
+
+
 }
