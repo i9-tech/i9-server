@@ -127,7 +127,7 @@ public class PratoController {
 
     @PutMapping("/{id}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
-    @Operation(summary = "Atualizar prato existente de determinada empresa", description = "Atualiza os dados de um prato existente de determinada empresa da base de dados a partir de seu ID.")
+    @Operation(summary = "Atualizar prato existente de determinada empresa", description = "Atualiza os dados de um prato existente de determinada empresa da base de dados, a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Prato atualizado com sucesso.",
                     content = @Content(mediaType = "application/json",

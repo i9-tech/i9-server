@@ -8,7 +8,7 @@ import java.util.List;
 public class PratoMapper {
 
     @Operation(summary = "Transforma um DTO de cadastro de prato em entidade de prato.",
-            description = "Converte os dados de um DTO de cadastro de prato em uma entidade de prato para persistência no banco de dados.")
+            description = "Converte os dados de um DTO de cadastro de prato em uma entidade de prato, para persistência no banco de dados.")
     public static Prato toEntity(CadastroPratoDto dto) {
         if (dto == null) {
             return null;
@@ -28,7 +28,7 @@ public class PratoMapper {
     }
 
     @Operation(summary = "Transforma um DTO de atualização de prato em entidade de prato.",
-            description = "Converte os dados de um DTO de atualização de prato em uma entidade de prato para atualizar os dados existentes no banco de dados.")
+            description = "Converte os dados de um DTO de atualização de prato em uma entidade de prato, para atualizar os dados existentes no banco de dados.")
     public static Prato toEntity(AtualizarPratoDto dto) {
         if (dto == null) {
             return null;
@@ -48,7 +48,7 @@ public class PratoMapper {
     }
 
     @Operation(summary = "Transforma uma entidade de prato em DTO de resposta.",
-            description = "Converte os dados de uma entidade de prato em um DTO de resposta para ser enviado na resposta da API.")
+            description = "Converte os dados de uma entidade de prato em um DTO de resposta, para ser enviado na resposta da API.")
     public static RespostaPratoDto toResponseDto(Prato entity) {
         if (entity == null) {
             return null;
@@ -69,7 +69,7 @@ public class PratoMapper {
     }
 
     @Operation(summary = "Transforma uma lista de entidades de pratos em uma lista de DTOs de resposta.",
-            description = "Converte uma lista de entidades de pratos em uma lista de DTOs de resposta para ser enviado na resposta da API.")
+            description = "Converte uma lista de entidades de pratos em uma lista de DTOs de resposta, para ser enviada na resposta da API.")
     public static List<RespostaPratoDto> toResponseDtoList(List<Prato> entities) {
         if (entities == null) {
             return null;
