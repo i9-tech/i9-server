@@ -44,6 +44,7 @@ public class FuncionarioMapper {
         }
 
         return new FuncionarioResponseDto(
+                funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
                 funcionario.getCargo(),

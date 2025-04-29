@@ -185,10 +185,10 @@ public class CategoriaController {
     public ResponseEntity<CategoriaListagemDto> atualizar(
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Integer id,
-            @Parameter(description = "Dados da categoria para atualização.", required = true)
-            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar,
             @Parameter(description = "ID do funcionário encarregado pela atualização.", example = "1", required = true)
-            @PathVariable Integer idFuncionario
+            @PathVariable Integer idFuncionario,
+            @Parameter(description = "Dados da categoria para atualização.", required = true)
+            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar
             ) {
         Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar), idFuncionario);
 
