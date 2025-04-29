@@ -22,11 +22,11 @@ public interface SetorRepository extends JpaRepository<Setor, Integer> {
 
     @Modifying
     @Query("UPDATE Prato p SET p.setor = NULL WHERE p.setor.id = :setorId")
-    void desvincularPratosDaSetor(@Param("categoriaId") Integer setorId);
+    void desvincularPratosDoSetor(@Param("setorId") Integer setorId);
 
     @Modifying
     @Query("UPDATE Produto p SET p.setor = NULL WHERE p.setor.id = :setorId")
-    void desvincularProdutosDaSetor(@Param("categoriaId") Integer setorId);
+    void desvincularProdutosDoSetor(@Param("setorId") Integer setorId);
 
     @Modifying
     @Query("DELETE FROM Setor c WHERE c.id = :id")

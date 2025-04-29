@@ -197,7 +197,7 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaAtualizadaDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/{idFuncionario}")
     @Operation(summary = "Remover categoria existente", description = "Remove uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Categoria removida com sucesso.", content = @Content),

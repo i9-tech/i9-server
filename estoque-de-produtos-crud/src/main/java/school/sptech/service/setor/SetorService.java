@@ -1,8 +1,7 @@
 package school.sptech.service.setor;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import school.sptech.controller.setor.dto.SetorMapper;
-import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.setor.Setor;
 import school.sptech.exception.EntidadeInativaException;
@@ -82,21 +81,22 @@ public class SetorService {
         return setorRepository.save(setorParaAtualizar);
     }
 
-    public void removerSetor(Integer id, Integer idFuncionario) {
+    @Transactional
+    public void removerSetor(Integer setorId, Integer idFuncionario) {
 
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
 
-        Optional<Setor> setorEncontrado = setorRepository.findById(id);
+        Optional<Setor> setorEncontrado = setorRepository.findById(setorId);
 
         if (setorEncontrado.isEmpty()) {
             throw new EntidadeNaoEncontradaException();
         }
 
-        setorRepository.desvincularPratosDaSetor(id);
-        setorRepository.desvincularProdutosDaSetor(id);
+        setorRepository.desvincularPratosDoSetor(setorId);
+        setorRepository.desvincularProdutosDoSetor(setorId);
 
-        setorRepository.deleteSetorById(id);
+        setorRepository.deleteSetorById(setorId);
     }
 }
