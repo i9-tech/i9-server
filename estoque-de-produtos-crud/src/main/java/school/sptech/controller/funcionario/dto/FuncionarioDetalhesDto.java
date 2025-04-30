@@ -1,5 +1,6 @@
 package school.sptech.controller.funcionario.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +12,25 @@ import java.util.List;
 
 public class FuncionarioDetalhesDto implements UserDetails {
 
+    @Schema(
+            description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
+            example = "Agatha Nunes",
+            type = "string"
+    )
     private final String nome;
+
+    @Schema(
+            description = "Senha que dará acesso ao sistema para a pessoa contratada.",
+            type = "string"
+    )
     private final String senha;
+
+    @Schema(
+            description = "CPF da pessoa empregada. Precisa ser informado com formatação.",
+            example = "999.999.999-99",
+            maxLength = 14,
+            type = "string"
+    )
     private final String cpf;
 
     public FuncionarioDetalhesDto(Funcionario funcionario) {

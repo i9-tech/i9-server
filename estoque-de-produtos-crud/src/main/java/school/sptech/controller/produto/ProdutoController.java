@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class ProdutoController {
     private ProdutoService service;
 
     @PostMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar novo produto", description = "Cadastra um novo produto de uma determinada empresa na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Produto cadastrado com sucesso."),
@@ -52,6 +54,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar produtos", description = "Lista todos os produtos de uma determinada empresa presentes na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produtos listados com sucesso.",
@@ -125,6 +128,7 @@ public class ProdutoController {
     }
 
     @PatchMapping("/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar produto existente de determinada empresa", description = "Atualiza um produto existente de determinada empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso.",
@@ -184,6 +188,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover produto", description = "Remove um produto da base de dados usando o ID do produto e o ID do funcionário responsável.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Produto removido com sucesso.", content = @Content),
@@ -206,6 +211,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/valor-total-estoque/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Valor total do estoque", description = "Calcula o valor total de todos os produtos no estoque de uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Valor total do estoque calculado com sucesso.",
@@ -229,6 +235,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/lucro-previsto-estoque/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Lucro previsto do estoque", description = "Calcula o lucro previsto a partir dos produtos no estoque de uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lucro previsto calculado com sucesso.",
@@ -252,6 +259,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/quantidade-estoque/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Quantidade total no estoque", description = "Obtém a quantidade total de produtos no estoque de uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quantidade total obtida com sucesso.",
@@ -275,6 +283,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/quantidade-estoque-baixo/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Quantidade de produtos com estoque baixo", description = "Obtém a quantidade de produtos com estoque abaixo do limite mínimo de uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quantidade de produtos obtida com sucesso.",
@@ -298,6 +307,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/quantidade-estoque-alto/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Quantidade de produtos com estoque alto", description = "Obtém a quantidade de produtos com estoque acima do limite máximo de uma empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quantidade de produtos obtida com sucesso.",
@@ -322,6 +332,7 @@ public class ProdutoController {
 
 
     @GetMapping("/categoria/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar produtos por categoria", description = "Lista todos os produtos de uma determinada categoria na empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produtos da categoria listados com sucesso.",
@@ -364,6 +375,7 @@ public class ProdutoController {
 
 
     @GetMapping("/setor/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar produtos por setor", description = "Lista todos os produtos de um determinado setor na empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produtos do setor listados com sucesso.",
@@ -406,6 +418,7 @@ public class ProdutoController {
 
 
     @GetMapping("/nome/{nome}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar produtos por nome", description = "Lista todos os produtos com base no nome na empresa.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Produtos encontrados com sucesso pelo nome",
