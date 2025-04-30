@@ -151,7 +151,7 @@ public class CategoriaController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar categoria existente", description = "Atualiza uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
@@ -190,16 +190,19 @@ public class CategoriaController {
     public ResponseEntity<CategoriaListagemDto> atualizar(
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Integer id,
+            @Parameter(description = "ID do funcionário encarregado pela atualização.", example = "1", required = true)
+            @PathVariable Integer idFuncionario,
             @Parameter(description = "Dados da categoria para atualização.", required = true)
-            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar) {
-        Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar));
+            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar
+            ) {
+        Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar), idFuncionario);
 
         CategoriaListagemDto respostaAtualizadaDto = CategoriaMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaAtualizadaDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover categoria existente", description = "Remove uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
@@ -214,8 +217,11 @@ public class CategoriaController {
     })
     public ResponseEntity<CategoriaListagemDto> remover(
             @Parameter(description = "ID da categoria.", example = "1", required = true)
-            @PathVariable Integer id) {
-        categoriaService.removerCategoria(id);
+            @PathVariable Integer id,
+            @Parameter(description = "ID do funcionário responsável pela remoção da categoria.", example = "1", required = true)
+            @PathVariable Integer idFuncionario
+            ) {
+        categoriaService.removerCategoria(id, idFuncionario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

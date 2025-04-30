@@ -124,7 +124,7 @@ public class EmpresaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idEmpresa}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar empresa existente", description = "Atualiza uma empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
@@ -160,10 +160,10 @@ public class EmpresaController {
     })
     public ResponseEntity<EmpresaListagemDto> atualizar(
             @Parameter(description = "ID da empresa", example = "1", required = true)
-            @PathVariable Integer id,
+            @PathVariable Integer idEmpresa,
             @Parameter(description = "Dados da empresa para atualização.", required = true)
             @Valid @RequestBody EmpresaAtualizarDto empresaParaAtualizar) {
-        Empresa entidadeParaAtualizar = empresaService.atualizarEmpresa(id, EmpresaMapper.transformarEmEntidade(empresaParaAtualizar));
+        Empresa entidadeParaAtualizar = empresaService.atualizarEmpresa(idEmpresa, EmpresaMapper.transformarEmEntidade(empresaParaAtualizar));
 
         EmpresaListagemDto respostaAtualizadaDto = EmpresaMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
