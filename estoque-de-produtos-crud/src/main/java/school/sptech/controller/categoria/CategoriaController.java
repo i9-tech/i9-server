@@ -151,7 +151,7 @@ public class CategoriaController {
     }
 
 
-    @PutMapping("/{id}}/{idFuncionario}")
+    @PutMapping("/{id}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar categoria existente", description = "Atualiza uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {

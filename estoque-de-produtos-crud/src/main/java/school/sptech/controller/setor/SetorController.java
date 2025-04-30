@@ -199,7 +199,7 @@ public class SetorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaAtualizadaDto);
     }
 
-    @DeleteMapping("/{idSetor}")
+
     @DeleteMapping("/{idSetor}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover setor existente", description = "Remove um setor da base de dados a partir de seu ID.")
