@@ -17,7 +17,7 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("interessado")
+    @PostMapping("interesse")
     public ResponseEntity<String> enviarEmail(@RequestBody String emailRecebido) {
         try {
             emailService.enviarEmail(emailRecebido);
