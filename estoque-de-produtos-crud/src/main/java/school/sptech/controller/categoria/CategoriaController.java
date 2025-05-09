@@ -143,7 +143,8 @@ public class CategoriaController {
             @Valid @RequestBody CategoriaCadastroDto categoriaParaCadastro,
             @Parameter(description = "Identificação do funcionário que está cadastrando categoria.", required = true)
             @PathVariable Integer idFuncionario) {
-        Categoria novaCategoria = categoriaService.cadastrarCategoria(CategoriaMapper.transformarEmEntidade(categoriaParaCadastro), idFuncionario);
+        Categoria novaCategoria = categoriaService.cadastrarCategoria(
+                CategoriaMapper.transformarEmEntidade(categoriaParaCadastro), idFuncionario);
 
         CategoriaListagemDto respostaCategoriaDto = CategoriaMapper.transformarEmRespostaDto(novaCategoria);
 

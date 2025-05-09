@@ -71,7 +71,7 @@ public class FuncionarioService {
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
-    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, Integer idEmpresa){
+    public Funcionario cadastrarFuncionario(Funcionario requestDto, Integer idEmpresa){
 
         boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(requestDto.getCpf(), idEmpresa);
 
@@ -85,11 +85,11 @@ public class FuncionarioService {
         String senhaCriptografada = passwordEncoder.encode(requestDto.getSenha());
         requestDto.setSenha(senhaCriptografada);
 
-        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
+//        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
 
-        funcionario = repository.save(funcionario);
-        return FuncionarioMapper.toDto(funcionario);
-
+        requestDto.setEmpresa(empresa);
+        requestDto.setId(requestDto.getId());
+        return repository.save(requestDto);
     }
 
     public List<FuncionarioResponseDto> listarPorEmpresa(Integer idEmpresa) {

@@ -27,8 +27,8 @@ public class FuncionarioMapper {
         funcionario.setProprietario(requestDto.isProprietario());
         funcionario.setSenha(requestDto.getSenha());
 
-        // Agora setamos a empresa
-        funcionario.setEmpresa(empresa);
+//        // Agora setamos a empresa
+//        funcionario.setEmpresa(idEmpresa);
 
         return funcionario;
     }
