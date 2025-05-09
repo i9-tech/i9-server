@@ -1,52 +1,143 @@
 package school.sptech.entity.produto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import school.sptech.controller.categoria.dto.CategoriaListagemDto;
+import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
+import school.sptech.controller.setor.dto.SetorListagemDto;
+import school.sptech.entity.categoria.Categoria;
+import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.setor.Setor;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "produto")
+@Schema(
+        name = "Produto",
+        description = "Representa os produtos cadastrados em um setor da empresa, controlando as quantidades, valores de compra e venda, e categorias. Essencial para a gestão de estoque e reabastecimento.")
 public class Produto {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Schema(
+            description = "Identificador único do produto.",
+            example = "1",
+            type = "integer"
+    )
+    private Integer id;
+
+    @Schema(
+            description = "Código de identificação do produto.",
+            example = "0122339475",
+            type = "int"
+    )
     private int codigo;
-    private String nomeProduto;
-    private LocalDate dataVencimento;
-    private double valorCompra;
-    private double valorUnitario;
+
+    //    @Lob
+//    private byte[] imagem;
+    @Schema(
+            description = "Nome do produto a ser cadastrado.",
+            example = "Bolinho Ana Maria",
+            type = "string"
+    )
+    private String nome;
+
+
+    @Schema(
+            description = "Quantidade a ser cadastrada do produto informado. Deve ser maior que 0 e menor que a quantidade máxima.",
+            example = "15",
+            type = "int"
+    )
     private int quantidade;
-    private LocalDate dtRegistro;
-    private String descricao;
-    private String categoria;
-    private String setorAlimenticio;
+
+
+    @Schema(
+            description = "Valor que produto foi comprado. Deve ser menor que o valor de venda.",
+            example = "3.00",
+            type = "double"
+    )
+    private double valorCompra;
+
+
+    @Schema(
+            description = "Valor que produto comprado será vendido. Deve ser maior que o valor de compra.",
+            example = "5.00",
+            type = "double"
+    )
+    private double valorUnitario;
+
+
+    @Schema(
+            description = "Quantidade mínima do estoque. Esse valor serve de parâmetro para possíveis alertas de estoque baixo. Deve ser menor que a quantidade máxima.",
+            example = "3",
+            type = "int"
+    )
     private int quantidadeMin;
+
+
+    @Schema(
+            description = "Quantidade máxima do estoque. Esse valor serve de parâmetro para possíveis alertas de estoque superlotado. Deve ser maior que a quantidade mínima.",
+            example = "30",
+            type = "int"
+    )
     private int quantidadeMax;
-    private int fkFuncionario;
-    private int fkEmpresa;
-    private int fkPedidoPratoProduto;
 
-    public int getFkFuncionario() {
-        return fkFuncionario;
+
+    @Schema(
+            description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto.",
+            example = "O Bolinho Ana Maria é um produto de confeitaria, embalado individualmente, ideal para lanches rápidos.",
+            type = "string",
+            nullable = true
+    )
+    private String descricao;
+
+    @Schema(
+            description = "Data em que o produto foi registrado no sistema da empresa. A data não pode ser informada no futuro.",
+            example = "2025-04-25",
+            format = "date",
+            type = "string"
+    )
+    private LocalDate dataRegistro;
+
+
+    @ManyToOne
+    @Schema(
+            description = "Setor que o produto pertencerá. É necessário informar setor e categoria para cadastro de produto.",
+            implementation = SetorListagemDto.class
+    )
+    private Setor setor;
+
+
+    @ManyToOne
+    @Schema(
+            description = "Categoria que o produto pertencerá. É necessário informar uma categoria existente do setor anteriormente informado.",
+            implementation = CategoriaListagemDto.class
+    )
+    private Categoria categoria;
+
+
+    @ManyToOne
+    @Schema(
+            description = "Funcionário associado à criação do produto.",
+            implementation = FuncionarioResponseDto.class
+    )
+    private Funcionario funcionario;
+
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setFkFuncionario(int fkFuncionario) {
-        this.fkFuncionario = fkFuncionario;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
-    public int getFkPedidoPratoProduto() {
-        return fkPedidoPratoProduto;
-    }
-
-    public void setFkPedidoPratoProduto(int fkPedidoPratoProduto) {
-        this.fkPedidoPratoProduto = fkPedidoPratoProduto;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -58,20 +149,20 @@ public class Produto {
         this.codigo = codigo;
     }
 
-    public String getNomeProduto() {
-        return nomeProduto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public LocalDate getDataVencimento() {
-        return dataVencimento;
+    public int getQuantidade() {
+        return quantidade;
     }
 
-    public void setDataVencimento(LocalDate dataVencimento) {
-        this.dataVencimento = dataVencimento;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
     public double getValorCompra() {
@@ -90,46 +181,6 @@ public class Produto {
         this.valorUnitario = valorUnitario;
     }
 
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public LocalDate getDtRegistro() {
-        return dtRegistro;
-    }
-
-    public void setDtRegistro(LocalDate dtRegistro) {
-        this.dtRegistro = dtRegistro;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getSetorAlimenticio() {
-        return setorAlimenticio;
-    }
-
-    public void setSetorAlimenticio(String setorAlimenticio) {
-        this.setorAlimenticio = setorAlimenticio;
-    }
-
     public int getQuantidadeMin() {
         return quantidadeMin;
     }
@@ -146,20 +197,36 @@ public class Produto {
         this.quantidadeMax = quantidadeMax;
     }
 
-    public int getFkColaborador() {
-        return fkFuncionario;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setFkColaborador(int fkFuncionario) {
-        this.fkFuncionario = fkFuncionario;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public int getFkEmpresa() {
-        return fkEmpresa;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setFkEmpresa(int fkEmpresa) {
-        this.fkEmpresa = fkEmpresa;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Setor getSetor() {
+        return setor;
+    }
+
+    public void setSetor(Setor setor) {
+        this.setor = setor;
+    }
+
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public void setDataRegistro(LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
     }
 
 }
