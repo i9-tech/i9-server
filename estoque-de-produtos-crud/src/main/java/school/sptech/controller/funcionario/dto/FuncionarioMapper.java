@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class FuncionarioMapper {
 
     public FuncionarioMapper() {
@@ -71,6 +74,13 @@ public class FuncionarioMapper {
         funcionarioTokenDto.setToken(token);
 
         return funcionarioTokenDto;
+    }
+
+
+    public static List<FuncionarioResponseDto> toDtoList(List<Funcionario> funcionarios) {
+        return funcionarios.stream()
+                .map(FuncionarioMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 

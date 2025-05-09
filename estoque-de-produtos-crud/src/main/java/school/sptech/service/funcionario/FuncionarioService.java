@@ -71,9 +71,9 @@ public class FuncionarioService {
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
-    public Funcionario cadastrarFuncionario(Funcionario requestDto, Integer idEmpresa){
+    public Funcionario cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
 
-        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(requestDto.getCpf(), idEmpresa);
+        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
 
         if (funcionarioExisteByCpf){
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");
@@ -81,37 +81,30 @@ public class FuncionarioService {
 
         Empresa empresa = empresaRepository.findById(idEmpresa)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
-        requestDto.setEmpresa(empresa);
+        funcionario.setEmpresa(empresa);
 
-        String senhaCriptografada = passwordEncoder.encode(requestDto.getSenha());
-        requestDto.setSenha(senhaCriptografada);
+        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+        funcionario.setSenha(senhaCriptografada);
 
-        requestDto.setId(requestDto.getId());
-        return repository.save(requestDto);
+        funcionario.setId(funcionario.getId());
+        return repository.save(funcionario);
     }
 
-    public List<FuncionarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
+    public List<Funcionario> listarPorEmpresa(Integer idEmpresa) {
         List<Funcionario> todosFuncionariosEmpresa = repository.findByEmpresaIdAndAtivoTrue(idEmpresa);
 
         if (todosFuncionariosEmpresa.isEmpty()) {
             return Collections.emptyList(); // Retorna uma lista vazia
         }
 
-        return todosFuncionariosEmpresa.stream()
-                .map(FuncionarioMapper::toDto)
-                .collect(Collectors.toList()); // Retorna uma lista com dtos
+        return todosFuncionariosEmpresa;
     }
 
-    public FuncionarioResponseDto buscarFuncionarioPorId(int id,Integer idEmpresa) {
-        Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
-
-        if (funcionario.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
-        }
-
-        return FuncionarioMapper.toDto(funcionario.get());
-
+    public Funcionario buscarFuncionarioPorId(int id, Integer idEmpresa) {
+        return repository.findByIdAndEmpresaId(id, idEmpresa)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada."));
     }
+
 
     public void removerPorId(int id, Integer idEmpresa) {
         Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
@@ -124,36 +117,23 @@ public class FuncionarioService {
 
     }
 
-    public FuncionarioResponseDto editarFuncionario(int id, Integer idEmpresa , FuncionarioRequestDto requestDto){
-        Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
+    public Funcionario editarFuncionario(int id, Integer idEmpresa, Funcionario funcionarioParaEditar) {
+        Optional<Funcionario> funcionarioOptional = repository.findByIdAndEmpresaId(id, idEmpresa);
 
-        if (funcionario.isEmpty()) {
+        if (funcionarioOptional.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
-        Funcionario funcionarioExiste = funcionario.get();
+        Funcionario funcionarioExistente = funcionarioOptional.get();
 
-        validarFuncionario(requestDto);
+        funcionarioExistente.setCpf(funcionarioParaEditar.getCpf());
+        funcionarioExistente.setNome(funcionarioParaEditar.getNome());
+        funcionarioExistente.setCargo(funcionarioParaEditar.getCargo());
+        funcionarioExistente.setSenha(funcionarioParaEditar.getSenha());
+        funcionarioExistente.setAcessoSetorCozinha(funcionarioParaEditar.isAcessoSetorCozinha());
+        funcionarioExistente.setAcessoSetorAtendimento(funcionarioParaEditar.isAcessoSetorAtendimento());
+        funcionarioExistente.setAcessoSetorEstoque(funcionarioParaEditar.isAcessoSetorEstoque());
 
-        funcionarioExiste.setCpf(requestDto.getCpf());
-        funcionarioExiste.setNome(requestDto.getNome());
-        funcionarioExiste.setCargo(requestDto.getCargo());
-        funcionarioExiste.setSenha(requestDto.getSenha());
-        funcionarioExiste.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
-        funcionarioExiste.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
-        funcionarioExiste.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
-
-        return FuncionarioMapper.toDto(repository.save(funcionarioExiste));
+        return repository.save(funcionarioExistente);
     }
-
-    public void validarFuncionario(FuncionarioRequestDto requestDto){
-        if (requestDto.getNome() == null || requestDto.getNome().trim().isEmpty()){
-            throw new ValidacaoException("O nome do funcionário é obrigatório");
-        }  if (requestDto.getCpf() == null){
-            throw new ValidacaoException("O CPF do funcionário é obrigatório");
-        } if (requestDto.getCargo() == null || requestDto.getCargo().trim().isEmpty()){
-            throw new ValidacaoException("O cargo do funcionário é obrigatório");
-        }
-    }
-
 }
