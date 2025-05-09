@@ -81,13 +81,11 @@ public class FuncionarioService {
 
         Empresa empresa = empresaRepository.findById(idEmpresa)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
+        requestDto.setEmpresa(empresa);
 
         String senhaCriptografada = passwordEncoder.encode(requestDto.getSenha());
         requestDto.setSenha(senhaCriptografada);
 
-//        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
-
-        requestDto.setEmpresa(empresa);
         requestDto.setId(requestDto.getId());
         return repository.save(requestDto);
     }

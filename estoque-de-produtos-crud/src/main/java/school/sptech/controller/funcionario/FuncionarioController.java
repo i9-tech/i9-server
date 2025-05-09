@@ -52,8 +52,7 @@ public class FuncionarioController {
             @PathVariable Integer idEmpresa) {
 
 
-        Funcionario novoFuncionario = service.cadastrarFuncionario(
-                FuncionarioMapper.toEntity(requestDto), idEmpresa);
+        Funcionario novoFuncionario = service.cadastrarFuncionario(FuncionarioMapper.toEntity(requestDto), idEmpresa);
 
         FuncionarioResponseDto respostaFuncionarioDto = FuncionarioMapper.toDto(novoFuncionario);
 
