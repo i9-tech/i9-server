@@ -11,7 +11,7 @@ public class FuncionarioMapper {
 
     @Operation(summary = "Transforma um DTO de requisição de funcionário em uma entidade de funcionário.",
             description = "Converte os dados de um DTO de requisição de funcionário em uma entidade de funcionário, para persistência no banco de dados.")
-    public static Funcionario toEntity(FuncionarioRequestDto requestDto, Empresa empresa){
+    public static Funcionario toEntity(FuncionarioRequestDto requestDto){
         if (requestDto == null){
             return null;
         }
@@ -26,9 +26,6 @@ public class FuncionarioMapper {
         funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionario.setProprietario(requestDto.isProprietario());
         funcionario.setSenha(requestDto.getSenha());
-
-//        // Agora setamos a empresa
-//        funcionario.setEmpresa(idEmpresa);
 
         return funcionario;
     }
