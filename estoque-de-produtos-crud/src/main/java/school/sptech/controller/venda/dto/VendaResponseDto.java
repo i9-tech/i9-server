@@ -1,4 +1,4 @@
-package school.sptech.controller.Venda.Dto;
+package school.sptech.controller.venda.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;

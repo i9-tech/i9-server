@@ -1,7 +1,5 @@
-package school.sptech.controller.Venda.Dto;
+package school.sptech.controller.venda.dto;
 
-import school.sptech.controller.Venda.Dto.VendaRequestDto;
-import school.sptech.controller.Venda.Dto.VendaResponseDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
 import school.sptech.entity.venda.Venda;
@@ -32,8 +30,9 @@ public class VendaMapper {
                 venda.getDataVenda(),
                 venda.getValorTotal(),
                 venda.getMesa(),
-                venda.getVendaConcluida(),
-                venda.getFuncionario().getNome()
+                venda.getFuncionario().getNome(),
+                venda.getItensCarrinho(),
+                venda.getVendaConcluida()
         );
     }
 }

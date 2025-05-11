@@ -1,13 +1,13 @@
-package school.sptech.controller.Venda;
+package school.sptech.controller.venda;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.controller.Venda.Dto.VendaRequestDto;
-import school.sptech.controller.Venda.Dto.VendaResponseDto;
+import school.sptech.controller.venda.dto.VendaRequestDto;
+import school.sptech.controller.venda.dto.VendaResponseDto;
 import school.sptech.entity.venda.Venda;
-import school.sptech.service.VendaService;
+import school.sptech.service.venda.VendaService;
 
 import java.util.List;
 

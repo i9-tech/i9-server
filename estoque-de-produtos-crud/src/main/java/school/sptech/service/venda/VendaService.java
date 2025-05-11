@@ -1,15 +1,17 @@
-package school.sptech.service;
+package school.sptech.service.venda;
 
 import org.springframework.stereotype.Service;
-import school.sptech.controller.Venda.Dto.VendaMapper;
-import school.sptech.controller.Venda.Dto.VendaRequestDto;
-import school.sptech.controller.Venda.Dto.VendaResponseDto;
+import school.sptech.controller.venda.dto.VendaMapper;
+import school.sptech.controller.venda.dto.VendaRequestDto;
+import school.sptech.controller.venda.dto.VendaResponseDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
+import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.repository.VendaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
+import school.sptech.repository.produto.ProdutoRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,29 +23,47 @@ public class VendaService {
     private final FuncionarioRepository funcionarioRepository;
     private final ItemCarrinhoRepository itemCarrinhoRepository;
     private final VendaRepository vendaRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository) {
+
+    public VendaService(FuncionarioRepository funcionarioRepository,
+                        ItemCarrinhoRepository itemCarrinhoRepository,
+                        VendaRepository vendaRepository,
+                        ProdutoRepository produtoRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
+        this.produtoRepository = produtoRepository;
     }
 
     public Venda criarVenda(VendaRequestDto vendaRequest) {
-
         Funcionario funcionario = funcionarioRepository.findById(vendaRequest.getFuncionarioId())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
         List<ItemCarrinho> itens = itemCarrinhoRepository.findAllById(vendaRequest.getItens());
-
         if (itens.isEmpty()) {
             throw new RuntimeException("Itens não encontrados");
         }
 
         Venda venda = VendaMapper.toEntity(vendaRequest, funcionario, itens);
-
         venda.setValorTotal(calcularValorTotal(itens));
 
+        reduzirEstoque(itens);
         return vendaRepository.save(venda);
+    }
+
+    private void reduzirEstoque(List<ItemCarrinho> itens) {
+        for (ItemCarrinho item : itens) {
+            Produto produto = item.getProduto();
+            int estoqueAtual = produto.getQuantidade();
+            if (estoqueAtual < 1) {
+                throw new RuntimeException(
+                        "Estoque insuficiente para o produto: " + produto.getNome()
+                );
+            }
+            produto.setQuantidade(estoqueAtual - 1);
+            produtoRepository.save(produto);
+        }
     }
 
 
@@ -59,9 +79,9 @@ public class VendaService {
     public VendaResponseDto buscarVendaPorId(Integer id) {
         Venda venda = vendaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
-
         return VendaMapper.toDto(venda);
     }
+
 
     public Venda atualizarVenda(Integer id, VendaRequestDto vendaRequest) {
         Venda vendaExistente = vendaRepository.findById(id)
