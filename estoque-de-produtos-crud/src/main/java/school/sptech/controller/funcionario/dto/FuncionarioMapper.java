@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class FuncionarioMapper {
 
     public FuncionarioMapper() {
@@ -11,7 +14,7 @@ public class FuncionarioMapper {
 
     @Operation(summary = "Transforma um DTO de requisição de funcionário em uma entidade de funcionário.",
             description = "Converte os dados de um DTO de requisição de funcionário em uma entidade de funcionário, para persistência no banco de dados.")
-    public static Funcionario toEntity(FuncionarioRequestDto requestDto, Empresa empresa){
+    public static Funcionario toEntity(FuncionarioRequestDto requestDto){
         if (requestDto == null){
             return null;
         }
@@ -26,9 +29,6 @@ public class FuncionarioMapper {
         funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionario.setProprietario(requestDto.isProprietario());
         funcionario.setSenha(requestDto.getSenha());
-
-        // Agora setamos a empresa
-        funcionario.setEmpresa(empresa);
 
         return funcionario;
     }
@@ -74,6 +74,13 @@ public class FuncionarioMapper {
         funcionarioTokenDto.setToken(token);
 
         return funcionarioTokenDto;
+    }
+
+
+    public static List<FuncionarioResponseDto> toDtoList(List<Funcionario> funcionarios) {
+        return funcionarios.stream()
+                .map(FuncionarioMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 
