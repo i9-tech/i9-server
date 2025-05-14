@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.funcionario.dto.*;
+import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.service.funcionario.FuncionarioService;
 
@@ -29,6 +30,7 @@ public class FuncionarioController {
     public FuncionarioController(FuncionarioService service) {
         this.service = service;
     }
+
 
     @PostMapping("/{idEmpresa}")
     @SecurityRequirement(name = "Bearer")
@@ -53,6 +55,7 @@ public class FuncionarioController {
         FuncionarioResponseDto responseDto = service.cadastrarFuncionario(requestDto, idEmpresa);
         return ResponseEntity.status(201).body(responseDto);
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<FuncionarioTokenDto> login(@RequestBody FuncionarioLoginDto funcionarioLoginDto) {
@@ -206,5 +209,7 @@ public class FuncionarioController {
         FuncionarioResponseDto responseDto = service.editarFuncionario(id, idEmpresa, funcionarioParaEditar);
         return ResponseEntity.status(200).body(responseDto);
     }
+
+
 
 }

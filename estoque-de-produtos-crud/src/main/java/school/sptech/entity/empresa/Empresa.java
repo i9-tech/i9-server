@@ -62,6 +62,9 @@ public class Empresa {
     )
     private boolean ativo;
 
+    private String email;
+
+    private String nomeSenha;
 
     public Integer getId() {
         return id;
@@ -109,5 +112,21 @@ public class Empresa {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNomeSenha() {
+        return nomeSenha;
+    }
+
+    public void setNomeSenha(String nomeSenha) {
+        this.nomeSenha = nomeSenha;
     }
 }

@@ -1,15 +1,15 @@
 
 -- Inserir uma empresa
-INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
-VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true);
+INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha)
+VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'taua@gmail.com', 'taua');
 
 -- Inserir outra empresa
-INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
-VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true);
+INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha)
+VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true, 'tai@gmail.com', 'tai');
 
 -- Inserir uma empresa inativa
-INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo)
-VALUES ('Ygonna Bolos', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false);
+INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo,  email, nome_senha)
+VALUES ('Ygonna Bolos', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false, 'maria@gmail.com', 'maria');
 
 
 -- Inserir um funcionário

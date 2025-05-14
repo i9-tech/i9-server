@@ -71,26 +71,41 @@ public class FuncionarioService {
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
-    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, Integer idEmpresa){
+    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, Integer idEmpresa) {
 
         boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(requestDto.getCpf(), idEmpresa);
 
-        if (funcionarioExisteByCpf){
+        if (funcionarioExisteByCpf) {
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");
         }
 
         Empresa empresa = empresaRepository.findById(idEmpresa)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
 
-        String senhaCriptografada = passwordEncoder.encode(requestDto.getSenha());
+        // Aqui, geramos a senha automática SEM usar a senha da requisição
+        String senhaGerada = gerarSenha(empresa.getId(), requestDto.getCpf());
+
+        // Criptografamos a senha gerada
+        String senhaCriptografada = passwordEncoder.encode(senhaGerada);
+
+        // Definimos essa senha criptografada no DTO
         requestDto.setSenha(senhaCriptografada);
 
         Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
 
         funcionario = repository.save(funcionario);
         return FuncionarioMapper.toDto(funcionario);
-
     }
+
+
+    public String gerarSenha(int empresaId, String cpfFuncionario) {
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        String senha = empresa.getNomeSenha() + '@' + cpfFuncionario;
+        return senha;
+    }
+
 
     public List<FuncionarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
         List<Funcionario> todosFuncionariosEmpresa = repository.findByEmpresaIdAndAtivoTrue(idEmpresa);
