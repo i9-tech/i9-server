@@ -13,6 +13,7 @@ import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.produto.ProdutoRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,23 +49,9 @@ public class VendaService {
         Venda venda = VendaMapper.toEntity(vendaRequest, funcionario, itens);
         venda.setValorTotal(calcularValorTotal(itens));
 
-        reduzirEstoque(itens);
         return vendaRepository.save(venda);
     }
 
-    private void reduzirEstoque(List<ItemCarrinho> itens) {
-        for (ItemCarrinho item : itens) {
-            Produto produto = item.getProduto();
-            int estoqueAtual = produto.getQuantidade();
-            if (estoqueAtual < 1) {
-                throw new RuntimeException(
-                        "Estoque insuficiente para o produto: " + produto.getNome()
-                );
-            }
-            produto.setQuantidade(estoqueAtual - 1);
-            produtoRepository.save(produto);
-        }
-    }
 
 
     public Double calcularValorTotal(List<ItemCarrinho> itens) {
@@ -134,6 +121,19 @@ public class VendaService {
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
 
         vendaRepository.delete(venda);
+    }
+
+
+
+    public Double calcularLucroTotal(Integer idFuncionario, LocalDate dataVenda) {
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario).orElseThrow();
+        Integer idEmpresa = funcionario.getEmpresa().getId();
+
+        List<Venda> vendas = vendaRepository.findAllByDataVenda(dataVenda);
+        return vendas.stream()
+                .filter(venda -> venda.getFuncionario().getEmpresa().getId().equals(idEmpresa))
+                .mapToDouble(Venda::getValorTotal)
+                .sum();
     }
 
 }

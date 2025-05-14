@@ -1,6 +1,7 @@
 package school.sptech.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import school.sptech.entity.venda.Venda;
 
@@ -15,6 +16,11 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     List<Venda> findByDataVenda(LocalDate dataVenda);
 
     List<Venda> findByVendaConcluida(Boolean vendaConcluida);
+
+
+    @Query("select venda from Venda venda where venda.dataVenda = :dataVenda")
+    List<Venda> findAllByDataVenda(LocalDate dataVenda);
+
 
 
 }
