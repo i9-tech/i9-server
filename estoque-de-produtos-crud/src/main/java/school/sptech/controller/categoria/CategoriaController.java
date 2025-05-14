@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class CategoriaController {
     }
 
     @GetMapping({"/{idFuncionario}"})
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar categorias", description = "Lista todas as categorias presentes na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categorias listadas com sucesso.",
@@ -97,6 +99,7 @@ public class CategoriaController {
 
 
     @GetMapping("/{idCategoria}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar categoria por ID", description = "Retorna uma categoria presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria encontrada com sucesso."),
@@ -122,6 +125,7 @@ public class CategoriaController {
     }
 
     @PostMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar nova categoria", description = "Cadastra uma nova categoria na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso."),
@@ -147,7 +151,8 @@ public class CategoriaController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar categoria existente", description = "Atualiza uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso.",
@@ -185,16 +190,20 @@ public class CategoriaController {
     public ResponseEntity<CategoriaListagemDto> atualizar(
             @Parameter(description = "ID da categoria", example = "1", required = true)
             @PathVariable Integer id,
+            @Parameter(description = "ID do funcionário encarregado pela atualização.", example = "1", required = true)
+            @PathVariable Integer idFuncionario,
             @Parameter(description = "Dados da categoria para atualização.", required = true)
-            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar) {
-        Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar));
+            @Valid @RequestBody CategoriaAtualizarDto categoriaParaAtualizar
+            ) {
+        Categoria entidadeParaAtualizar = categoriaService.atualizarCategoria(id, CategoriaMapper.transformarEmEntidade(categoriaParaAtualizar), idFuncionario);
 
         CategoriaListagemDto respostaAtualizadaDto = CategoriaMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaAtualizadaDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover categoria existente", description = "Remove uma categoria da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Categoria removida com sucesso.", content = @Content),
@@ -208,8 +217,11 @@ public class CategoriaController {
     })
     public ResponseEntity<CategoriaListagemDto> remover(
             @Parameter(description = "ID da categoria.", example = "1", required = true)
-            @PathVariable Integer id) {
-        categoriaService.removerCategoria(id);
+            @PathVariable Integer id,
+            @Parameter(description = "ID do funcionário responsável pela remoção da categoria.", example = "1", required = true)
+            @PathVariable Integer idFuncionario
+            ) {
+        categoriaService.removerCategoria(id, idFuncionario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

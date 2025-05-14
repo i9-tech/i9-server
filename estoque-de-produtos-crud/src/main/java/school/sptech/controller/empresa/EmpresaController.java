@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ public class EmpresaController {
     }
 
     @PostMapping
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar nova empresa", description = "Cadastra uma nova empresa na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso."),
@@ -58,6 +60,7 @@ public class EmpresaController {
     }
 
     @GetMapping
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar empresas", description = "Lista todas as empresas presentes na base de dados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empresas listadas com sucesso.",
@@ -99,6 +102,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar empresa por ID", description = "Retorna uma empresa presente na base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empresa encontrada com sucesso."),
@@ -120,7 +124,8 @@ public class EmpresaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar empresa existente", description = "Atualiza uma empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Empresa atualizada com sucesso.",
@@ -155,10 +160,10 @@ public class EmpresaController {
     })
     public ResponseEntity<EmpresaListagemDto> atualizar(
             @Parameter(description = "ID da empresa", example = "1", required = true)
-            @PathVariable Integer id,
+            @PathVariable Integer idEmpresa,
             @Parameter(description = "Dados da empresa para atualização.", required = true)
             @Valid @RequestBody EmpresaAtualizarDto empresaParaAtualizar) {
-        Empresa entidadeParaAtualizar = empresaService.atualizarEmpresa(id, EmpresaMapper.transformarEmEntidade(empresaParaAtualizar));
+        Empresa entidadeParaAtualizar = empresaService.atualizarEmpresa(idEmpresa, EmpresaMapper.transformarEmEntidade(empresaParaAtualizar));
 
         EmpresaListagemDto respostaAtualizadaDto = EmpresaMapper.transformarEmRespostaDto(entidadeParaAtualizar);
 
@@ -166,6 +171,7 @@ public class EmpresaController {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover empresa existente", description = "Remove uma empresa da base de dados a partir de seu ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Empresa removida com sucesso.", content = @Content),

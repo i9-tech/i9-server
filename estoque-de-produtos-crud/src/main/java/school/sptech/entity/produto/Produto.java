@@ -86,7 +86,7 @@ public class Produto {
 
 
     @Schema(
-            description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto",
+            description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto.",
             example = "O Bolinho Ana Maria é um produto de confeitaria, embalado individualmente, ideal para lanches rápidos.",
             type = "string",
             nullable = true
@@ -120,7 +120,7 @@ public class Produto {
 
     @ManyToOne
     @Schema(
-            description = "Funcionário associado à criação da categoria.",
+            description = "Funcionário associado à criação do produto.",
             implementation = FuncionarioResponseDto.class
     )
     private Funcionario funcionario;
