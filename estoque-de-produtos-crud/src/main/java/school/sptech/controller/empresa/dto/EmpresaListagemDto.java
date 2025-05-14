@@ -57,6 +57,8 @@ public class EmpresaListagemDto {
     )
     private boolean ativo;
 
+    private String whatsapp;
+
     public Integer getId() {
         return id;
     }
@@ -104,4 +106,8 @@ public class EmpresaListagemDto {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    public String getWhatsapp() { return whatsapp; }
+
+    public void setWhatsapp(String whatsapp) { this.whatsapp = whatsapp; }
 }
