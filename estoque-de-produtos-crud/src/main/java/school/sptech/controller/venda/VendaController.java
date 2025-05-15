@@ -9,6 +9,7 @@ import school.sptech.controller.venda.dto.VendaResponseDto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.service.venda.VendaService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,4 +35,12 @@ public class VendaController {
         vendaService.excluirVenda(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/lucro-total")
+    public Double lucroTotal(@RequestParam Integer idFuncionario) {
+        LocalDate dataAtual = LocalDate.now();
+        return vendaService.calcularLucroTotal(idFuncionario, dataAtual);
+    }
+
 }

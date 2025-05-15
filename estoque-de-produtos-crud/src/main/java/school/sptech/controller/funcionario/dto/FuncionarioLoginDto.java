@@ -6,9 +6,19 @@ import jakarta.validation.constraints.Pattern;
 
 
 public class FuncionarioLoginDto {
-    @Schema(description = "Login do usuário", example = "502.3400.085-6")
+
+    @Schema(
+            description = "CPF da pessoa empregada. Precisa ser informado com formatação para login.",
+            example = "999.999.999-99",
+            maxLength = 14,
+            type = "string"
+    )
     private String cpf;
-    @Schema(description = "Senha do usuário", example = "10@5023400856")
+
+    @Schema(
+            description = "Senha que dará acesso ao sistema para a pessoa contratada.",
+            type = "string"
+    )
     private String senha;
 
     public String getCpf() {

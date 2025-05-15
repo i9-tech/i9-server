@@ -1,9 +1,11 @@
 package school.sptech.service.categoria;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.exception.EntidadeInativaException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.categoria.CategoriaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
@@ -24,6 +26,10 @@ public class CategoriaService {
 
     public Categoria cadastrarCategoria(Categoria categoriaParaCadastrar, Integer idFuncionario) {
 
+        if (!categoriaRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
+            throw new EntidadeInativaException();
+        }
+
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
@@ -33,10 +39,18 @@ public class CategoriaService {
     }
 
     public List<Categoria> listarTodasCategorias(Integer idFuncionario) {
+        if (!categoriaRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
+            throw new EntidadeInativaException();
+        }
     return categoriaRepository.buscarCategoriasDaEmpresaDoFuncionario(idFuncionario);
     }
 
     public Optional<Categoria> buscarCategoriaPorId(Integer idCategoria, Integer idFuncionario) {
+
+        if (!categoriaRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
+            throw new EntidadeInativaException();
+        }
+
         Optional<Categoria> categoriaEncontrada = categoriaRepository.buscarCategoriaPorIdDoFuncionarioDaEmpresa(idCategoria, idFuncionario);
 
         if (categoriaEncontrada.isEmpty()) {
@@ -45,7 +59,15 @@ public class CategoriaService {
         return categoriaEncontrada;
     }
 
-    public Categoria atualizarCategoria(Integer id, Categoria categoriaParaAtualizar) {
+    public Categoria atualizarCategoria(Integer id, Categoria categoriaParaAtualizar, Integer idFuncionario) {
+
+        if (!categoriaRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
+            throw new EntidadeInativaException();
+        }
+
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
+
         Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 
         if (categoriaEncontrada.isEmpty()) {
@@ -53,16 +75,26 @@ public class CategoriaService {
         }
 
         categoriaParaAtualizar.setId(id);
+        categoriaParaAtualizar.setFuncionario(funcionario);
         return categoriaRepository.save(categoriaParaAtualizar);
     }
 
-    public void removerCategoria(Integer id) {
+    @Transactional
+    public void removerCategoria(Integer id, Integer idFuncionario) {
+
+        if (!categoriaRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
+            throw new EntidadeInativaException();
+        }
+
         Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 
         if (categoriaEncontrada.isEmpty()) {
             throw new EntidadeNaoEncontradaException();
         }
 
-        categoriaRepository.deleteById(id);
+        categoriaRepository.desvincularPratosDaCategoria(id);
+        categoriaRepository.desvincularProdutosDaCategoria(id);
+
+        categoriaRepository.deleteCategoriaById(id);
     }
 }

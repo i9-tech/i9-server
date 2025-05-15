@@ -8,6 +8,8 @@ import java.util.Date;
 
 public class FuncionarioResponseDto {
 
+    private Integer id;
+
     @Schema(
             description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
             example = "Agatha Nunes",
@@ -66,10 +68,11 @@ public class FuncionarioResponseDto {
     )
     private boolean proprietario;
 
-    public FuncionarioResponseDto( String nome, String cpf, String cargo,
+    public FuncionarioResponseDto(Integer id, String nome, String cpf, String cargo,
                                    LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                    boolean acessoSetorAtendimento, boolean proprietario) {
 
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.cargo = cargo;
@@ -80,6 +83,10 @@ public class FuncionarioResponseDto {
         this.proprietario = proprietario;
 
     }
+
+    public Integer getId() { return id; }
+
+    public void setId(Integer id) { this.id = id; }
 
     public String getNome() {
         return nome;

@@ -1,0 +1,1666 @@
+{
+  "type": "collection.insomnia.rest/5.0",
+  "name": "i9-server",
+  "meta": {
+    "id": "wrk_89942802ff4047d594bbf4b1583fd0f0",
+    "created": 1745618842780,
+    "modified": 1745618842780
+  },
+  "collection": [
+    {
+      "name": "Empresas",
+      "meta": {
+        "id": "fld_4679b97d91064870ae796a8ff5a0c51c",
+        "created": 1745618852066,
+        "modified": 1745697040041,
+        "sortKey": -1745693190465
+      },
+      "children": [
+        {
+          "url": "localhost:8080/empresas",
+          "name": "Cadastrar Empresa",
+          "meta": {
+            "id": "req_c6d75d28275d4ab9b6142b5001107dd1",
+            "created": 1745618856750,
+            "modified": 1745630940422,
+            "isPrivate": false,
+            "sortKey": -1745630940247
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"Nome da Empresa\",\n  \"cnpj\": \"12345678901234\",\n  \"endereco\": \"Rua Exemplo, 123\",\n  \"dataCadastro\": \"2025-04-25\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/empresas",
+          "name": "Listar Empresas",
+          "meta": {
+            "id": "req_82aad87f0d8742dd8d811e76704207c4",
+            "created": 1745619452187,
+            "modified": 1745867208690,
+            "isPrivate": false,
+            "sortKey": -1745630940347
+          },
+          "method": "GET",
+          "body": {
+            "mimeType": "application/json"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/empresas/1",
+          "name": "Buscar Empresa Por ID",
+          "meta": {
+            "id": "req_b57d2820b6c84f96927d8ec580420233",
+            "created": 1745705198125,
+            "modified": 1745707906878,
+            "isPrivate": false,
+            "sortKey": -1745630940297
+          },
+          "method": "GET",
+          "body": {
+            "mimeType": "application/json"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/empresas/3",
+          "name": "Atualizar Empresas",
+          "meta": {
+            "id": "req_1b8042a7f17f4cc0bcf760a52fa8bae2",
+            "created": 1745705217252,
+            "modified": 1745867171718,
+            "isPrivate": false,
+            "sortKey": -1745630940272
+          },
+          "method": "PUT",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"endereco\": \"Rua Haddock Lobo 595, Consolação - São Paulo, SP\",\n  \"nome\": \"Novo Nome de Empresa\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/empresas/1",
+          "name": "Deletar Empresas",
+          "meta": {
+            "id": "req_17f785e2b28a43038e2fbe33ee8eefe6",
+            "created": 1745705393618,
+            "modified": 1745705398613,
+            "isPrivate": false,
+            "sortKey": -1745630940259.5
+          },
+          "method": "DELETE",
+          "body": {
+            "mimeType": "application/json"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setores",
+      "meta": {
+        "id": "fld_799ef8d19af64686a35aa5c8f8962c71",
+        "created": 1745630952101,
+        "modified": 1745697119100,
+        "sortKey": -1745654116155.25
+      },
+      "children": [
+        {
+          "url": "localhost:8080/setores/1",
+          "name": "Listar Setores",
+          "meta": {
+            "id": "req_fc2a962c0ea64ef4a43a3dbb347017a8",
+            "created": 1745630956319,
+            "modified": 1745631442540,
+            "isPrivate": false,
+            "sortKey": -1745630960914
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/setores/1",
+          "name": "Cadastrar Setores",
+          "meta": {
+            "id": "req_2e5c5b26270a42b3bc0282935986ef68",
+            "created": 1745631098355,
+            "modified": 1745631134428,
+            "isPrivate": false,
+            "sortKey": -1745630950630.5
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"nome_101f00f173e0\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/setores/1/1",
+          "name": "Buscar Setor Por ID",
+          "meta": {
+            "id": "req_b5b4dc957c64434aa4aa9bc99b85825a",
+            "created": 1745705782071,
+            "modified": 1745705861471,
+            "isPrivate": false,
+            "sortKey": -1745630955772.25
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/setores/1/1",
+          "name": "Atualizar Setores",
+          "meta": {
+            "id": "req_d5bc004c553a44da8f15fc53239b2179",
+            "created": 1745705878493,
+            "modified": 1745865991612,
+            "isPrivate": false,
+            "sortKey": -1745630945488.75
+          },
+          "method": "PUT",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"nome_101f00f173e0\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/setores/1",
+          "name": "Deletar Setores",
+          "meta": {
+            "id": "req_faf1e073a84c43cca6e4c428471fb0bb",
+            "created": 1745705938717,
+            "modified": 1745705958306,
+            "isPrivate": false,
+            "sortKey": -1745630942917.875
+          },
+          "method": "DELETE",
+          "body": {
+            "mimeType": "multipart/form-data"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "multipart/form-data"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categorias",
+      "meta": {
+        "id": "fld_b5863aae7b0a44a4aaec77ec4359be67",
+        "created": 1745630966247,
+        "modified": 1745697032729,
+        "sortKey": -1745693190515
+      },
+      "children": [
+        {
+          "url": "localhost:8080/categorias/1",
+          "name": "Listar Categorias",
+          "meta": {
+            "id": "req_1b50d7488f484e6b87b7023a38ac2a5d",
+            "created": 1745619442247,
+            "modified": 1745877769396,
+            "isPrivate": false,
+            "sortKey": -1745630986578
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/categorias/3",
+          "name": "Cadastrar Categorias",
+          "meta": {
+            "id": "req_83467e2fb9b44097acd44ba632632c0f",
+            "created": 1745631464532,
+            "modified": 1745868586281,
+            "isPrivate": false,
+            "sortKey": -1745630973746
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"nome_8995a370e3d5\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEuMjIyLjMzMy00NCIsImF1dGhvcml0aWVzIjoiUk9MRV9FU1RPUVVFIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjpmYWxzZSwiYWNlc3NvU2V0b3JFc3RvcXVlIjp0cnVlLCJhY2Vzc29TZXRvckF0ZW5kaW1lbnRvIjpmYWxzZSwicHJvcHJpZXRhcmlvIjpmYWxzZSwiaWF0IjoxNzQ1ODY4Mzk5LCJleHAiOjE3NDk0NjgzOTl9.oqqqUu1F0-27H4fV4l-BZQGqvzVLiKAa7DKAwMtF-GBExLKPLxlru-GeKMlOWpORjzJ7mqE04YcNyIVlLZB-fg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/categorias/1/3",
+          "name": "Atualizar Categorias",
+          "meta": {
+            "id": "req_e8ac2e3fcf8a4290a36edb2f93ecffc5",
+            "created": 1745706010488,
+            "modified": 1745868549932,
+            "isPrivate": false,
+            "sortKey": -1745630967330
+          },
+          "method": "PUT",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"nome_8995a370e3d5\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEuMjIyLjMzMy00NCIsImF1dGhvcml0aWVzIjoiUk9MRV9FU1RPUVVFIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjpmYWxzZSwiYWNlc3NvU2V0b3JFc3RvcXVlIjp0cnVlLCJhY2Vzc29TZXRvckF0ZW5kaW1lbnRvIjpmYWxzZSwicHJvcHJpZXRhcmlvIjpmYWxzZSwiaWF0IjoxNzQ1ODY4Mzk5LCJleHAiOjE3NDk0NjgzOTl9.oqqqUu1F0-27H4fV4l-BZQGqvzVLiKAa7DKAwMtF-GBExLKPLxlru-GeKMlOWpORjzJ7mqE04YcNyIVlLZB-fg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/categorias/1/1",
+          "name": "Buscar Categoria Por ID",
+          "meta": {
+            "id": "req_a7467499d41c484bb13cb99b2d519c5d",
+            "created": 1745706020066,
+            "modified": 1745706071654,
+            "isPrivate": false,
+            "sortKey": -1745630980162
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/categorias/1",
+          "name": "Deletar Categorias",
+          "meta": {
+            "id": "req_e28471cd501a4509bbd664c281019c98",
+            "created": 1745706028272,
+            "modified": 1745871294291,
+            "isPrivate": false,
+            "sortKey": -1745630964122
+          },
+          "method": "DELETE",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Funcionários",
+      "meta": {
+        "id": "fld_8d0e025e3c524e76b32a03de78c49dd2",
+        "created": 1745631012346,
+        "modified": 1745697046188,
+        "sortKey": -1745693190440
+      },
+      "children": [
+        {
+          "url": "localhost:8080/colaboradores/1",
+          "name": "Listar Funcionários",
+          "meta": {
+            "id": "req_c50c4d6ca2304ac897ae3fb04edfdee1",
+            "created": 1745631017802,
+            "modified": 1745869309270,
+            "isPrivate": false,
+            "sortKey": -1745631025308
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/colaboradores/1",
+          "name": "Cadastrar Funcionários",
+          "meta": {
+            "id": "req_fbd5c43c97534c5282b390ae65ad10cf",
+            "created": 1745697153222,
+            "modified": 1745778569933,
+            "isPrivate": false,
+            "sortKey": -1745631005943
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"Pedro\",\n  \"cpf\": \"133.356.389-00\",\n  \"cargo\": \"Cozinheiro\",\n  \"dataAdmissao\": \"2025-04-25\",\n  \"acessoSetorCozinha\": true,\n  \"acessoSetorEstoque\": true,\n  \"acessoSetorAtendimento\": false,\n  \"proprietario\": false,\n  \"senha\": \"senha14557385\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json",
+              "id": "pair_08e08ad92cac40f5a4a4066ea257794b"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1",
+              "id": "pair_1dbf3657182d4391bd827f39a518bcff"
+            },
+            {
+              "id": "pair_11bc1884dae14120b64f852655ecafa0",
+              "name": "TOKEN",
+              "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1NzY5NTc1LCJleHAiOjE3NDkzNjk1NzV9.kqfduXIYbCCLMyRXnydYULHsncNPojyeGAnSUbO77WtBWchZbavyyHgMtxhlwrmaCzpdj4v_739p5xjk54X2xg",
+              "disabled": false
+            },
+            {
+              "id": "pair_8b698414b246441d809df2f3eb3b2f17",
+              "disabled": false
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1Nzc4NTYwLCJleHAiOjE3NDkzNzg1NjB9.keJQY61Lx5bGba9ubCb9cO_TH9Lyo68frxTssrp6tSyyjHtSbZsw9ymiSa2B6tSAEw_7eop8ISNPKE6lqacCTA"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/colaboradores/1/1",
+          "name": "Buscar Funcionário Por ID",
+          "meta": {
+            "id": "req_00c3512007704d769458b92b32eeb289",
+            "created": 1745705612715,
+            "modified": 1745705630874,
+            "isPrivate": false,
+            "sortKey": -1745631015625.5
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/colaboradores/2/1",
+          "name": "Deletar Funcionários",
+          "meta": {
+            "id": "req_c13b49ba2ddf4307b972ed1881ac7f74",
+            "created": 1745705654128,
+            "modified": 1745705676092,
+            "isPrivate": false,
+            "sortKey": -1745631010784.25
+          },
+          "method": "DELETE",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/colaboradores/1/1",
+          "name": "Atualizar Funcionários",
+          "meta": {
+            "id": "req_4439c3bafac74419acd700c9a7dd1e79",
+            "created": 1745705722662,
+            "modified": 1745869222831,
+            "isPrivate": false,
+            "sortKey": -1745630996260.5
+          },
+          "method": "PATCH",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"Arroz\",\n  \"cpf\": \"133.356.389-00\",\n  \"cargo\": \"Cozinheiro\",\n  \"dataAdmissao\": \"2025-04-25\",\n  \"acessoSetorCozinha\": true,\n  \"acessoSetorEstoque\": true,\n  \"acessoSetorAtendimento\": false,\n  \"proprietario\": false,\n  \"senha\": \"senha14557385\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMuNDU2Ljc4OS0wMCIsImF1dGhvcml0aWVzIjoiUk9MRV9DT1pJTkhBLFJPTEVfRVNUT1FVRSxST0xFX0FURU5ESU1FTlRPLFJPTEVfUFJPUFJJRVRBUklPIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjp0cnVlLCJhY2Vzc29TZXRvckVzdG9xdWUiOnRydWUsImFjZXNzb1NldG9yQXRlbmRpbWVudG8iOnRydWUsInByb3ByaWV0YXJpbyI6dHJ1ZSwiaWF0IjoxNzQ1ODY1OTM0LCJleHAiOjE3NDk0NjU5MzR9.jpQsF9gguq99R9T1coYsZ0CZOiA31-c75nhwh3ecbQl3KuVThH7Y1dWUdRvEpEtEehg75ysn5kzNdr15r0NjAg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pratos",
+      "meta": {
+        "id": "fld_7b79f14973814fb898e47830738ad62c",
+        "created": 1745692699169,
+        "modified": 1745692699169,
+        "sortKey": -1745692699169
+      },
+      "children": [
+        {
+          "url": "localhost:8080/pratos/1",
+          "name": "Listar Pratos",
+          "meta": {
+            "id": "req_be5bf188d5364381852a0c91975e6999",
+            "created": 1745692704339,
+            "modified": 1745692740701,
+            "isPrivate": false,
+            "sortKey": -1745692708538
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/pratos/1",
+          "name": "Cadastrar Pratos",
+          "meta": {
+            "id": "req_4dcf7b8b701e41afa76c5080ad1cf09a",
+            "created": 1745692752732,
+            "modified": 1745693080918,
+            "isPrivate": false,
+            "sortKey": -1745661866923
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"Hamburguer Artesanal\",\n  \"valorVenda\": 29.90,\n  \"descricao\": \"Hambúrguer artesanal com queijo e bacon\",\n  \"imagem\": \"hamburguer.jpg\",\n  \"disponivel\": true,\n  \"funcionario\": {\n    \"id\": 1\n  },\n  \"setor\": {\n    \"id\": 2\n  },\n  \"categoria\": {\n    \"id\": 3\n  }\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/pratos/1/1",
+          "name": "Atualizar Pratos",
+          "meta": {
+            "id": "req_2685fa3f4d654cc49fb7cde43436c936",
+            "created": 1745706284136,
+            "modified": 1745706301342,
+            "isPrivate": false,
+            "sortKey": -1745646446115.5
+          },
+          "method": "PUT",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"nome\": \"Hamburguer Caseiro\",\n  \"valorVenda\": 29.90,\n  \"descricao\": \"Hambúrguer artesanal com queijo e bacon\",\n  \"imagem\": \"hamburguer.jpg\",\n  \"disponivel\": true,\n  \"funcionario\": {\n    \"id\": 1\n  },\n  \"setor\": {\n    \"id\": 2\n  },\n  \"categoria\": {\n    \"id\": 3\n  }\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/pratos/2/1",
+          "name": "Deletar Pratos",
+          "meta": {
+            "id": "req_bd9e5229bb6e4a20ac6da452c4203b4e",
+            "created": 1745706331299,
+            "modified": 1745715845850,
+            "isPrivate": false,
+            "sortKey": -1745638735711.75
+          },
+          "method": "DELETE",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/pratos/buscar/1",
+          "name": "Listar Pratos Por Nome",
+          "meta": {
+            "id": "req_11937ba1b38842b58c8e074e9d3f827b",
+            "created": 1745706402714,
+            "modified": 1745706453763,
+            "isPrivate": false,
+            "sortKey": -1745677287730.5
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_b79067bb2c81456f9a15acdc3d1a1377",
+              "name": "nome",
+              "value": "Caseiro",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/pratos/categoria/1",
+          "name": "Listar Pratos Por Categoria",
+          "meta": {
+            "id": "req_be83ea2fd71b4daba6b2fd8ce4261696",
+            "created": 1745706411207,
+            "modified": 1745706512340,
+            "isPrivate": false,
+            "sortKey": -1745669577326.75
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_5fabb42f0bca43788e1eb610c3b06253",
+              "name": "categoriaId",
+              "value": "2",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/pratos/setor/1",
+          "name": "Listar Pratos Por Setor",
+          "meta": {
+            "id": "req_01ae2c633d9a4dae8f7d1c42ad5ef74c",
+            "created": 1745706414560,
+            "modified": 1745706531084,
+            "isPrivate": false,
+            "sortKey": -1745665722124.875
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_36f56053a3604395b49a4028bd4dc3e1",
+              "name": "setorId",
+              "value": "1",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Itens Carrinho",
+      "meta": {
+        "id": "fld_79e197f2a326455d91a4b93d6dab6278",
+        "created": 1745693190415,
+        "modified": 1745693190415,
+        "sortKey": -1745693190415
+      },
+      "children": [
+        {
+          "url": "localhost:8080/itens-carrinho/venda2/1",
+          "name": "Listar Itens no Carrinho",
+          "meta": {
+            "id": "req_21d3c196d22a4985a794abe3cf456784",
+            "created": 1745693194802,
+            "modified": 1745872885210,
+            "isPrivate": false,
+            "sortKey": -1745693199259
+          },
+          "method": "GET",
+          "body": {
+            "mimeType": "application/json"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer",
+            "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMTEuMjIyLjMzMy00NCIsImF1dGhvcml0aWVzIjoiUk9MRV9FU1RPUVVFIiwiYWNlc3NvU2V0b3JDb3ppbmhhIjpmYWxzZSwiYWNlc3NvU2V0b3JFc3RvcXVlIjp0cnVlLCJhY2Vzc29TZXRvckF0ZW5kaW1lbnRvIjpmYWxzZSwicHJvcHJpZXRhcmlvIjpmYWxzZSwiaWF0IjoxNzQ1ODY4Mzk5LCJleHAiOjE3NDk0NjgzOTl9.oqqqUu1F0-27H4fV4l-BZQGqvzVLiKAa7DKAwMtF-GBExLKPLxlru-GeKMlOWpORjzJ7mqE04YcNyIVlLZB-fg"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/itens-carrinho/prato/1",
+          "name": "Adicionar Pratos no Carrinho",
+          "meta": {
+            "id": "req_ff53216168c54ee6a1f378ce726d23d1",
+            "created": 1745693345168,
+            "modified": 1745771822382,
+            "isPrivate": false,
+            "sortKey": -1745692953898.5
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"venda\": \"venda2\",\n  \"prato\": {\n    \"id\": 2\n  },\n  \"observacao\": \"Sem cebola, por favor\",\n  \"funcionario\": {\n    \"id\": 1\n  }\n}\n"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "authentication": {
+            "type": "bearer"
+          },
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/itens-carrinho/produto/1",
+          "name": "Adicionar Produtos no Carrinho",
+          "meta": {
+            "id": "req_3dc01b90bc9b4955a6536e11be4cf8de",
+            "created": 1745693367529,
+            "modified": 1745695793391,
+            "isPrivate": false,
+            "sortKey": -1745692831218.25
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"venda\": \"venda2\",\n  \"produto\": {\n    \"id\": 1\n  },\n  \"funcionario\": {\n    \"id\": 1\n  }\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/itens-carrinho/1/venda2",
+          "name": "Deletar Itens no Carrinho",
+          "meta": {
+            "id": "req_ef2bda346d5844c9ad6932ce946dfcab",
+            "created": 1745706570902,
+            "modified": 1745706596343,
+            "isPrivate": false,
+            "sortKey": -1745693076578.75
+          },
+          "method": "DELETE",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "meta": {
+        "id": "fld_01ed52b3bdc5458084348ec5f21253ab",
+        "created": 1745697058411,
+        "modified": 1745697095248,
+        "sortKey": -1745661832758
+      },
+      "children": [
+        {
+          "url": "localhost:8080/produtos/4",
+          "name": "Listar Produtos",
+          "meta": {
+            "id": "req_5aa1611152604422b0435031f7d94b10",
+            "created": 1745700174996,
+            "modified": 1745716152393,
+            "isPrivate": false,
+            "sortKey": -1745700183275
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/1",
+          "name": "Cadastrar Produtos",
+          "meta": {
+            "id": "req_507b9c4293924df1a8b2a91c4c8b09fb",
+            "created": 1745700299706,
+            "modified": 1745700361636,
+            "isPrivate": false,
+            "sortKey": -1745696691267
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n\t\"id\": 1,\n\t\t\"codigo\": 1001,\n\t\t\"nome\": \"Arroz Branco Tipo 1\",\n\t\t\"quantidade\": 50,\n\t\t\"valorCompra\": 15.9,\n\t\t\"valorUnitario\": 22,\n\t\t\"quantidadeMin\": 80,\n\t\t\"quantidadeMax\": 100,\n\t\t\"descricao\": \"Arroz tipo 1 de ótima qualidade\",\n\t\t\"dataRegistro\": \"2025-04-11\",\n\t\t\"setor\": {\n\t\t\t\"id\": 1\n\t\t\t}\n\t\t},\n\t\t\"categoria\": {\n\t\t\t\"id\": 1\n\t\t\t}\n\t\t},\n\t\t\"funcionario\": {\n\t\t\t\"id\": 1,\n\t\t\t\"empresa\": {\n\t\t\t\t\"id\": 1\n\t\t\t}\n\t\t}\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/1/1",
+          "name": "Atualizar Produtos",
+          "meta": {
+            "id": "req_6ef4f51a7b80462fb90b343807ea8804",
+            "created": 1745707037002,
+            "modified": 1745707058363,
+            "isPrivate": false,
+            "sortKey": -1745694945263
+          },
+          "method": "PATCH",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n\t\"id\": 1,\n\t\t\"codigo\": 1001,\n\t\t\"nome\": \"Arroz Branco Tipo 1\",\n\t\t\"quantidade\": 50,\n\t\t\"valorCompra\": 15.9,\n\t\t\"valorUnitario\": 22.50,\n\t\t\"quantidadeMin\": 80,\n\t\t\"quantidadeMax\": 100,\n\t\t\"descricao\": \"Arroz tipo 1 de ótima qualidade\",\n\t\t\"dataRegistro\": \"2025-04-11\",\n\t\t\"setor\": {\n\t\t\t\"id\": 1\n\t\t\t}\n\t\t},\n\t\t\"categoria\": {\n\t\t\t\"id\": 1\n\t\t\t}\n\t\t},\n\t\t\"funcionario\": {\n\t\t\t\"id\": 1,\n\t\t\t\"empresa\": {\n\t\t\t\t\"id\": 1\n\t\t\t}\n\t\t}\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/1/3",
+          "name": "Deletar Produtos",
+          "meta": {
+            "id": "req_f2502841dc9e4d069c9c06e326c830ba",
+            "created": 1745707088627,
+            "modified": 1745712255490,
+            "isPrivate": false,
+            "sortKey": -1745694072261
+          },
+          "method": "DELETE",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/valor-total-estoque/1",
+          "name": "Calcular Valor Total de Produtos",
+          "meta": {
+            "id": "req_0ab41f27f0e748008b66f38358997b4c",
+            "created": 1745707181481,
+            "modified": 1745707417559,
+            "isPrivate": false,
+            "sortKey": -1745698437271
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_d0ccffa7aa514698a7990bd225815c3e",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/lucro-previsto-estoque/1",
+          "name": "Calcular Lucro Previsto de Produtos",
+          "meta": {
+            "id": "req_7335415bbc3c41d5986c04b389231083",
+            "created": 1745707205156,
+            "modified": 1745707210951,
+            "isPrivate": false,
+            "sortKey": -1745697564269
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/quantidade-estoque/1",
+          "name": "Calcular Quantidade de Produtos Registrados",
+          "meta": {
+            "id": "req_5a99e443defd4d519e5a0f5855532732",
+            "created": 1745707244731,
+            "modified": 1745707249757,
+            "isPrivate": false,
+            "sortKey": -1745697127768
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/quantidade-estoque-baixo/1",
+          "name": "Calcular Quantidade de Produtos em Estoque Baixo",
+          "meta": {
+            "id": "req_1f30824b10d1428b87cb8c25d61f9cc2",
+            "created": 1745707266364,
+            "modified": 1745707270543,
+            "isPrivate": false,
+            "sortKey": -1745696909517.5
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/quantidade-estoque-alto/1",
+          "name": "Calcular Quantidade de Produtos em Estoque Alto",
+          "meta": {
+            "id": "req_c0682d0efaf94a2cbb3ccca729f4ff7b",
+            "created": 1745707284018,
+            "modified": 1745707288659,
+            "isPrivate": false,
+            "sortKey": -1745696800392.25
+          },
+          "method": "GET",
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/setor/1",
+          "name": "Listar Produtos Por Setor",
+          "meta": {
+            "id": "req_9f4caa3c3e87476081110b1c95d56cdc",
+            "created": 1745707308900,
+            "modified": 1745707430618,
+            "isPrivate": false,
+            "sortKey": -1745699310273
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_47d87b2c0ad64df6a9ab480f46efde4e",
+              "name": "setorId",
+              "value": "1",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/categoria/1",
+          "name": "Listar Produtos Por Categoria",
+          "meta": {
+            "id": "req_11397446570549c89b1d45b9443fa3c5",
+            "created": 1745707313970,
+            "modified": 1745707394103,
+            "isPrivate": false,
+            "sortKey": -1745698873772
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_3a3676df2b25455897ef97aaeaa7320b",
+              "name": "categoriaId",
+              "value": "2",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/produtos/nome/Arroz/1",
+          "name": "Listar Produtos Por Nome",
+          "meta": {
+            "id": "req_b05ba27bd62641a0b206cbe415326b90",
+            "created": 1745707441466,
+            "modified": 1745707462231,
+            "isPrivate": false,
+            "sortKey": -1745699092022.5
+          },
+          "method": "GET",
+          "parameters": [
+            {
+              "id": "pair_49c9da0284da48b29a72d646a052cfec",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vendas",
+      "meta": {
+        "id": "fld_0b57c650fc094c2ca89c771290aec1f1",
+        "created": 1745697106196,
+        "modified": 1745697121908,
+        "sortKey": -1745646399552.5
+      }
+    },
+    {
+      "name": "JWT",
+      "meta": {
+        "id": "fld_62aac87e8abe416aa4418ba56013452e",
+        "created": 1745759731375,
+        "modified": 1745873191447,
+        "sortKey": -1745759731375
+      },
+      "children": [
+        {
+          "url": "localhost:8080/colaboradores/login",
+          "name": "Realizar Login",
+          "meta": {
+            "id": "req_6ff6fe3380af4715bc097c42d1b06d42",
+            "created": 1745759742543,
+            "modified": 1745869121200,
+            "isPrivate": false,
+            "sortKey": -1745763283114
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"cpf\": \"111.222.333-44\",\t\n  \"senha\": \"11122233344@tai\"\n}"
+          },
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        },
+        {
+          "url": "localhost:8080/colaboradores/login/criptografar",
+          "name": "Criptografar Senha",
+          "meta": {
+            "id": "req_b6aafe1648a345c6b482053b0af059ee",
+            "created": 1745763291988,
+            "modified": 1745763632987,
+            "isPrivate": false,
+            "sortKey": -1745731733194.5
+          },
+          "method": "POST",
+          "body": {
+            "mimeType": "application/json",
+            "text": "{\n  \"cpf\": \"987.654.321-11\",\t\n  \"senha\": \"123456\"\n}"
+          },
+          "parameters": [
+            {
+              "id": "pair_f575ce099a83469bb96479744a1aa7f1",
+              "name": "senha",
+              "value": "55566677788@tai",
+              "disabled": false
+            }
+          ],
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "insomnia/11.0.1"
+            }
+          ],
+          "settings": {
+            "renderRequestBody": true,
+            "encodeUrl": true,
+            "followRedirects": "global",
+            "cookies": {
+              "send": true,
+              "store": true
+            },
+            "rebuildPath": true
+          }
+        }
+      ]
+    }
+  ],
+  "cookieJar": {
+    "name": "Default Jar",
+    "meta": {
+      "id": "jar_831f68a3470a3224f367d98197219df0cf7bcbd2",
+      "created": 1745618842791,
+      "modified": 1745618842791
+    }
+  },
+  "environments": {
+    "name": "Base Environment",
+    "meta": {
+      "id": "env_831f68a3470a3224f367d98197219df0cf7bcbd2",
+      "created": 1745618842784,
+      "modified": 1745618842784,
+      "isPrivate": false
+    }
+  }
+}

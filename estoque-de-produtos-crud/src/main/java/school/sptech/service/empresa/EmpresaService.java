@@ -3,6 +3,7 @@ package school.sptech.service.empresa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.empresa.Empresa;
+import school.sptech.exception.EntidadeInativaException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.empresa.EmpresaRepository;
 
@@ -39,13 +40,22 @@ public class EmpresaService {
         return empresaRepository.findById(id).get();
     }
 
-    public Empresa atualizarEmpresa(Integer id, Empresa empresaParaAtualizar) {
-        Optional<Empresa> empresaEncontrada = empresaRepository.findById(id);
+    public Empresa atualizarEmpresa(Integer idEmpresa, Empresa empresaParaAtualizar) {
 
-        if (empresaEncontrada.isEmpty()) {
+        if (!empresaRepository.verificarEmpresaAtivaPorId(idEmpresa)) {
+            throw new EntidadeInativaException();
+        }
+
+        if (!empresaRepository.existsById(idEmpresa)) {
             throw new EntidadeNaoEncontradaException("A empresa não foi encontrada");
         }
-        empresaParaAtualizar.setId(id);
+
+        Empresa empresaEncontrada = empresaRepository.findById(idEmpresa).get();
+
+        empresaParaAtualizar.setId(idEmpresa);
+        empresaParaAtualizar.setCnpj(empresaEncontrada.getCnpj());
+        empresaParaAtualizar.setDataCadastro(empresaEncontrada.getDataCadastro());
+        empresaParaAtualizar.setAtivo(empresaEncontrada.isAtivo());
         return empresaRepository.save(empresaParaAtualizar);
     }
 
@@ -54,6 +64,11 @@ public class EmpresaService {
         if (!empresaRepository.existsById(id)) {
             throw new EntidadeNaoEncontradaException("A empresa não foi encontrada");
         }
-        empresaRepository.deleteById(id);
+
+        Empresa empresaDesativar = empresaRepository.findById(id).get();
+
+        empresaDesativar.setAtivo(false);
+
+        // empresaRepository.deleteById(id);
     }
 }
