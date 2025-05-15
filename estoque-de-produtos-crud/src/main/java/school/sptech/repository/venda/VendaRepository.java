@@ -1,7 +1,8 @@
-package school.sptech.repository;
+package school.sptech.repository.venda;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import school.sptech.entity.venda.Venda;
 
@@ -22,5 +23,7 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     List<Venda> findAllByDataVenda(LocalDate dataVenda);
 
 
-
+    @Query("SELECT v FROM Venda v WHERE v.dataVenda = :dataVenda AND v.funcionario.empresa.id = :idEmpresa")
+    List<Venda> findByDataVendaAndEmpresaId(@Param("dataVenda") LocalDate dataVenda,
+                                            @Param("idEmpresa") Integer idEmpresa);
 }

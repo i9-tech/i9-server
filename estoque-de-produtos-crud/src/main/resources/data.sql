@@ -5,7 +5,7 @@ VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01
 
 -- Inserir outra empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, whatsapp)
-VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true, '+5511962751146');
+VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true, '+5511970533898');
 
 -- Inserir uma empresa inativa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, whatsapp)
