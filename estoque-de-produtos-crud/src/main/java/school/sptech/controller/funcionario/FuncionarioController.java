@@ -50,6 +50,7 @@ public class FuncionarioController {
             @Valid @RequestBody FuncionarioRequestDto requestDto,
             @Parameter(description = "ID da empresa contratante.", required = true)
             @PathVariable Integer idEmpresa) {
+
         FuncionarioResponseDto responseDto = service.cadastrarFuncionario(requestDto, idEmpresa);
         return ResponseEntity.status(201).body(responseDto);
     }

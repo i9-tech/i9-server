@@ -12,13 +12,6 @@ import java.util.List;
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Integer> {
 
-    List<Venda> findByMesa(String mesa);
-
-    List<Venda> findByDataVenda(LocalDate dataVenda);
-
-    List<Venda> findByVendaConcluida(Boolean vendaConcluida);
-
-
     @Query("select venda from Venda venda where venda.dataVenda = :dataVenda")
     List<Venda> findAllByDataVenda(LocalDate dataVenda);
 

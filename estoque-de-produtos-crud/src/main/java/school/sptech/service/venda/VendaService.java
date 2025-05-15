@@ -18,22 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class VendaService {
-
-
     private final FuncionarioRepository funcionarioRepository;
     private final ItemCarrinhoRepository itemCarrinhoRepository;
     private final VendaRepository vendaRepository;
-    private final ProdutoRepository produtoRepository;
 
-
-    public VendaService(FuncionarioRepository funcionarioRepository,
-                        ItemCarrinhoRepository itemCarrinhoRepository,
-                        VendaRepository vendaRepository,
-                        ProdutoRepository produtoRepository) {
+    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
-        this.produtoRepository = produtoRepository;
     }
 
     public Venda criarVenda(VendaRequestDto vendaRequest) {
@@ -51,8 +43,6 @@ public class VendaService {
         return vendaRepository.save(venda);
     }
 
-
-
     public Double calcularValorTotal(List<ItemCarrinho> itens) {
         return itens.stream()
                 .collect(Collectors.groupingBy(item -> item))  // Agrupar os itens pelo próprio objeto
@@ -61,7 +51,6 @@ public class VendaService {
                 .sum();  // Somando o valor total
     }
 
-
     public VendaResponseDto buscarVendaPorId(Integer id) {
         Venda venda = vendaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
@@ -69,60 +58,12 @@ public class VendaService {
     }
 
 
-    public Venda atualizarVenda(Integer id, VendaRequestDto vendaRequest) {
-        Venda vendaExistente = vendaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
-
-        List<ItemCarrinho> itens = itemCarrinhoRepository.findAllById(vendaRequest.getItens());
-
-        if (itens.isEmpty()) {
-            throw new RuntimeException("Itens não encontrados");
-        }
-
-        vendaExistente.setMesa(vendaRequest.getMesa());
-        vendaExistente.setDataVenda(vendaRequest.getDataVenda());
-        vendaExistente.setVendaConcluida(vendaRequest.getVendaConcluida());
-        vendaExistente.setItensCarrinho(itens);
-        vendaExistente.setFuncionario(
-                funcionarioRepository.findById(vendaRequest.getFuncionarioId())
-                        .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"))
-        );
-        vendaExistente.setValorTotal(calcularValorTotal(itens));
-
-        return vendaRepository.save(vendaExistente);
-    }
-
-    public void concluirVenda(Integer id) {
-        Venda venda = vendaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
-
-        venda.setVendaConcluida(true);
-
-        vendaRepository.save(venda);
-    }
-
-    public List<VendaResponseDto> listarVendas() {
-        List<Venda> vendas = vendaRepository.findAll();
-        return vendas.stream()
-                .map(VendaMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<VendaResponseDto> listarVendasPorMesa(String mesa) {
-        List<Venda> vendas = vendaRepository.findByMesa(mesa);
-        return vendas.stream()
-                .map(VendaMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
     public void excluirVenda(Integer id) {
         Venda venda = vendaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
 
         vendaRepository.delete(venda);
     }
-
-
 
     public Double calcularLucroTotal(Integer idFuncionario, LocalDate dataVenda) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario).orElseThrow();
