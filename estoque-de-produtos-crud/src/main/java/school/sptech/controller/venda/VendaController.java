@@ -28,36 +28,6 @@ public class VendaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VendaResponseDto> buscarPorId(@PathVariable Integer id) {
-        VendaResponseDto dto = vendaService.buscarVendaPorId(id);
-        return ResponseEntity.ok(dto);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<VendaResponseDto> atualizarVenda(@PathVariable Integer id, @RequestBody @Valid VendaRequestDto dto) {
-        Venda vendaAtualizada = vendaService.atualizarVenda(id, dto);
-        VendaResponseDto response = vendaService.buscarVendaPorId(vendaAtualizada.getId());
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping("/{id}/concluir")
-    public ResponseEntity<Void> concluirVenda(@PathVariable Integer id) {
-        vendaService.concluirVenda(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<VendaResponseDto>> listarTodas() {
-        List<VendaResponseDto> vendas = vendaService.listarVendas();
-        return ResponseEntity.ok(vendas);
-    }
-
-    @GetMapping("/mesa/{mesa}")
-    public ResponseEntity<List<VendaResponseDto>> listarPorMesa(@PathVariable String mesa) {
-        List<VendaResponseDto> vendas = vendaService.listarVendasPorMesa(mesa);
-        return ResponseEntity.ok(vendas);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirVenda(@PathVariable Integer id) {
