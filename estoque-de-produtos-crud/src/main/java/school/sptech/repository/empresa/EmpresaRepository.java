@@ -13,4 +13,5 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Integer> {
     @Query("SELECT e.ativo FROM Empresa e WHERE e.id = :idEmpresa")
     Boolean verificarEmpresaAtivaPorId(@Param("idEmpresa") Integer idEmpresa);
 
+    List<Empresa> findByAtivoTrue();
 }
