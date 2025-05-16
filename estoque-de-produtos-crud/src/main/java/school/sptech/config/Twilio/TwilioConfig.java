@@ -10,7 +10,7 @@ public class TwilioConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(TwilioConfig.class);
     private static final String ACCOUNT_SID = "ACf0ea50734f4845c351c9b1033d1765b0";
-    private static final String AUTH_TOKEN = "ac944a724c1a62361df058d00ad0833c";
+    private static final String AUTH_TOKEN = "82798c1ce1e983942d882fba0ebe728a";
 
     @PostConstruct
     public void init() {

@@ -1,6 +1,7 @@
 package school.sptech.service.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,15 +20,14 @@ import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.exception.SenhaInvalidaException;
 import school.sptech.exception.ValidacaoException;
+import school.sptech.observer.FuncionarioEvent;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioService {
@@ -80,7 +80,7 @@ public class FuncionarioService {
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
-    public Funcionario cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
+    public FuncionarioResponseDto cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
 
         boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
 
@@ -93,19 +93,16 @@ public class FuncionarioService {
         funcionario.setEmpresa(empresa);
 
         // Aqui, geramos a senha automática SEM usar a senha da requisição
-        String senhaGerada = gerarSenha(empresa.getId(), requestDto.getCpf());
+        String senhaGerada = gerarSenha(empresa.getId(), funcionario.getCpf());
 
         // Criptografamos a senha gerada
         String senhaCriptografada = passwordEncoder.encode(senhaGerada);
 
-        // Definimos essa senha criptografada no DTO
-        requestDto.setSenha(senhaCriptografada);
-
-        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+        // Definimos essa senha criptografada na entidade
         funcionario.setSenha(senhaCriptografada);
 
+        funcionario.setSenha(senhaCriptografada);
         funcionario.setId(funcionario.getId());
-        return repository.save(funcionario);
 
         funcionario = repository.save(funcionario);
 
