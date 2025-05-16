@@ -81,7 +81,6 @@ public class FuncionarioRequestDto {
     )
     private boolean proprietario;
 
-    @NotBlank(message = "A senha é obrigatória.")
     @Size(min = 11,
             message = "A senha deve ter no mínimo 11 caracteres.")
     @Schema(
