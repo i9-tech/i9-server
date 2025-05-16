@@ -6,42 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import school.sptech.observer.EmailSubject;
-import school.sptech.observer.Observer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
-public class EmailService implements EmailSubject {
+public class EmailService{
 
     @Autowired
     private JavaMailSender mailSender;
 
-    private final List<Observer> observers = new ArrayList<>();
-
-
-    @Override
-    public void adicionarObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    @Override
-    public void removerObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notificarObservers(String mensagem) {
-        for (Observer observer : observers) {
-            observer.update(mensagem);
-        }
-    }
 
     public void enviarEmail(String destinatario) throws MessagingException {
 
-        try {
             MimeMessage mensagem = mailSender.createMimeMessage();
             MimeMessageHelper helperMensagem = new MimeMessageHelper(mensagem, true);
 
@@ -74,16 +49,26 @@ public class EmailService implements EmailSubject {
 
             mailSender.send(mensagem);
 
-            notificarObservers("Email enviado com sucesso para: " + destinatario);
-
-        }catch (MessagingException e) {
-            notificarObservers("Erro ao enviar e-mail para " + destinatario + ": " + e.getMessage());
-        }
-
-
-
     }
 
+
+    public void enviarEmailObserver(String destinatario, String assunto, String conteudoHtml) throws MessagingException {
+
+        try {
+            MimeMessage mensagem = mailSender.createMimeMessage();
+            MimeMessageHelper helperMensagem = new MimeMessageHelper(mensagem, true, "UTF-8");
+
+            helperMensagem.setTo(destinatario);
+            helperMensagem.setSubject(assunto);
+            helperMensagem.setText(conteudoHtml, true); // Usa o conteúdo passado no parâmetro
+
+            mailSender.send(mensagem);
+
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Você pode trocar isso por um logger
+            throw e; // Repropaga a exceção para tratamento externo, se necessário
+        }
+    }
 
 }
 

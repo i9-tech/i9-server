@@ -1,7 +1,7 @@
 
 -- Inserir uma empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha)
-VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'taua@gmail.com', 'taua');
+VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'yasmim.silva510811@gmail.com', 'taua');
 
 -- Inserir outra empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha)

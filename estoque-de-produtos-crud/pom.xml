@@ -118,6 +118,11 @@
 			<artifactId>jakarta.mail-api</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>school.sptech</groupId>
+			<artifactId>estoque-de-produtos</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 

@@ -1,6 +1,7 @@
 package school.sptech.service.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,8 +20,8 @@ import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.exception.SenhaInvalidaException;
 import school.sptech.exception.ValidacaoException;
+import school.sptech.observer.FuncionarioEvent;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 
@@ -46,6 +47,15 @@ public class FuncionarioService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    private final ApplicationEventPublisher eventPublisher;
+
+    private final FuncionarioRepository funcionarioRepository;
+
+    public FuncionarioService(ApplicationEventPublisher eventPublisher, FuncionarioRepository funcionarioRepository) {
+        this.eventPublisher = eventPublisher;
+        this.funcionarioRepository = funcionarioRepository;
+    }
 
     public String criptografar(String senha) {
         return passwordEncoder.encode(senha);
@@ -93,7 +103,12 @@ public class FuncionarioService {
 
         Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
 
+
         funcionario = repository.save(funcionario);
+
+        // 🔴 EVENTO
+        eventPublisher.publishEvent(new FuncionarioEvent(this, funcionario));
+
         return FuncionarioMapper.toDto(funcionario);
     }
 
@@ -160,7 +175,8 @@ public class FuncionarioService {
         funcionarioExiste.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionarioExiste.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
 
-        return FuncionarioMapper.toDto(repository.save(funcionarioExiste));
+       return FuncionarioMapper.toDto(repository.save(funcionarioExiste));
+
     }
 
     public void validarFuncionario(FuncionarioRequestDto requestDto){
