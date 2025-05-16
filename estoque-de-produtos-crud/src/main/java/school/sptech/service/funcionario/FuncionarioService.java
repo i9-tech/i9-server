@@ -117,7 +117,11 @@ public class FuncionarioService {
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
-        String senha = empresa.getNomeSenha() + '@' + cpfFuncionario;
+        // Remove tudo que não for número do CPF
+        String cpfLimpo = cpfFuncionario.replaceAll("[^\\d]", "");
+
+        String senha = cpfLimpo + '@' + empresa.getNomeSenha();
+
         return senha;
     }
 
