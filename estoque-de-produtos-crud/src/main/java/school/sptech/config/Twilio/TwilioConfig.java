@@ -1,6 +1,7 @@
 package school.sptech.config.Twilio;
 import com.twilio.Twilio;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,12 @@ import org.slf4j.LoggerFactory;
 public class TwilioConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(TwilioConfig.class);
-    private static final String ACCOUNT_SID = "ACf0ea50734f4845c351c9b1033d1765b0";
-    private static final String AUTH_TOKEN = "82798c1ce1e983942d882fba0ebe728a";
+
+    @Value("${twilio.account.sid}")
+    private String ACCOUNT_SID;
+
+    @Value("${twilio.auth.token}")
+    private String AUTH_TOKEN;
 
     @PostConstruct
     public void init() {

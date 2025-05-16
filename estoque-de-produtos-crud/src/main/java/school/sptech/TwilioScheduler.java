@@ -13,7 +13,6 @@ public class TwilioScheduler {
     private final FuncionarioRepository funcionarioRepository;
 
 
-
     public TwilioScheduler(TwilioService twilioService, FuncionarioRepository funcionarioRepository) {
         this.twilioService = twilioService;
         this.funcionarioRepository = funcionarioRepository;
