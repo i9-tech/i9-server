@@ -62,6 +62,8 @@ public class Empresa {
     )
     private boolean ativo;
 
+    private String whatsapp;
+
     private String email;
 
     private String nomeSenha;
@@ -129,4 +131,8 @@ public class Empresa {
     public void setNomeSenha(String nomeSenha) {
         this.nomeSenha = nomeSenha;
     }
+
+    public String getWhatsapp() { return whatsapp; }
+
+    public void setWhatsapp(String whatsapp) { this.whatsapp = whatsapp; }
 }

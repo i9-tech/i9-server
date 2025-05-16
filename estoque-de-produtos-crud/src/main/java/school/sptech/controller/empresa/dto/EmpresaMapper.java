@@ -21,6 +21,7 @@ public class EmpresaMapper {
         entidadeEmpresa.setEndereco(empresaEnviadaDto.getEndereco());
         entidadeEmpresa.setDataCadastro(empresaEnviadaDto.getDataCadastro());
         entidadeEmpresa.setAtivo(true);
+        entidadeEmpresa.setWhatsapp(empresaEnviadaDto.getWhatsapp());
         return entidadeEmpresa;
     }
 
@@ -31,6 +32,7 @@ public class EmpresaMapper {
 
         entidadeEmpresaParaAtualizar.setNome(empresaEnviadaDto.getNome());
         entidadeEmpresaParaAtualizar.setEndereco(empresaEnviadaDto.getEndereco());
+        entidadeEmpresaParaAtualizar.setWhatsapp(empresaEnviadaDto.getWhatsapp());
 
         return entidadeEmpresaParaAtualizar;
     }
@@ -46,6 +48,7 @@ public class EmpresaMapper {
         entidadeEmpresaParaResposta.setEndereco(entidadeEmpresaResposta.getEndereco());
         entidadeEmpresaParaResposta.setDataCadastro(entidadeEmpresaResposta.getDataCadastro());
         entidadeEmpresaParaResposta.setAtivo(entidadeEmpresaResposta.isAtivo());
+        entidadeEmpresaParaResposta.setWhatsapp(entidadeEmpresaResposta.getWhatsapp());
 
         return entidadeEmpresaParaResposta;
     }
@@ -65,6 +68,7 @@ public class EmpresaMapper {
             entidadeEmpresaParaResposta.setEndereco(empresaList.get(i).getEndereco());
             entidadeEmpresaParaResposta.setDataCadastro(empresaList.get(i).getDataCadastro());
             entidadeEmpresaParaResposta.setAtivo(empresaList.get(i).isAtivo());
+            entidadeEmpresaParaResposta.setWhatsapp(empresaList.get(i).getWhatsapp());
 
             respostasEmDto.add(entidadeEmpresaParaResposta);
         }

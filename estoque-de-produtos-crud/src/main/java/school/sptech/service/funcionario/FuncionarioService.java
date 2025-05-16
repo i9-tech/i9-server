@@ -1,7 +1,6 @@
 package school.sptech.service.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +19,8 @@ import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
+import school.sptech.exception.SenhaInvalidaException;
 import school.sptech.exception.ValidacaoException;
-import school.sptech.observer.FuncionarioEvent;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 
@@ -81,9 +80,9 @@ public class FuncionarioService {
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
-    public FuncionarioResponseDto cadastrarFuncionario(FuncionarioRequestDto requestDto, Integer idEmpresa) {
+    public Funcionario cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
 
-        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(requestDto.getCpf(), idEmpresa);
+        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
 
         if (funcionarioExisteByCpf) {
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");
@@ -91,6 +90,7 @@ public class FuncionarioService {
 
         Empresa empresa = empresaRepository.findById(idEmpresa)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
+        funcionario.setEmpresa(empresa);
 
         // Aqui, geramos a senha automática SEM usar a senha da requisição
         String senhaGerada = gerarSenha(empresa.getId(), requestDto.getCpf());
@@ -101,8 +101,11 @@ public class FuncionarioService {
         // Definimos essa senha criptografada no DTO
         requestDto.setSenha(senhaCriptografada);
 
-        Funcionario funcionario = FuncionarioMapper.toEntity(requestDto, empresa);
+        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+        funcionario.setSenha(senhaCriptografada);
 
+        funcionario.setId(funcionario.getId());
+        return repository.save(funcionario);
 
         funcionario = repository.save(funcionario);
 
@@ -122,28 +125,21 @@ public class FuncionarioService {
     }
 
 
-    public List<FuncionarioResponseDto> listarPorEmpresa(Integer idEmpresa) {
+    public List<Funcionario> listarPorEmpresa(Integer idEmpresa) {
         List<Funcionario> todosFuncionariosEmpresa = repository.findByEmpresaIdAndAtivoTrue(idEmpresa);
 
         if (todosFuncionariosEmpresa.isEmpty()) {
             return Collections.emptyList(); // Retorna uma lista vazia
         }
 
-        return todosFuncionariosEmpresa.stream()
-                .map(FuncionarioMapper::toDto)
-                .collect(Collectors.toList()); // Retorna uma lista com dtos
+        return todosFuncionariosEmpresa;
     }
 
-    public FuncionarioResponseDto buscarFuncionarioPorId(int id,Integer idEmpresa) {
-        Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
-
-        if (funcionario.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
-        }
-
-        return FuncionarioMapper.toDto(funcionario.get());
-
+    public Funcionario buscarFuncionarioPorId(int id, Integer idEmpresa) {
+        return repository.findByIdAndEmpresaId(id, idEmpresa)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada."));
     }
+
 
     public void removerPorId(int id, Integer idEmpresa) {
         Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
@@ -156,27 +152,24 @@ public class FuncionarioService {
 
     }
 
-    public FuncionarioResponseDto editarFuncionario(int id, Integer idEmpresa , FuncionarioRequestDto requestDto){
-        Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
+    public Funcionario editarFuncionario(int id, Integer idEmpresa, Funcionario funcionarioParaEditar) {
+        Optional<Funcionario> funcionarioOptional = repository.findByIdAndEmpresaId(id, idEmpresa);
 
-        if (funcionario.isEmpty()) {
+        if (funcionarioOptional.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
-        Funcionario funcionarioExiste = funcionario.get();
+        Funcionario funcionarioExistente = funcionarioOptional.get();
 
-        validarFuncionario(requestDto);
+        funcionarioExistente.setCpf(funcionarioParaEditar.getCpf());
+        funcionarioExistente.setNome(funcionarioParaEditar.getNome());
+        funcionarioExistente.setCargo(funcionarioParaEditar.getCargo());
+        funcionarioExistente.setSenha(funcionarioParaEditar.getSenha());
+        funcionarioExistente.setAcessoSetorCozinha(funcionarioParaEditar.isAcessoSetorCozinha());
+        funcionarioExistente.setAcessoSetorAtendimento(funcionarioParaEditar.isAcessoSetorAtendimento());
+        funcionarioExistente.setAcessoSetorEstoque(funcionarioParaEditar.isAcessoSetorEstoque());
 
-        funcionarioExiste.setCpf(requestDto.getCpf());
-        funcionarioExiste.setNome(requestDto.getNome());
-        funcionarioExiste.setCargo(requestDto.getCargo());
-        funcionarioExiste.setSenha(requestDto.getSenha());
-        funcionarioExiste.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
-        funcionarioExiste.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
-        funcionarioExiste.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
-
-       return FuncionarioMapper.toDto(repository.save(funcionarioExiste));
-
+        return repository.save(funcionarioExistente);
     }
 
     public void validarFuncionario(FuncionarioRequestDto requestDto){
