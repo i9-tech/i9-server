@@ -87,7 +87,7 @@ public class VendaService {
 
     public Double lucroLiquidoPorEmpresaHoje(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
-        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(hoje, empresaId);
+        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
         return lucro = lucro;
     }
 
