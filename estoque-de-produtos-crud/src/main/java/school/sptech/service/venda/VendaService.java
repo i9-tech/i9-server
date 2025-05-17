@@ -6,11 +6,17 @@ import school.sptech.controller.venda.dto.VendaRequestDto;
 import school.sptech.controller.venda.dto.VendaResponseDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
+import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.repository.venda.VendaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.produto.ProdutoRepository;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -76,4 +82,87 @@ public class VendaService {
                 .sum();
     }
 
+    public Double valorTotalPorEmpresaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        Double valorTotal = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
+        return valorTotal = valorTotal;
+    }
+
+    public Double lucroLiquidoPorEmpresaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
+        return lucro = lucro;
+    }
+
+    public Map<String, Double> valorTotalPorSetorHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorSetorEmpresa(empresaId, hoje);
+
+        Map<String, Double> totalPorSetor = new HashMap<>();
+        for (Object[] linha : resultados) {
+            String setor = (String) linha[0];
+            Double valor = ((Number) linha[1]).doubleValue();
+            totalPorSetor.put(setor, valor);
+        }
+
+        return totalPorSetor;
+    }
+
+    public Map<String, Double> valorTotalPorCategoriaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorCategoriaEmpresa(empresaId, hoje);
+
+        Map<String, Double> totalPorCategoria = new HashMap<>();
+        for (Object[] linha : resultados) {
+            String categoria = (String) linha[0];
+            Double valor = ((Number) linha[1]).doubleValue();
+            totalPorCategoria.put(categoria, valor);
+        }
+
+        return totalPorCategoria;
+    }
+
+
+    public Integer quantidadeVendasPorEmpresaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
+        return quantidade = quantidade;
+    }
+
+    public List<Produto> listarProdutosAbaixoDaQuantidadeMinima(Integer empresaId) {
+        return vendaRepository.buscaProdutosAbaixoDeQuantidadeMinima(empresaId);
+    }
+
+    public List<String> listarResumoItensVendidosPorEmpresaEData(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        List<Venda> vendas = vendaRepository.findVendasComItensPorEmpresaEData(empresaId, hoje);
+
+        List<ItemCarrinho> itensVendidos = new ArrayList<>();
+        for (Venda venda : vendas) {
+            itensVendidos.addAll(venda.getItensCarrinho());
+        }
+
+        Map<String, Integer> resumo = new HashMap<>();
+
+        for (ItemCarrinho item : itensVendidos) {
+            String nomeItem = null;
+
+            if (item.getProduto() != null) {
+                nomeItem = item.getProduto().getNome();
+            } else if (item.getPrato() != null) {
+                nomeItem = item.getPrato().getNome();
+            }
+
+            if (nomeItem != null) {
+                resumo.put(nomeItem, resumo.getOrDefault(nomeItem, 0) + 1);
+            }
+        }
+
+        List<String> resultado = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : resumo.entrySet()) {
+            resultado.add(entry.getKey() + " - " + entry.getValue() + " unidade(s)");
+        }
+
+        return resultado;
+    }
 }

@@ -8,16 +8,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.venda.dto.VendaRequestDto;
 import school.sptech.controller.venda.dto.VendaResponseDto;
+import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.service.venda.VendaService;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/vendas")
@@ -90,6 +94,48 @@ public class VendaController {
             @RequestParam Integer idFuncionario) {
         LocalDate dataAtual = LocalDate.now();
         return vendaService.calcularLucroTotal(idFuncionario, dataAtual);
+    }
+
+
+    @GetMapping("/valor-total-diario/{empresaId}")
+    public ResponseEntity<Double> valorTotalPorEmpresaHoje(@PathVariable Integer empresaId) {
+        Double valorTotal = vendaService.valorTotalPorEmpresaHoje(empresaId);
+        return ResponseEntity.ok(valorTotal);
+    }
+
+    @GetMapping("/valor-liquido-diario/{empresaId}")
+    public ResponseEntity<Double> lucroLiquidoHojePorEmpresa(@PathVariable Integer empresaId) {
+        Double lucro = vendaService.lucroLiquidoPorEmpresaHoje(empresaId);
+        return ResponseEntity.ok(lucro);
+    }
+
+    @GetMapping("/valor-total-setor-diario/{empresaId}")
+    public ResponseEntity<Map<String, Double>> valorTotalPorSetorHoje(@PathVariable Integer empresaId) {
+        return ResponseEntity.ok(vendaService.valorTotalPorSetorHoje(empresaId));
+    }
+
+    @GetMapping("/valor-total-categoria-diario/{empresaId}")
+    public ResponseEntity<Map<String, Double>> valorTotalPorCategoriaHoje(@PathVariable Integer empresaId) {
+        return ResponseEntity.ok(vendaService.valorTotalPorCategoriaHoje(empresaId));
+    }
+
+    @GetMapping("/quantidade-vendas/{empresaId}")
+    public ResponseEntity<Integer> quantidadeVendasHoje(@PathVariable Integer empresaId) {
+        Integer quantidade = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
+        return ResponseEntity.ok(quantidade);
+    }
+
+    @GetMapping("/quantidade-minima/{empresaId}")
+    public ResponseEntity<List<Produto>> listarAbaixoMinimo(@PathVariable Integer empresaId) {
+        List<Produto> produtos = vendaService.listarProdutosAbaixoDaQuantidadeMinima(empresaId);
+        return produtos.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/itens-vendidos/{empresaId}")
+    public List<String> listarResumoItensVendidosHoje(@PathVariable Integer empresaId) {
+        return vendaService.listarResumoItensVendidosPorEmpresaEData(empresaId);
     }
 
 }
