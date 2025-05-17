@@ -18,8 +18,7 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
 
 
     @Query("select sum(v.valorTotal) from Venda v where v.funcionario.empresa.id = :empresaId and v.dataVenda = :data")
-    Double valorTotalVendasPorEmpresaEData(@Param("empresaId") Integer empresaId,
-                                        @Param("data") LocalDate data);
+    Double valorTotalVendasPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("data") LocalDate data);
 
     @Query("""
     select
@@ -70,9 +69,7 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
       and v.dataVenda = :hoje
     group by coalesce(cp.nome, cpr.nome)
     """)
-    List<Object[]> valorTotalDiarioPorCategoriaEmpresa(
-            @Param("empresaId") Integer empresaId,
-            @Param("hoje") LocalDate hoje);
+    List<Object[]> valorTotalDiarioPorCategoriaEmpresa(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
 
 
     @Query("select count(v) from Venda v where v.funcionario.empresa.id = :empresaId and v.dataVenda = :hoje")
