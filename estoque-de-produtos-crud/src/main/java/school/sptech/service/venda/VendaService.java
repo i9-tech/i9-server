@@ -6,11 +6,14 @@ import school.sptech.controller.venda.dto.VendaRequestDto;
 import school.sptech.controller.venda.dto.VendaResponseDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
+import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.repository.venda.VendaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.produto.ProdutoRepository;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -126,4 +129,40 @@ public class VendaService {
         return quantidade = quantidade;
     }
 
+    public List<Produto> listarProdutosAbaixoDaQuantidadeMinima(Integer empresaId) {
+        return vendaRepository.buscaProdutosAbaixoDeQuantidadeMinima(empresaId);
+    }
+
+    public List<String> listarResumoItensVendidosPorEmpresaEData(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        List<Venda> vendas = vendaRepository.findVendasComItensPorEmpresaEData(empresaId, hoje);
+
+        List<ItemCarrinho> itensVendidos = new ArrayList<>();
+        for (Venda venda : vendas) {
+            itensVendidos.addAll(venda.getItensCarrinho());
+        }
+
+        Map<String, Integer> resumo = new HashMap<>();
+
+        for (ItemCarrinho item : itensVendidos) {
+            String nomeItem = null;
+
+            if (item.getProduto() != null) {
+                nomeItem = item.getProduto().getNome();
+            } else if (item.getPrato() != null) {
+                nomeItem = item.getPrato().getNome();
+            }
+
+            if (nomeItem != null) {
+                resumo.put(nomeItem, resumo.getOrDefault(nomeItem, 0) + 1);
+            }
+        }
+
+        List<String> resultado = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : resumo.entrySet()) {
+            resultado.add(entry.getKey() + " - " + entry.getValue() + " unidade(s)");
+        }
+
+        return resultado;
+    }
 }

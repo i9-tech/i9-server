@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.controller.venda.dto.VendaRequestDto;
 import school.sptech.controller.venda.dto.VendaResponseDto;
+import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.service.venda.VendaService;
 
@@ -122,6 +123,19 @@ public class VendaController {
     public ResponseEntity<Integer> quantidadeVendasHoje(@PathVariable Integer empresaId) {
         Integer quantidade = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
         return ResponseEntity.ok(quantidade);
+    }
+
+    @GetMapping("/quantidade-minima/{empresaId}")
+    public ResponseEntity<List<Produto>> listarAbaixoMinimo(@PathVariable Integer empresaId) {
+        List<Produto> produtos = vendaService.listarProdutosAbaixoDaQuantidadeMinima(empresaId);
+        return produtos.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(produtos);
+    }
+
+    @GetMapping("/itens-vendidos/{empresaId}")
+    public List<String> listarResumoItensVendidosHoje(@PathVariable Integer empresaId) {
+        return vendaService.listarResumoItensVendidosPorEmpresaEData(empresaId);
     }
 
 }

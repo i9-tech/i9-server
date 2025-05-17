@@ -1,20 +1,15 @@
 package school.sptech.service.Twilio;
+
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.empresa.Empresa;
-import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.produto.Produto;
-import school.sptech.entity.venda.Venda;
 import school.sptech.repository.empresa.EmpresaRepository;
-import school.sptech.repository.funcionario.FuncionarioRepository;
-import school.sptech.repository.produto.ProdutoRepository;
-import school.sptech.repository.venda.VendaRepository;
 import school.sptech.service.venda.VendaService;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +25,6 @@ public class TwilioService {
         this.empresaRepository = empresaRepository;
         this.vendaService = vendaService;
     }
-
 
 
     public void enviarMensagem(List<String> numeros, String mensagem) {
@@ -49,7 +43,8 @@ public class TwilioService {
         Integer quantidadeVendas = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
         Map<String, Double> totalPorSetor = vendaService.valorTotalPorSetorHoje(empresaId);
         Map<String, Double> totalPorCategoria = vendaService.valorTotalPorCategoriaHoje(empresaId);
-
+        List<Produto> produtosBaixoEstoque = vendaService.listarProdutosAbaixoDaQuantidadeMinima(empresaId);
+        List<String> resumoItens = vendaService.listarResumoItensVendidosPorEmpresaEData(empresaId);
 
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
@@ -82,7 +77,7 @@ public class TwilioService {
             mensagem.append(String.format("*📈 Lucro Liquido*: R$ %.2f\n\n", valorLiquido));
         }
 
-        mensagem.append("🏪 *_Lucro bruto por Setor_*:\n");
+        mensagem.append("🏪 *_Lucro bruto por Setor:_*\n");
         if (totalPorSetor == null || totalPorSetor.isEmpty()) {
             mensagem.append("- Nenhum dado disponível\n");
         } else {
@@ -94,12 +89,34 @@ public class TwilioService {
 
         mensagem.append("📦 *_Lucro bruto por Categoria:_*\n");
         if (totalPorCategoria == null || totalPorCategoria.isEmpty()) {
-            mensagem.append("- Nenhum dado disponível\n");
+            mensagem.append("- Nenhum dado disponível\n\n");
         } else {
             totalPorCategoria.forEach((categoria, valor) ->
                     mensagem.append(String.format("- %s: R$ %.2f\n", categoria, valor))
             );
         }
+
+        mensagem.append(String.format("\n📋 *Resumo dos itens vendidos:*\n"));
+
+        if (resumoItens.isEmpty()) {
+            mensagem.append("⚠️ Nenhum item vendido hoje.\n");
+        } else {
+            for (String linha : resumoItens) {
+                mensagem.append("— ").append(linha).append("\n");
+            }
+        }
+
+
+        if (!produtosBaixoEstoque.isEmpty()) {
+            mensagem.append("\n\n⚠️ *Alerta de Estoque Baixo!*\n");
+            mensagem.append("_Reponha o estoque o quanto antes._ \n");
+
+            for (Produto p : produtosBaixoEstoque) {
+                mensagem.append(String.format("— %s (Estoque: %d | Minimo: %d)\n",
+                        p.getNome(), p.getQuantidade(), p.getQuantidadeMin()));
+            }
+        }
+
         mensagem.append("\n 🫱🏻‍🫲🏻 A equipe *i9Tech* agradece pela confiança e reafirma seu compromisso com a excelência em soluções para o seu negócio.");
         mensagem.append("\n\n 🛎️ _Lembrete: para garantir o recebimento dos próximos relatórios, responda a esta mensagem com *join slowly-cloud* após a leitura._");
 
