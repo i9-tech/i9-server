@@ -51,6 +51,8 @@ public class EmpresaCadastroDto {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataCadastro;
 
+    private String whatsapp;
+
     public @NotBlank(message = "O nome não pode estar em branco.") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.") String getNome() {
         return nome;
     }
@@ -81,5 +83,13 @@ public class EmpresaCadastroDto {
 
     public void setDataCadastro(@NotNull(message = "A data não pode estar em branco.") LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 }

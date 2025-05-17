@@ -83,10 +83,7 @@ public class ItemCarrinhoController {
             @Parameter(description = "ID do funcionário que está adicionando o prato ao carrinho.", required = true)
             @PathVariable Integer idFuncionario
     ) {
-        return ResponseEntity
-                .ok(ItemCarrinhoMapper.
-                        toPratoResponseDto(
-                                itemCarrinhoService.adicionarPrato(ItemCarrinhoMapper.toEntity(request), idFuncionario)));
+        return ResponseEntity.ok(ItemCarrinhoMapper.toPratoResponseDto(itemCarrinhoService.adicionarPrato(ItemCarrinhoMapper.toEntity(request), idFuncionario)));
     }
 
     @PostMapping("/produto/{idFuncionario}")

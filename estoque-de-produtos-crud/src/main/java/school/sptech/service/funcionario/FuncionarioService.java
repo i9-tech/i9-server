@@ -1,6 +1,7 @@
 package school.sptech.service.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,15 +20,14 @@ import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.exception.SenhaInvalidaException;
 import school.sptech.exception.ValidacaoException;
+import school.sptech.observer.FuncionarioEvent;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class FuncionarioService {
@@ -46,6 +46,15 @@ public class FuncionarioService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    private final ApplicationEventPublisher eventPublisher;
+
+    private final FuncionarioRepository funcionarioRepository;
+
+    public FuncionarioService(ApplicationEventPublisher eventPublisher, FuncionarioRepository funcionarioRepository) {
+        this.eventPublisher = eventPublisher;
+        this.funcionarioRepository = funcionarioRepository;
+    }
 
     public String criptografar(String senha) {
         return passwordEncoder.encode(senha);
@@ -71,11 +80,11 @@ public class FuncionarioService {
         return FuncionarioMapper.of(funcionarioAutenticado, token);
     }
 
-    public Funcionario cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
+    public FuncionarioResponseDto cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
 
         boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
 
-        if (funcionarioExisteByCpf){
+        if (funcionarioExisteByCpf) {
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");
         }
 
@@ -83,12 +92,39 @@ public class FuncionarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
         funcionario.setEmpresa(empresa);
 
-        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+        // Aqui, geramos a senha automática SEM usar a senha da requisição
+        String senhaGerada = gerarSenha(empresa.getId(), funcionario.getCpf());
+
+        // Criptografamos a senha gerada
+        String senhaCriptografada = passwordEncoder.encode(senhaGerada);
+
+        // Definimos essa senha criptografada na entidade
         funcionario.setSenha(senhaCriptografada);
 
+        funcionario.setSenha(senhaCriptografada);
         funcionario.setId(funcionario.getId());
-        return repository.save(funcionario);
+
+        funcionario = repository.save(funcionario);
+
+        // 🔴 EVENTO
+        eventPublisher.publishEvent(new FuncionarioEvent(this, funcionario));
+
+        return FuncionarioMapper.toDto(funcionario);
     }
+
+
+    public String gerarSenha(int empresaId, String cpfFuncionario) {
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        // Remove tudo que não for número do CPF
+        String cpfLimpo = cpfFuncionario.replaceAll("[^\\d]", "");
+
+        String senha = cpfLimpo + '@' + empresa.getNomeSenha();
+
+        return senha;
+    }
+
 
     public List<Funcionario> listarPorEmpresa(Integer idEmpresa) {
         List<Funcionario> todosFuncionariosEmpresa = repository.findByEmpresaIdAndAtivoTrue(idEmpresa);
@@ -136,4 +172,15 @@ public class FuncionarioService {
 
         return repository.save(funcionarioExistente);
     }
+
+    public void validarFuncionario(FuncionarioRequestDto requestDto){
+        if (requestDto.getNome() == null || requestDto.getNome().trim().isEmpty()){
+            throw new ValidacaoException("O nome do funcionário é obrigatório");
+        }  if (requestDto.getCpf() == null){
+            throw new ValidacaoException("O CPF do funcionário é obrigatório");
+        } if (requestDto.getCargo() == null || requestDto.getCargo().trim().isEmpty()){
+            throw new ValidacaoException("O cargo do funcionário é obrigatório");
+        }
+    }
+
 }

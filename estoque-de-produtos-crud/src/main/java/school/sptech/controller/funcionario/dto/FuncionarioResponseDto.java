@@ -69,8 +69,8 @@ public class FuncionarioResponseDto {
     private boolean proprietario;
 
     public FuncionarioResponseDto(Integer id, String nome, String cpf, String cargo,
-                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                   boolean acessoSetorAtendimento, boolean proprietario) {
+                                  LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
+                                  boolean acessoSetorAtendimento, boolean proprietario) {
 
         this.id = id;
         this.nome = nome;
