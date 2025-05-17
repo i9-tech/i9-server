@@ -67,7 +67,7 @@ public class TwilioService {
         if (quantidadeVendas <= 0) {
             mensagem.append("🔢 *Quantidade de Vendas*: 0 - Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
         } else {
-            mensagem.append(String.format("💰 *Quantidade de Vendas*: %d \n", quantidadeVendas));
+            mensagem.append(String.format("🔢 *Quantidade de Vendas*: %d \n", quantidadeVendas));
         }
 
         if (valorTotal == null) {
