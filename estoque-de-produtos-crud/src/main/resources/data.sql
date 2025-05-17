@@ -5,11 +5,11 @@ VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01
 
 -- Inserir outra empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
-VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true, 'tai@gmail.com', 'tai', '+5511970533898');
+VALUES ('Doces da Tai', '98.765.432/0001-01', 'Avenida Central, 456', '2022-06-15', true, 'tai@gmail.com', 'tai', '');
 
 -- Inserir uma empresa inativa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo,  email, nome_senha, whatsapp)
-VALUES ('Ygonna Bolos', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false, 'maria@gmail.com', 'maria', '+5511967232879');
+VALUES ('Ygonna Bolos', '11.222.333/0001-02', 'Rua Secundária, 789', '2023-03-10', false, 'maria@gmail.com', 'maria', '');
 
 -- Inserir um funcionário
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)

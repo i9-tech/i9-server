@@ -12,62 +12,26 @@ import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.produto.ProdutoRepository;
 import school.sptech.repository.venda.VendaRepository;
+import school.sptech.service.venda.VendaService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TwilioService {
 
+
     private final EmpresaRepository empresaRepository;
-    private final ProdutoRepository produtoRepository;
-    private final FuncionarioRepository funcionarioRepository;
-    private final VendaRepository vendaRepository;
+    private final VendaService vendaService;
     private final Logger logger = LoggerFactory.getLogger(TwilioService.class);
 
-    public TwilioService(EmpresaRepository empresaRepository, ProdutoRepository produtoRepository, FuncionarioRepository funcionarioRepository, VendaRepository vendaRepository) {
+    public TwilioService(EmpresaRepository empresaRepository, VendaService vendaService) {
         this.empresaRepository = empresaRepository;
-        this.produtoRepository = produtoRepository;
-        this.funcionarioRepository = funcionarioRepository;
-        this.vendaRepository = vendaRepository;
+        this.vendaService = vendaService;
     }
 
-    public void enviarMensagemAutomatica() {
-        List<Produto> produtos = produtoRepository.findAll();
 
-        for (Produto produto : produtos) {
-            Empresa empresa = produto.getFuncionario().getEmpresa();
-            if (empresa.getWhatsapp() != null && !empresa.getWhatsapp().isBlank() && empresa.isAtivo()) {
-                String mensagem = formatarMensagem(produto, empresa);
-                enviarMensagem(List.of(empresa.getWhatsapp()), mensagem);
-
-                logger.info("✅ Mensagem enviada para empresa '{}' (número: {})", empresa.getNome(), empresa.getWhatsapp());
-            }
-        }
-    }
-
-    private String formatarMensagem(Produto produto, Empresa empresa) {
-        return String.format(
-                "📦 Produto cadastrado:\n\n" +
-                        "🏢 Empresa: %s\n" +
-                        "📛 Nome: %s\n" +
-                        "🧾 Código: %d\n" +
-                        "📦 Quantidade: %d\n" +
-                        "💰 Compra: R$ %.2f | Venda: R$ %.2f\n" +
-                        "📂 Categoria: %s\n" +
-                        "🏬 Setor: %s\n" +
-                        "🗓️ Registrado em: %s",
-                empresa.getNome(),
-                produto.getNome(),
-                produto.getCodigo(),
-                produto.getQuantidade(),
-                produto.getValorCompra(),
-                produto.getValorUnitario(),
-                produto.getCategoria().getNome(),
-                produto.getSetor().getNome(),
-                produto.getDataRegistro()
-        );
-    }
 
     public void enviarMensagem(List<String> numeros, String mensagem) {
         for (String numero : numeros) {
@@ -79,37 +43,68 @@ public class TwilioService {
         }
     }
 
+    public void enviarMensagemRelatorioCompletoHoje(Integer empresaId) {
+        Double valorTotal = vendaService.valorTotalPorEmpresaHoje(empresaId);
+        Double valorLiquido = vendaService.lucroLiquidoPorEmpresaHoje(empresaId);
+        Integer quantidadeVendas = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
+        Map<String, Double> totalPorSetor = vendaService.valorTotalPorSetorHoje(empresaId);
+        Map<String, Double> totalPorCategoria = vendaService.valorTotalPorCategoriaHoje(empresaId);
 
-    public void enviarMensagemLucroTotalPorFuncionario(Integer idFuncionario) {
-        Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
-        var empresa = funcionario.getEmpresa();
-        String whatsappEmpresa = empresa.getWhatsapp();
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
-        if (whatsappEmpresa == null || whatsappEmpresa.isBlank()) {
+        String whatsapp = empresa.getWhatsapp();
+        if (whatsapp == null || whatsapp.isBlank()) {
             logger.warn("Empresa '{}' não possui número de WhatsApp cadastrado.", empresa.getNome());
             return;
         }
 
-        Integer idEmpresa = empresa.getId();
-        LocalDate hoje = LocalDate.now();
+        StringBuilder mensagem = new StringBuilder();
+        mensagem.append(String.format("Olá! Aqui está o relatório de vendas para a empresa %s hoje:\n\n", empresa.getNome()));
 
-        List<Venda> vendas = vendaRepository.findByDataVendaAndEmpresaId(hoje, idEmpresa);
 
-        double valorTotal = vendas.stream()
-                .mapToDouble(Venda::getValorTotal)
-                .sum();
+        if (quantidadeVendas <= 0) {
+            mensagem.append("🔢 *Quantidade de Vendas*: 0 - Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
+        } else {
+            mensagem.append(String.format("💰 *Quantidade de Vendas*: %d \n", quantidadeVendas));
+        }
 
-        String mensagem = String.format(
-                "Olá! Hoje a empresa %s teve um total de vendas de R$ %.2f.",
-                empresa.getNome(),
-                valorTotal
-        );
+        if (valorTotal == null) {
+            mensagem.append("💰 *Lucro Bruto*: R$ 00,00 -  Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
+        } else {
+            mensagem.append(String.format("💰 *Lucro Bruto*: R$ %.2f\n", valorTotal));
+        }
 
-        enviarMensagem(List.of(whatsappEmpresa), mensagem);
+        if (valorLiquido == null) {
+            mensagem.append("📈 *Lucro Liquido*: R$ 00,00 -  Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
+        } else {
+            mensagem.append(String.format("*📈 Lucro Liquido*: R$ %.2f\n\n", valorLiquido));
+        }
 
-        logger.info("Mensagem de lucro total enviada para a empresa '{}' no WhatsApp {}", empresa.getNome(), whatsappEmpresa);
+        mensagem.append("🏪 *_Lucro bruto por Setor_*:\n");
+        if (totalPorSetor == null || totalPorSetor.isEmpty()) {
+            mensagem.append("- Nenhum dado disponível\n");
+        } else {
+            totalPorSetor.forEach((setor, valor) ->
+                    mensagem.append(String.format("- %s: R$ %.2f\n", setor, valor))
+            );
+        }
+        mensagem.append("\n");
+
+        mensagem.append("📦 *_Lucro bruto por Categoria:_*\n");
+        if (totalPorCategoria == null || totalPorCategoria.isEmpty()) {
+            mensagem.append("- Nenhum dado disponível\n");
+        } else {
+            totalPorCategoria.forEach((categoria, valor) ->
+                    mensagem.append(String.format("- %s: R$ %.2f\n", categoria, valor))
+            );
+        }
+        mensagem.append("\n 🫱🏻‍🫲🏻 A equipe *i9Tech* agradece pela confiança e reafirma seu compromisso com a excelência em soluções para o seu negócio.");
+        mensagem.append("\n\n 🛎️ _Lembrete: para garantir o recebimento dos próximos relatórios, responda a esta mensagem com *join slowly-cloud* após a leitura._");
+
+        enviarMensagem(List.of(whatsapp), mensagem.toString());
+        logger.info("Mensagem completa enviada para a empresa '{}' no número {}", empresa.getNome(), whatsapp);
     }
 
 }

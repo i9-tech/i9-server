@@ -11,6 +11,9 @@ import school.sptech.repository.venda.VendaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.produto.ProdutoRepository;
+import java.util.Map;
+import java.util.HashMap;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -74,6 +77,53 @@ public class VendaService {
                 .filter(venda -> venda.getFuncionario().getEmpresa().getId().equals(idEmpresa))
                 .mapToDouble(Venda::getValorTotal)
                 .sum();
+    }
+
+    public Double valorTotalPorEmpresaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        Double valorTotal = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
+        return valorTotal = valorTotal;
+    }
+
+    public Double lucroLiquidoPorEmpresaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(hoje, empresaId);
+        return lucro = lucro;
+    }
+
+    public Map<String, Double> valorTotalPorSetorHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorSetorEmpresa(empresaId, hoje);
+
+        Map<String, Double> totalPorSetor = new HashMap<>();
+        for (Object[] linha : resultados) {
+            String setor = (String) linha[0];
+            Double valor = ((Number) linha[1]).doubleValue();
+            totalPorSetor.put(setor, valor);
+        }
+
+        return totalPorSetor;
+    }
+
+    public Map<String, Double> valorTotalPorCategoriaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorCategoriaEmpresa(empresaId, hoje);
+
+        Map<String, Double> totalPorCategoria = new HashMap<>();
+        for (Object[] linha : resultados) {
+            String categoria = (String) linha[0];
+            Double valor = ((Number) linha[1]).doubleValue();
+            totalPorCategoria.put(categoria, valor);
+        }
+
+        return totalPorCategoria;
+    }
+
+
+    public Integer quantidadeVendasPorEmpresaHoje(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
+        return quantidade = quantidade;
     }
 
 }
