@@ -60,21 +60,21 @@ public class TwilioService {
 
 
         if (quantidadeVendas <= 0) {
-            mensagem.append("🔢 *Quantidade de Vendas*: 0 - Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
+            mensagem.append("🔢 *Quantidade de Vendas*: 0 - Nenhuma venda foi realizada hoje ou o serviço está indisponível. Contate-nos.\n\n");
         } else {
             mensagem.append(String.format("🔢 *Quantidade de Vendas*: %d \n", quantidadeVendas));
         }
 
         if (valorTotal == null) {
-            mensagem.append("💰 *Lucro Bruto*: R$ 00,00 -  Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
+            mensagem.append("💰 *Lucro Bruto*: R$ 00,00 - Nenhuma venda foi realizada hoje ou o serviço está indisponível. Contate-nos.\n\n");
         } else {
             mensagem.append(String.format("💰 *Lucro Bruto*: R$ %.2f\n", valorTotal));
         }
 
         if (valorLiquido == null) {
-            mensagem.append("📈 *Lucro Liquido*: R$ 00,00 -  Não foi realizado nenhuma venda hoje, ou serviço indisponivel. Contate-nos\n\n");
+            mensagem.append("📈 *Lucro Líquido*: R$ 0,00 - Nenhuma venda foi realizada hoje ou o serviço está indisponível. Contate-nos.\n\n");
         } else {
-            mensagem.append(String.format("*📈 Lucro Liquido*: R$ %.2f\n\n", valorLiquido));
+            mensagem.append(String.format("*📈 Lucro Líquido*: R$ %.2f\n\n", valorLiquido));
         }
 
         mensagem.append("🏪 *_Lucro bruto por Setor:_*\n");
@@ -112,14 +112,13 @@ public class TwilioService {
             mensagem.append("_Reponha o estoque o quanto antes._ \n");
 
             for (Produto p : produtosBaixoEstoque) {
-                mensagem.append(String.format("— %s (Estoque: %d | Minimo: %d)\n",
+                mensagem.append(String.format("— %s (Estoque: %d | Mínimo: %d)\n",
                         p.getNome(), p.getQuantidade(), p.getQuantidadeMin()));
             }
         }
 
-        mensagem.append("\n 🫱🏻‍🫲🏻 A equipe *i9Tech* agradece pela confiança e reafirma seu compromisso com a excelência em soluções para o seu negócio.");
-        mensagem.append("\n\n 🛎️ _Lembrete: para garantir o recebimento dos próximos relatórios, responda a esta mensagem com *join slowly-cloud* após a leitura._");
-
+        mensagem.append("\n🫱🏻‍🫲🏻 A equipe *i9Tech* agradece pela confiança e reafirma seu compromisso com a excelência em soluções para o seu negócio.");
+        mensagem.append("\n\n🛎️ _Lembrete: para garantir o recebimento dos próximos relatórios, responda a esta mensagem com *join slowly-cloud* após a leitura._");
         enviarMensagem(List.of(whatsapp), mensagem.toString());
         logger.info("Mensagem completa enviada para a empresa '{}' no número {}", empresa.getNome(), whatsapp);
     }
