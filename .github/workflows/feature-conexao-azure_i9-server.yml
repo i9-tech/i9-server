@@ -41,8 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: target/estoque-de-produtos-crud.jar
-          working-directory: ./estoque-de-produtos-crud
+          path: './estoque-de-produtos-crud/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
