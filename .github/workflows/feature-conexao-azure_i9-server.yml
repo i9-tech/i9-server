@@ -42,6 +42,7 @@ jobs:
         with:
           name: java-app
           path: target/estoque-de-produtos-crud.jar
+          working-directory: ./estoque-de-produtos-crud
 
   deploy:
     runs-on: ubuntu-latest
