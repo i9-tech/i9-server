@@ -1,6 +1,6 @@
 # 🖥️ Servidor i9
 
-### 🌟 Boas vindas!
+### 🌟 Boas-vindas!
 Esse é o repositório da **i9 Tech** referente aos servidores de nosso sistema. Esse repositório tem como propósito **armazenar** toda nossa **regra de negócio** junto a **camadas de segurança** e **fluxos de funcionamento**, tudo em **um só servidor**. Cada nova implementação é desenvolvida em uma nova branch, para que não haja conflitos na aplicação final, então o que estiver presente na branch principal será o conteúdo mais atualizado e homologado.
 
 ***
@@ -17,7 +17,7 @@ Para utilizar nosso sistema em sua máquina, é preciso instalar alguns software
 
 ***
 
-### 🧳 Dependências
+## 🧳 Dependências
 Além das ferramentas de desenvolvimento, é possível encontrar as seguintes dependências em nosso servidor:
 - Springboot 
 - H2 Database
@@ -32,7 +32,7 @@ Além das ferramentas de desenvolvimento, é possível encontrar as seguintes de
 
 ***
 
-### 🔑 Acesso a Aplicação
+## 🔑 Acesso a Aplicação
 Para acessar nossa aplicação, siga os passos:
 1. Clone o repositório:
 ```sh
