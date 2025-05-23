@@ -34,7 +34,8 @@ public class VendaService {
         this.vendaRepository = vendaRepository;
     }
 
-    public Venda criarVenda(VendaRequestDto vendaRequest) {
+
+    public VendaResponseDto criarVendaRetornandoDto(VendaRequestDto vendaRequest) {
         Funcionario funcionario = funcionarioRepository.findById(vendaRequest.getFuncionarioId())
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
@@ -46,8 +47,10 @@ public class VendaService {
         Venda venda = VendaMapper.toEntity(vendaRequest, funcionario, itens);
         venda.setValorTotal(calcularValorTotal(itens));
 
-        return vendaRepository.save(venda);
+        venda = vendaRepository.save(venda);
+        return VendaMapper.toDto(venda);
     }
+
 
     public Double calcularValorTotal(List<ItemCarrinho> itens) {
         return itens.stream()
