@@ -2,6 +2,10 @@ package school.sptech.service.setor;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import school.sptech.controller.setor.dto.SetorAtualizarDto;
+import school.sptech.controller.setor.dto.SetorCadastroDto;
+import school.sptech.controller.setor.dto.SetorListagemDto;
+import school.sptech.controller.setor.dto.SetorMapper;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.setor.Setor;
 import school.sptech.exception.EntidadeInativaException;
@@ -10,7 +14,6 @@ import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.setor.SetorRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SetorService {
@@ -23,8 +26,7 @@ public class SetorService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public Setor cadastrarSetor(Setor setorParaCadastrar, Integer idFuncionario) {
-
+    public SetorListagemDto cadastrarSetor(SetorCadastroDto setorDto, Integer idFuncionario) {
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
@@ -32,37 +34,34 @@ public class SetorService {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
-        setorParaCadastrar.setFuncionario(funcionario);
+        Setor setor = SetorMapper.transformarEmEntidade(setorDto);
+        setor.setFuncionario(funcionario);
 
-        setorParaCadastrar.setId(setorParaCadastrar.getId());
-        return setorRepository.save(setorParaCadastrar);
+        Setor salvo = setorRepository.save(setor);
+        return SetorMapper.transformarEmRespostaDto(salvo);
     }
 
-    public List<Setor> listarTodosSetores(Integer idFuncionario) {
-
+    public List<SetorListagemDto> listarTodosSetores(Integer idFuncionario) {
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
 
-        return setorRepository.buscarSetorsDaEmpresaDoFuncionario(idFuncionario);
+        List<Setor> setores = setorRepository.buscarSetorsDaEmpresaDoFuncionario(idFuncionario);
+        return SetorMapper.transformarEmListaRespostaDto(setores);
     }
 
-    public Optional<Setor> buscarSetorPorId(Integer id, Integer idFuncionario) {
-
+    public SetorListagemDto buscarSetorPorId(Integer id, Integer idFuncionario) {
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
 
-        Optional<Setor> setorEncontrado = setorRepository.buscarSetorPorIdDoFuncionarioDaEmpresa(id, idFuncionario);
+        Setor setor = setorRepository.buscarSetorPorIdDoFuncionarioDaEmpresa(id, idFuncionario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Setor não encontrado"));
 
-        if (setorEncontrado.isEmpty()) {
-            throw new EntidadeNaoEncontradaException();
-        }
-        return setorEncontrado;
+        return SetorMapper.transformarEmRespostaDto(setor);
     }
 
-    public Setor atualizarSetor(Integer id, Setor setorParaAtualizar, Integer idFuncionario) {
-
+    public SetorListagemDto atualizarSetor(Integer id, SetorAtualizarDto setorDto, Integer idFuncionario) {
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
@@ -70,33 +69,28 @@ public class SetorService {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
-        Optional<Setor> setorEncontrado = setorRepository.findById(id);
+        setorRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("O setor não foi encontrado"));
 
-        if (setorEncontrado.isEmpty()) {
-            throw new EntidadeNaoEncontradaException("O setor não foi encontrado");
-        }
+        Setor setor = SetorMapper.transformarEmEntidade(setorDto);
+        setor.setId(id);
+        setor.setFuncionario(funcionario);
 
-        setorParaAtualizar.setId(id);
-        setorParaAtualizar.setFuncionario(funcionario);
-        return setorRepository.save(setorParaAtualizar);
+        Setor atualizado = setorRepository.save(setor);
+        return SetorMapper.transformarEmRespostaDto(atualizado);
     }
 
     @Transactional
     public void removerSetor(Integer setorId, Integer idFuncionario) {
-
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
 
-        Optional<Setor> setorEncontrado = setorRepository.findById(setorId);
-
-        if (setorEncontrado.isEmpty()) {
-            throw new EntidadeNaoEncontradaException();
-        }
+        setorRepository.findById(setorId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException());
 
         setorRepository.desvincularPratosDoSetor(setorId);
         setorRepository.desvincularProdutosDoSetor(setorId);
-
         setorRepository.deleteSetorById(setorId);
     }
 }
