@@ -34,25 +34,26 @@ VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, f
 -- Setores para restaurante/lanchonete vinculados aos funcionários
 INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Quente', 1);
 INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Fria', 1);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Estoque de Alimentos', 3);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Atendimento ao Cliente', 2);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Delivery', 2);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Higienização', 4);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Estoque de Alimentos', 1);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Atendimento ao Cliente', 1);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Delivery', 1);
+INSERT INTO setor (nome, funcionario_id) VALUES ('Higienização', 1);
 
 -- Categorias de produtos/ingredientes típicos do ramo alimentício
 INSERT INTO categoria (nome, funcionario_id) VALUES ('Carnes e Proteínas', 1);
 INSERT INTO categoria (nome, funcionario_id) VALUES ('Massas e Pizzas', 1);
-INSERT INTO categoria (nome, funcionario_id) VALUES ('Bebidas', 2);
-INSERT INTO categoria (nome, funcionario_id) VALUES ('Sobremesas', 2);
-INSERT INTO categoria (nome, funcionario_id) VALUES ('Frituras e Salgados', 3);
-INSERT INTO categoria (nome, funcionario_id) VALUES ('Ingredientes Básicos', 3);
-INSERT INTO categoria (nome, funcionario_id) VALUES ('Descartáveis e Embalagens', 4);
-INSERT INTO categoria (nome, funcionario_id) VALUES ('Produtos de Limpeza', 4);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Bebidas', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Sobremesas', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Frituras e Salgados', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Ingredientes Básicos', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Descartáveis e Embalagens', 1);
+INSERT INTO categoria (nome, funcionario_id) VALUES ('Produtos de Limpeza', 1);
 
 
 -- PRODUTOS
 INSERT INTO produto (
     codigo,
+    imagem,
     data_registro,
     funcionario_id,
     quantidade,
@@ -65,27 +66,27 @@ INSERT INTO produto (
     nome,
     setor_id
 ) VALUES
-(1001, '2025-04-11', 1, 50, 100, 80, 15.90, 22.00, 1, 'Arroz tipo 1 de ótima qualidade', 'Arroz Branco Tipo 1', 1),
-(1002, '2025-04-11', 1, 30, 20, 5, 8.50, 12.00, 2, 'Feijão carioca grão selecionado', 'Feijão Carioca', 1),
-(1003, '2025-04-11', 3, 80, 50, 20, 1.20, 2.50, 3, 'Detergente para limpeza geral', 'Detergente Neutro', 2),
-(1004, '2025-04-11', 3, 200, 300, 50, 0.90, 1.50, 1, 'Água mineral sem gás', 'Água Mineral 500ml', 3),
-(1005, '2025-04-11', 4, 40, 70, 10, 2.80, 4.50, 2, 'Rolo de papel toalha absorvente', 'Papel Toalha', 1);
+(1001, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/arroz.png', '2025-04-11', 1, 50, 100, 80, 15.90, 22.00, 1, 'Arroz tipo 1 de ótima qualidade', 'Arroz Branco Tipo 1', 1),
+(1002, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/feijao-carioca.png', '2025-04-11', 1, 30, 20, 5, 8.50, 12.00, 2, 'Feijão carioca grão selecionado', 'Feijão Carioca', 1),
+(1003, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/detergente.png', '2025-04-11', 3, 80, 50, 20, 1.20, 2.50, 3, 'Detergente para limpeza geral', 'Detergente Neutro', 1),
+(1004, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/agua-mineral.png', '2025-04-11', 3, 200, 300, 50, 0.90, 1.50, 1, 'Água mineral sem gás', 'Água Mineral 500ml', 1),
+(1005, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/papel-toalha.png', '2025-04-11', 4, 40, 70, 10, 2.80, 4.50, 2, 'Rolo de papel toalha absorvente', 'Papel Toalha', 1);
 
 -- PRATOS
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Hambúrguer Artesanal', 'imagens/hamburguer.jpg', 35.50, 'Pão artesanal, carne angus, queijo cheddar.', true, 1, 1, 1);
+VALUES ('Hambúrguer Artesanal', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/hamburguer-artesanal.png', 35.50, 'Pão artesanal, carne angus, queijo cheddar.', true, 1, 1, 1);
 
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Pizza Margherita', 'imagens/pizza_margherita.jpg', 42.00, 'Mussarela de búfala, tomate e manjericão.', true, 2, 2, 2);
+VALUES ('Pizza Margherita', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/pizza-margherita.png', 42.00, 'Mussarela de búfala, tomate e manjericão.', true, 1, 2, 2);
 
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Cerveja Artesanal', 'imagens/cerveja.jpg', 18.00, 'Cerveja puro malte artesanal.', true, 3, 3, 3);
+VALUES ('Cerveja Artesanal', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/cerveja-artesanal.png', 18.00, 'Cerveja puro malte artesanal.', true, 1, 3, 3);
 
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Salada Caesar', 'imagens/salada_caesar.jpg', 27.50, 'Alface, parmesão, frango grelhado e croutons.', true, 1, 1, 4);
+VALUES ('Salada Caesar', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/salada-caesar.png', 27.50, 'Alface, parmesão, frango grelhado e croutons.', true, 1, 1, 4);
 
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Brownie de Chocolate', 'imagens/brownie.jpg', 15.00, 'Brownie de chocolate com sorvete de creme.', true, 2, 2, 5);
+VALUES ('Brownie de Chocolate', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/brownie.png', 15.00, 'Brownie de chocolate com sorvete de creme.', true, 1, 2, 5);
 
 
 -- ITENS CARRINHO
