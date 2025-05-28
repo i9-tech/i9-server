@@ -125,6 +125,11 @@ public class Produto {
     )
     private Funcionario funcionario;
 
+
+    public Produto() {
+
+    }
+
     public Funcionario getFuncionario() {
         return funcionario;
     }
@@ -228,5 +233,6 @@ public class Produto {
     public void setDataRegistro(LocalDate dataRegistro) {
         this.dataRegistro = dataRegistro;
     }
+
 
 }
