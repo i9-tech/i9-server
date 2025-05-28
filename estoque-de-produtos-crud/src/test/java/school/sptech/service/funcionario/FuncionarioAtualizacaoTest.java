@@ -23,5 +23,9 @@ public class FuncionarioAtualizacaoTest {
     }
 
     // ERRO AO TENTAR ATUALIZAR CPF E DATA DE ADMISSÃO
+    @Test
+    @DisplayName("Atualizar funcionário quando acionado com CPF e Data de admissão deve lançar Erro")
+    void atualizarFuncionarioQuandoAcionadoCPFeDataDeAdmissaoDeveRetornarErro(){
 
+    }
 }

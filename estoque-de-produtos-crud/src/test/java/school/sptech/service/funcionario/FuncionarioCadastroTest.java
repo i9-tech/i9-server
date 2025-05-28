@@ -35,10 +35,10 @@ public class FuncionarioCadastroTest {
 
     }
 
-    // ERRO AO CADASTRAR FUNCIONÁRIO COM EMPRESA INVÁLIDA
+    // ERRO AO CADASTRAR FUNCIONÁRIO COM EMPRESA INEXISTENTE
     @Test
     @DisplayName("Cadastrar funcionário quando acionado com empresa inválida deve retornar EntidadeNaoEncontradaException/")
-    void cadastrarFuncionarioQuandoAcionadoComEmpresaInvalidaDeveRetornarExcecao(){
+    void cadastrarFuncionarioQuandoAcionadoComEmpresaInexistenteDeveRetornarExcecao(){
 
 
     }
