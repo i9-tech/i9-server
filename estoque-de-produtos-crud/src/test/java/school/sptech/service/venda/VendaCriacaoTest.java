@@ -19,13 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-
 
 @ExtendWith(MockitoExtension.class)
 public class VendaCriacaoTest {
@@ -42,16 +39,20 @@ public class VendaCriacaoTest {
     @Mock
     private VendaRepository vendaRepository;
 
+    // Objetos usados nos testes
     private Funcionario funcionarioMock;
     private List<ItemCarrinho> itensMock;
     private VendaRequestDto vendaRequestDto;
     private Venda vendaMock;
 
+    // será executado antes dos testes para preparar os objetos
     @BeforeEach
     void setup(){
+        // funcionário com ID 1
         funcionarioMock = new Funcionario();
         funcionarioMock.setId(1);
 
+        // item de carrinho com valor unitário
         ItemCarrinho item = new ItemCarrinho();
         item.setId(1);
         item.setValorUnitario(10.0);
@@ -62,6 +63,7 @@ public class VendaCriacaoTest {
         vendaRequestDto.setFuncionarioId(1);
         vendaRequestDto.setItens(Arrays.asList(1, 1));
 
+        // venda retornada após salvar
         vendaMock = new Venda();
         vendaMock.setId(1);
         vendaMock.setFuncionario(funcionarioMock);
@@ -70,6 +72,7 @@ public class VendaCriacaoTest {
         vendaMock.setValorTotal(20.0);
         }
 
+        // CRIANDO VENDA COM DADOS VÁLIDOS
         @Test
         @DisplayName("Criar venda quando acionado com dados válidos deve retornar venda persistida")
         void criarVendaQuandoAcionadoComDadosValidosDeveRetornarResumoCorreto() {
@@ -79,13 +82,20 @@ public class VendaCriacaoTest {
 
             Venda venda = vendaService.criarVenda(vendaRequestDto);
 
+            // Verifica se a venda retornada não é nula
             assertNotNull(venda);
+
+            // Verifica se o valor total está correto
             assertEquals(20.0, venda.getValorTotal());
+
+            // Verifica se foram incluídos os 2 itens no carrinho
             assertEquals(2, venda.getItensCarrinho().size());
+
+            // Verifica se o funcionário associado está correto
             assertEquals(funcionarioMock, venda.getFuncionario());
         }
 
-
+    //ERRO AO CRIAR A VENDA COM FUNCIONÁRIO INEXISTENTE
     @Test
     @DisplayName("Criar venda quando acionado com funcionário inexistente deve lançar exceção")
     void criarVendaQuandoAcionadoComProdutosNormaisDeveRetornarResumoCorreto() {
@@ -97,10 +107,13 @@ public class VendaCriacaoTest {
         assertEquals("Funcionário não encontrado", ex.getMessage());
     }
 
+    // ERRO AO CRIAR VENDA COM ITENS INEXISTENTES
     @Test
     @DisplayName("Criar venda quando acionado com itens inexistentes deve lançar exceção")
     void criarVendaQuandoAcionadoComProdutosVendidosDeveRetornarResumoCorreto() {
         when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionarioMock));
+
+        // Simula que nenhum item de carrinho foi encontrado
         when(itemCarrinhoRepository.findAllById(Arrays.asList(1, 1))).thenReturn(List.of());
 
         RuntimeException ex = assertThrows(RuntimeException.class,
@@ -108,6 +121,5 @@ public class VendaCriacaoTest {
 
         assertEquals("Itens não encontrados", ex.getMessage());
     }
-
-    }
+}
 
