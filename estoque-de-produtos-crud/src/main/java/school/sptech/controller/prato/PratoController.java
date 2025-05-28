@@ -352,4 +352,39 @@ public class PratoController {
                         .toResponseDtoList(pratoService.buscarPratosPorSetor(setorId, idFuncionario)));
     }
 
+    @GetMapping("/valor-pratos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Double> buscarTotalPratos(
+            @Parameter(description = "ID do funcionário que está buscando os pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        return ResponseEntity.ok(pratoService.valorTotalEstoquePratos(idFuncionario));
+    }
+
+    @GetMapping("/quantidade-pratos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Integer> buscarQuantidadePratos(
+            @Parameter(description = "ID do funcionário que está buscando os pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        return ResponseEntity.ok(pratoService.totalPratosEstoque(idFuncionario));
+    }
+
+    @GetMapping("/pratos-ativos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Integer> buscarQuantidadePratosAtivos(
+            @Parameter(description = "ID do funcionário que está buscando os pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        return ResponseEntity.ok(pratoService.totalPratosAtivos(idFuncionario));
+    }
+
+    @GetMapping("/pratos-inativos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Integer> buscarQuantidadePratosInativos(
+            @Parameter(description = "ID do funcionário que está buscando os pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        return ResponseEntity.ok(pratoService.totalPratosInativos(idFuncionario));
+    }
 }
