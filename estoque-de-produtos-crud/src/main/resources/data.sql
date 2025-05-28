@@ -74,10 +74,11 @@ INSERT INTO produto (
 
 -- PRATOS
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Hambúrguer Artesanal', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/hamburguer-artesanal.png', 35.50, 'Pão artesanal, carne angus, queijo cheddar.', true, 1, 1, 1);
+
+VALUES ('Hambúrguer Artesanal', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/hamburguer-artesanal.png', 35.50, 'Pão artesanal, carne angus, queijo cheddar.', false, 1, 1, 1);
 
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
-VALUES ('Pizza Margherita', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/pizza-margherita.png', 42.00, 'Mussarela de búfala, tomate e manjericão.', true, 1, 2, 2);
+VALUES ('Pizza Margherita', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/pizza-margherita.png', 42.00, 'Mussarela de búfala, tomate e manjericão.', false, 1, 2, 2);
 
 INSERT INTO prato (nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id)
 VALUES ('Cerveja Artesanal', 'https://i9techblobstorage.blob.core.windows.net/i9-storage/cerveja-artesanal.png', 18.00, 'Cerveja puro malte artesanal.', true, 1, 3, 3);
