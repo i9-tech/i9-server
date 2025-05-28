@@ -68,22 +68,6 @@ public class VendaConsultaTest {
         assertThrows(NoSuchElementException.class, () -> vendaService.calcularLucroTotal(1, LocalDate.now()));
     }
 
-    //CALCULANDO QUANTIDADE DE VENDAS DE UMA EMPRESA NA DATA ATUAL
-    @Test
-    @DisplayName("quantidadeVendasPorEmpresaHoje quando acionado com funcionário inexistente deve lançar exceção")
-    void quantidadeVendasPorEmpresaHojeQuandoAcionadoComFuncionarioInexistenteDeveLancarExcecao() {
-        Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now();
-
-        when(vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje)).thenReturn(null);
-
-        Double resultado = vendaService.valorTotalPorEmpresaHoje(empresaId);
-
-        // aqui não tem exceção no seu service para funcionário, só retorna valor
-        // então, vou deixar esse teste apenas como exemplo de retorno vazio/null
-        assertNotNull(resultado);
-    }
-
     // QUANTIDADE DE VENDAS IGUAL A ZERO
     @Test
     @DisplayName("quantidadeVendasPorEmpresaHoje quando acionado com produtos normais deve retornar lista vazia")

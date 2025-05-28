@@ -121,5 +121,6 @@ public class VendaCriacaoTest {
 
         assertEquals("Itens não encontrados", ex.getMessage());
     }
+
 }
 
