@@ -19,6 +19,7 @@ public class ProdutoMapper {
         Produto produto = new Produto();
         produto.setNome(requestDto.getNome());
         produto.setCodigo(requestDto.getCodigo());
+        produto.setImagem(requestDto.getImagem());
         produto.setQuantidade(requestDto.getQuantidade());
         produto.setValorCompra(requestDto.getValorCompra());
         produto.setValorUnitario(requestDto.getValorUnitario());
@@ -38,6 +39,7 @@ public class ProdutoMapper {
         if (produto == null || dto == null) return;
 
         produto.setNome(dto.getNome());
+        produto.setImagem(dto.getImagem());
         produto.setQuantidade(dto.getQuantidade());
         produto.setValorCompra(dto.getValorCompra());
         produto.setValorUnitario(dto.getValorUnitario());
@@ -60,6 +62,7 @@ public class ProdutoMapper {
         return new ProdutoListagemDto(
                 produto.getId(),
                 produto.getCodigo(),
+                produto.getImagem(),
                 produto.getNome(),
                 produto.getQuantidade(),
                 produto.getValorCompra(),

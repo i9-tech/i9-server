@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "empresa")
@@ -135,4 +136,35 @@ public class Empresa {
     public String getWhatsapp() { return whatsapp; }
 
     public void setWhatsapp(String whatsapp) { this.whatsapp = whatsapp; }
+
+    public Empresa() {}
+
+    public Empresa(Integer id, String nome, String cnpj, String endereco, LocalDate dataCadastro, boolean ativo, String whatsapp, String email, String nomeSenha) {
+        this.id = id;
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+        this.dataCadastro = dataCadastro;
+        this.ativo = ativo;
+        this.whatsapp = whatsapp;
+        this.email = email;
+        this.nomeSenha = nomeSenha;
+    }
+
+    @Override
+    public String toString() {
+        return "Empresa{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cnpj='" + cnpj + '\'' +
+                ", endereco='" + endereco + '\'' +
+                ", dataCadastro=" + dataCadastro +
+                ", ativo=" + ativo +
+                ", whatsapp='" + whatsapp + '\'' +
+                ", email='" + email + '\'' +
+                ", nomeSenha='" + nomeSenha + '\'' +
+                '}';
+    }
+
+
 }

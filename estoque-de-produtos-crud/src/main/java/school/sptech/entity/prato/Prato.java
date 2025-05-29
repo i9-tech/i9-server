@@ -159,6 +159,35 @@ public class Prato {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+
+    public Prato() {}
+
+    public Prato(int id, String nome, String imagem, Double valorVenda, String descricao, Boolean disponivel, Funcionario funcionario, Setor setor, Categoria categoria) {
+        this.id = id;
+        this.nome = nome;
+        this.imagem = imagem;
+        this.valorVenda = valorVenda;
+        this.descricao = descricao;
+        this.disponivel = disponivel;
+        this.funcionario = funcionario;
+        this.setor = setor;
+        this.categoria = categoria;
+    }
+
+    @Override
+    public String toString() {
+        return "Prato{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", imagem='" + imagem + '\'' +
+                ", valorVenda=" + valorVenda +
+                ", descricao='" + descricao + '\'' +
+                ", disponivel=" + disponivel +
+                ", funcionario=" + funcionario +
+                ", setor=" + setor +
+                ", categoria=" + categoria +
+                '}';
+    }
 }
 
 

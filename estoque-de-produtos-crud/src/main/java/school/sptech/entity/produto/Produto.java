@@ -35,8 +35,9 @@ public class Produto {
     )
     private int codigo;
 
-    //    @Lob
-//    private byte[] imagem;
+
+    private String imagem;
+
     @Schema(
             description = "Nome do produto a ser cadastrado.",
             example = "Bolinho Ana Maria",
@@ -124,6 +125,14 @@ public class Produto {
             implementation = FuncionarioResponseDto.class
     )
     private Funcionario funcionario;
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
 
     public Funcionario getFuncionario() {
         return funcionario;
