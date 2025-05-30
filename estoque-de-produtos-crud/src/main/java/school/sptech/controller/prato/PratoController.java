@@ -361,6 +361,15 @@ public class PratoController {
         return ResponseEntity.ok(pratoService.valorTotalEstoquePratos(idFuncionario));
     }
 
+    @GetMapping("/valor-pratos-todos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Double> buscarTotalPratosTodos(
+            @Parameter(description = "ID do funcionário que está buscando os pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        return ResponseEntity.ok(pratoService.valorTotalEstoquePratosInativosEAtivos(idFuncionario));
+    }
+
     @GetMapping("/quantidade-pratos/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Integer> buscarQuantidadePratos(
