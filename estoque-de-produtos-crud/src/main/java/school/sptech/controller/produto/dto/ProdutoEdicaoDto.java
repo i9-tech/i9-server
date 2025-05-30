@@ -55,7 +55,6 @@ public class ProdutoEdicaoDto {
     )
     private Double valorUnitario;
 
-    @NotNull
     @Schema(
             description = "Quantidade mínima do estoque. Esse valor serve de parâmetro para possíveis alertas de estoque baixo. Deve ser menor que a quantidade máxima.",
             example = "3",
