@@ -30,6 +30,14 @@ public class PratoService {
         return pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario);
     }
 
+    public Prato buscarPratoPorId(Integer id, Integer idFuncionario) {
+        if (pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario).isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Pratos não encontrados!");
+        }
+
+        return pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).get();
+    }
+
     public Prato cadastrarPrato(Prato prato, Integer idFuncionario) {
 
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)

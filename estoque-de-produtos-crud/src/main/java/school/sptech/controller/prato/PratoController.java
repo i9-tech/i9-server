@@ -99,6 +99,18 @@ public class PratoController {
                         .toResponseDtoList(pratoService.listarPratos(idFuncionario)));
     }
 
+    @GetMapping("/{id}/{idFuncionario}")
+    public ResponseEntity<RespostaPratoDto> buscarPratoPorId(
+            @Parameter(description = "ID do prato para busca.", required = true)
+            @PathVariable Integer id,
+            @Parameter(description = "ID do funcionário para busca de prato.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        return ResponseEntity
+                .ok(PratoMapper
+                        .toResponseDto(pratoService.buscarPratoPorId(id, idFuncionario)));
+    }
+
     @PostMapping("/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Cadastrar novo prato", description = "Cadastra um novo prato para uma determinada empresa.")
