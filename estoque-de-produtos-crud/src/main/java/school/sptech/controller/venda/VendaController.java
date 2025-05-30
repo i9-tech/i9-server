@@ -173,3 +173,4 @@ public class VendaController {
         return ResponseEntity.ok(CategoriaMapper.transformarEmRespostaListaObjetoDto(vendaService.top5Categorias(empresaId)));
     }
 }
+

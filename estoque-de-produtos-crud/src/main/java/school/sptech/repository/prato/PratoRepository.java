@@ -35,6 +35,9 @@ public interface PratoRepository extends JpaRepository<Prato, Integer> {
     @Query("select sum(p.valorVenda) from Prato p join p.funcionario f where f.empresa = (select f2.empresa from Funcionario f2 where f2.id = :idFuncionario) and p.disponivel = true")
     Double valorTotalPratosEstoqueEmpresa(@Param("idFuncionario") Integer idFuncionario);
 
+    @Query("select sum(p.valorVenda) from Prato p join p.funcionario f where f.empresa = (select f2.empresa from Funcionario f2 where f2.id = :idFuncionario)")
+    Double valorTotalPratosEmpresaInativosAtivos(@Param("idFuncionario") Integer idFuncionario);
+
     @Query("select count(p) from Prato p join p.funcionario f where f.empresa = (select f2.empresa from Funcionario f2 where f2.id = :idFuncionario)")
     Integer quantidadeTotalPratosPorEmpresa(@Param("idFuncionario") Integer idFuncionario);
 

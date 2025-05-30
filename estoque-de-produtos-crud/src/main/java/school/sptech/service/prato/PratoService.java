@@ -103,6 +103,10 @@ public class PratoService {
         return pratoRepository.valorTotalPratosEstoqueEmpresa(idFuncionario);
     }
 
+    public Double valorTotalEstoquePratosInativosEAtivos(Integer idFuncionario) {
+        return pratoRepository.valorTotalPratosEmpresaInativosAtivos(idFuncionario);
+    }
+
     public Integer totalPratosEstoque(Integer idFuncionario) {
         return pratoRepository.quantidadeTotalPratosPorEmpresa(idFuncionario);
     }
