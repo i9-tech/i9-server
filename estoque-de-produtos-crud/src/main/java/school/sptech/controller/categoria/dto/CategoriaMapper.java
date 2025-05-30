@@ -49,4 +49,21 @@ public class CategoriaMapper {
         }
         return respostasDto;
     }
+
+    public static RespostaCategoriaDashDto transformarEmRespostaDto(Object[] row) {
+        if (row == null || row.length < 2) return null;
+
+        String nome = (String) row[0];
+        Double total = row[1] != null ? (Double) row[1] : 0.0;
+
+        return new RespostaCategoriaDashDto(nome, total);
+    }
+
+    public static List<RespostaCategoriaDashDto> transformarEmRespostaListaObjetoDto(List<Object[]> rows) {
+        if (rows == null) return null;
+
+        return rows.stream()
+                .map(CategoriaMapper::transformarEmRespostaDto)
+                .toList();
+    }
 }

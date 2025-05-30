@@ -79,4 +79,25 @@ public class PratoMapper {
                 .map(PratoMapper::toResponseDto)
                 .toList();
     }
+
+    public static RespostaPratoDashDto toResponseDto(Object[] row) {
+        if (row == null || row.length < 3) return null;
+
+        String nome = (String) row[0];
+        Long quantidadeLong = (Long) row[1];
+        Double total = (Double) row[2];
+
+        Integer quantidade = quantidadeLong != null ? quantidadeLong.intValue() : 0;
+
+        return new RespostaPratoDashDto(nome, quantidade, total != null ? total : 0.0);
+    }
+
+    public static List<RespostaPratoDashDto> toResponseDtoListObject(List<Object[]> rows) {
+        if (rows == null) return null;
+
+        return rows.stream()
+                .map(PratoMapper::toResponseDto)
+                .toList();
+    }
+
 }
