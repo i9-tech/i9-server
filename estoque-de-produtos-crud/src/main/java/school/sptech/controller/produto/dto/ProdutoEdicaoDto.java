@@ -55,6 +55,7 @@ public class ProdutoEdicaoDto {
     )
     private Double valorUnitario;
 
+    @NotNull
     @Schema(
             description = "Quantidade mínima do estoque. Esse valor serve de parâmetro para possíveis alertas de estoque baixo. Deve ser menor que a quantidade máxima.",
             example = "3",
@@ -70,7 +71,7 @@ public class ProdutoEdicaoDto {
     )
     private Integer quantidadeMax;
 
-    @NotBlank
+
     @Schema(
             description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto.",
             example = "O Bolinho Ana Maria é um produto de confeitaria, embalado individualmente, ideal para lanches rápidos.",
