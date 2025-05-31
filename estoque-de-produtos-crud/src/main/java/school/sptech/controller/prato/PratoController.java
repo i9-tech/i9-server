@@ -137,7 +137,7 @@ public class PratoController {
                                 PratoMapper.toEntity(request), idFuncionario)));
     }
 
-    @PutMapping("/{id}/{idFuncionario}")
+    @PatchMapping("/{id}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar prato existente de determinada empresa", description = "Atualiza os dados de um prato existente de determinada empresa da base de dados, a partir de seu ID.")
     @ApiResponses(value = {

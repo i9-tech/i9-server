@@ -56,6 +56,7 @@ public class PratoService {
         }
 
         prato.setId(idPrato);
+
         return pratoRepository.save(prato);
     }
 
