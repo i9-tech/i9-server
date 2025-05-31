@@ -190,4 +190,9 @@ public class VendaService {
         LocalDate hoje = LocalDate.now();
         return vendaRepository.top5CategoriasMaisVendidas(empresaId, hoje, limite);
     }
+
+    public List<Object[]> obterRankingSetoresMaisVendidos(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.rankingSetoresMaisVendidos(empresaId, hoje);
+    }
 }

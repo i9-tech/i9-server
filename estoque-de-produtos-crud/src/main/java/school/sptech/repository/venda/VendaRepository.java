@@ -132,4 +132,25 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
 
 
 
+    @Query("""
+    select 
+        coalesce(sp.nome, spr.nome) as setorNome,
+        count(ic) as quantidadeVendida,
+        sum(ic.valorUnitario) as valorTotal
+    from Venda v
+    join v.itensCarrinho ic
+    left join ic.prato p
+    left join p.setor sp
+    left join ic.produto prod
+    left join prod.setor spr
+    join v.funcionario f
+    join f.empresa e
+    where e.id = :empresaId
+    and v.dataVenda = :hoje
+    group by coalesce(sp.nome, spr.nome)
+    order by quantidadeVendida desc
+""")
+    List<Object[]> rankingSetoresMaisVendidos(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
+
+
 }
