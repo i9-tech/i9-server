@@ -49,6 +49,13 @@ public class CadastroPratoDto {
     )
     private String imagem;
 
+    @Schema(
+            description = "Indica se o prato está disponível no momento. 'true' define disponibilidade, 'false' define indisponibilidade.",
+            example = "false",
+            type = "boolean"
+    )
+    public boolean disponivel;
+
     @ManyToOne
     @Schema(
             description = "Funcionário associado à criação do prato.",
@@ -126,5 +133,13 @@ public class CadastroPratoDto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 }

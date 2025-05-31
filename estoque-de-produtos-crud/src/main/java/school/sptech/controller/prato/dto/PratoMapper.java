@@ -19,7 +19,7 @@ public class PratoMapper {
         entity.setImagem(dto.getImagem());
         entity.setValorVenda(dto.getValorVenda());
         entity.setDescricao(dto.getDescricao());
-        entity.setDisponivel(true);
+        entity.setDisponivel(dto.isDisponivel());
         entity.setFuncionario(dto.getFuncionario());
         entity.setSetor(dto.getSetor());
         entity.setCategoria(dto.getCategoria());
