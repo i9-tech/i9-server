@@ -189,15 +189,5 @@ public class VendaController {
         return ResponseEntity.ok(VendaMapper.toDtoListObject(vendaService.calculosKpi(empresaId)));
     }
 
-    @PostMapping("/criar-vendas")
-    public ResponseEntity<List<VendaResponseDto>> gerarVendas(
-            @RequestParam(defaultValue = "10") int quantidadeVendas, // Parâmetro opcional na URL
-            @RequestParam(defaultValue = "5") int maxItensPorVenda // Parâmetro opcional na URL
-    ) {
-        // Chama o método do seu serviço para gerar as vendas
-        return ResponseEntity.ok(vendaService.gerarVendasComItens(quantidadeVendas, maxItensPorVenda));
-    }
-    
-
 }
 

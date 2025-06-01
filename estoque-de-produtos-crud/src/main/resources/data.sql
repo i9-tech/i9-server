@@ -197,13 +197,5 @@ INSERT INTO item_carrinho (venda, prato_id, funcionario_id, observacao, valor_un
 ('venda2', 5, 1, NULL, 15.00),                -- Brownie de Chocolate (Assumindo func_id 1)
 ('venda2', 10, 1, NULL, 38.00);               -- Feijoada Completa (Assumindo func_id 1)
 
--- VENDA
-INSERT INTO venda (data_venda, valor_total, mesa, fk_funcionario, venda_concluida) VALUES
-(CURRENT_DATE, 125.75, 'Mesa 5', 1, TRUE),      -- Venda concluída na Mesa 5, funcionário 1
-(CURRENT_DATE, 45.00, 'Balcão', 1, TRUE),      -- Venda concluída no Balcão, funcionário 2
-(CURRENT_DATE, 0.00, 'Mesa 12', 1, TRUE),     -- Venda em andamento na Mesa 12 (valor inicial 0), funcionário 1
-(CURRENT_DATE, 89.90, 'Delivery 1', 1, TRUE),  -- Venda concluída de Delivery, funcionário 2
-(CURRENT_DATE, 210.50, 'Mesa 8', 1, TRUE),     -- Venda concluída em data anterior, funcionário 1
-(CURRENT_DATE, 30.25, 'Mesa 3', 1, TRUE),      -- Venda concluída na Mesa 3, funcionário 3
-(CURRENT_DATE, 55.00, 'Balcão', 1, TRUE);     -- Venda em andamento no Balcão, funcionário 4
+
 
