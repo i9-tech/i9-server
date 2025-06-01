@@ -21,6 +21,8 @@ import school.sptech.controller.prato.dto.RespostaPratoDto;
 import school.sptech.controller.produto.dto.ProdutoListagemDto;
 import school.sptech.controller.produto.dto.ProdutoMapper;
 import school.sptech.controller.produto.dto.RespostaProdutoDashDto;
+import school.sptech.controller.venda.dto.VendaKpisRespostaDto;
+import school.sptech.controller.venda.dto.VendaMapper;
 import school.sptech.controller.setor.dto.RespostaSetorDashDto;
 import school.sptech.controller.setor.dto.SetorMapper;
 import school.sptech.controller.venda.dto.VendaRequestDto;
@@ -174,12 +176,28 @@ public class VendaController {
     public ResponseEntity<List<RespostaCategoriaDashDto>> top5Categorias(@PathVariable Integer empresaId){
         return ResponseEntity.ok(CategoriaMapper.transformarEmRespostaListaObjetoDto(vendaService.top5Categorias(empresaId)));
     }
-
+                         
     @GetMapping("/ranking-setores/{empresaId}")
     @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<RespostaSetorDashDto>> rankingSetoresMaisVendidos(@PathVariable Integer empresaId) {
         return ResponseEntity.ok(SetorMapper.transformarEmRespostaListaObjetoDto(vendaService.obterRankingSetoresMaisVendidos(empresaId)));
     }
+
+    @GetMapping("/kpis/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<VendaKpisRespostaDto>> kpis(@PathVariable Integer empresaId) {
+        return ResponseEntity.ok(VendaMapper.toDtoListObject(vendaService.calculosKpi(empresaId)));
+    }
+
+    @PostMapping("/criar-vendas")
+    public ResponseEntity<List<VendaResponseDto>> gerarVendas(
+            @RequestParam(defaultValue = "10") int quantidadeVendas, // Parâmetro opcional na URL
+            @RequestParam(defaultValue = "5") int maxItensPorVenda // Parâmetro opcional na URL
+    ) {
+        // Chama o método do seu serviço para gerar as vendas
+        return ResponseEntity.ok(vendaService.gerarVendasComItens(quantidadeVendas, maxItensPorVenda));
+    }
+    
 
 }
 

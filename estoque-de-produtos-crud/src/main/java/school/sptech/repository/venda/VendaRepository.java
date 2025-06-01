@@ -114,7 +114,9 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     List<Object[]> top7ProdutosMaisVendidos(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje, Pageable pageable);
 
     @Query("""
-    select coalesce(catPrato.nome, catProduto.nome), sum(ic.valorUnitario * ic.id)
+    select coalesce(catPrato.nome, catProduto.nome),
+           sum(ic.valorUnitario * ic.id),
+           sum(ic.id)
     from Venda v
     join v.itensCarrinho ic
     left join ic.prato p
