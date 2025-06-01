@@ -191,7 +191,14 @@ public class VendaService {
         LocalDate hoje = LocalDate.now();
         return vendaRepository.top5CategoriasMaisVendidas(empresaId, hoje, limite);
     }
+  
+  
+    public List<Object[]> obterRankingSetoresMaisVendidos(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.rankingSetoresMaisVendidos(empresaId, hoje);
 
+    }
+  
     public List<Object[]> calculosKpi(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
         LocalDate ontem = hoje.minusDays(1);
@@ -271,5 +278,5 @@ public class VendaService {
             }
         }
         return vendasGeradas;
-    }
+
 }
