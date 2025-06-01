@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -189,5 +190,86 @@ public class VendaService {
         Pageable limite = PageRequest.of(0, 7);
         LocalDate hoje = LocalDate.now();
         return vendaRepository.top5CategoriasMaisVendidas(empresaId, hoje, limite);
+    }
+
+    public List<Object[]> calculosKpi(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        LocalDate ontem = hoje.minusDays(1);
+        List<Object[]> resultados = new ArrayList<>();
+
+        Double brutoHoje = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
+        Double brutoOntem = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, ontem);
+        Double liquidoHoje = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
+        Double liquidoMercadoria = brutoHoje - liquidoHoje;
+        Integer vendasHoje = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
+        Integer vendasOntem = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, ontem);
+
+        resultados.add(new Object[]{
+                brutoHoje,
+                brutoOntem,
+                vendasHoje,
+                vendasOntem,
+                liquidoHoje,
+                liquidoMercadoria
+        });
+
+
+        return resultados;
+    }
+
+    /**
+     * Gera um número especificado de vendas, com cada venda contendo um número aleatório
+     * de itens do carrinho, garantindo que os IDs dos itens existam no banco de dados.
+     *
+     * @param quantidadeVendas O número total de vendas a serem geradas.
+     * @param maxItensPorVenda O número máximo de itens do carrinho que uma única venda pode ter.
+     * @return Uma lista de DTOs de resposta das vendas geradas.
+     */
+    public List<VendaResponseDto> gerarVendasComItens(int quantidadeVendas, int maxItensPorVenda) {
+        List<VendaResponseDto> vendasGeradas = new ArrayList<>();
+        LocalDate dataAtual = LocalDate.now();
+
+        // 1. Obter TODOS os IDs de ItemCarrinho válidos no banco de dados
+        // Isso evita gerar IDs aleatórios que não existem.
+        List<Integer> allExistingItemIds = itemCarrinhoRepository.findAll()
+                .stream()
+                .map(ItemCarrinho::getId)
+                .collect(Collectors.toList());
+
+        if (allExistingItemIds.isEmpty()) {
+            throw new RuntimeException("Nenhum ItemCarrinho encontrado no banco de dados. Crie itens primeiro.");
+        }
+
+        // Para evitar NPE caso não haja funcionários
+        Funcionario funcionarioPadrao = funcionarioRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Funcionário padrão (ID 1) não encontrado para geração de vendas."));
+
+        for (int i = 0; i < quantidadeVendas; i++) {
+            List<Integer> itemIdsParaEstaVenda = new ArrayList<>();
+            int numItensNaVenda = ThreadLocalRandom.current().nextInt(1, maxItensPorVenda + 1); // Gera entre 1 e maxItensPorVenda itens
+
+            for (int j = 0; j < numItensNaVenda; j++) {
+                // 2. Selecionar um ID de ItemCarrinho aleatório da lista de IDs existentes
+                int randomIndex = ThreadLocalRandom.current().nextInt(allExistingItemIds.size());
+                itemIdsParaEstaVenda.add(allExistingItemIds.get(randomIndex));
+            }
+
+            // Cria um DTO de requisição como se estivesse vindo do Insomnia
+            VendaRequestDto requestDto = new VendaRequestDto();
+            requestDto.setMesa(String.valueOf(ThreadLocalRandom.current().nextInt(1, 21))); // Mesa aleatória de 1 a 20
+            requestDto.setDataVenda(dataAtual); // Sempre a data atual
+            requestDto.setItens(itemIdsParaEstaVenda); // Usamos a lista de IDs de itens válidos
+            requestDto.setFuncionarioId(funcionarioPadrao.getId());
+            requestDto.setVendaConcluida(true); // Sempre concluída para este exemplo
+
+            try {
+                Venda novaVenda = criarVenda(requestDto); // Reutiliza seu método existente de criação de venda
+                vendasGeradas.add(VendaMapper.toDto(novaVenda));
+            } catch (RuntimeException e) {
+                // Imprimir o erro, mas continuar se for um erro de item não encontrado que por algum motivo escapou
+                System.err.println("Erro ao criar venda: " + e.getMessage() + " para itens: " + itemIdsParaEstaVenda);
+            }
+        }
+        return vendasGeradas;
     }
 }
