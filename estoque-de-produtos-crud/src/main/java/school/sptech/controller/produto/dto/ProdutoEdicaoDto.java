@@ -19,6 +19,8 @@ import java.time.LocalDate;
 public class ProdutoEdicaoDto {
 
 
+    private String imagem;
+
     @NotBlank
     @Schema(
             description = "Nome do produto a ser atualizado.",
@@ -69,7 +71,7 @@ public class ProdutoEdicaoDto {
     )
     private Integer quantidadeMax;
 
-    @NotBlank
+
     @Schema(
             description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto.",
             example = "O Bolinho Ana Maria é um produto de confeitaria, embalado individualmente, ideal para lanches rápidos.",
@@ -104,6 +106,14 @@ public class ProdutoEdicaoDto {
             implementation = FuncionarioResponseDto.class
     )
     private Funcionario funcionario;
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;

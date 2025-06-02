@@ -30,6 +30,14 @@ public class PratoService {
         return pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario);
     }
 
+    public Prato buscarPratoPorId(Integer id, Integer idFuncionario) {
+        if (pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario).isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Pratos não encontrados!");
+        }
+
+        return pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).get();
+    }
+
     public Prato cadastrarPrato(Prato prato, Integer idFuncionario) {
 
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
@@ -48,6 +56,7 @@ public class PratoService {
         }
 
         prato.setId(idPrato);
+
         return pratoRepository.save(prato);
     }
 
@@ -89,6 +98,26 @@ public class PratoService {
         }
 
         return pratos;
+    }
+
+    public Double valorTotalEstoquePratos(Integer idFuncionario) {
+        return pratoRepository.valorTotalPratosEstoqueEmpresa(idFuncionario);
+    }
+
+    public Double valorTotalEstoquePratosInativosEAtivos(Integer idFuncionario) {
+        return pratoRepository.valorTotalPratosEmpresaInativosAtivos(idFuncionario);
+    }
+
+    public Integer totalPratosEstoque(Integer idFuncionario) {
+        return pratoRepository.quantidadeTotalPratosPorEmpresa(idFuncionario);
+    }
+
+    public Integer totalPratosAtivos(Integer idFuncionario) {
+        return pratoRepository.quantidadePratosAtivosPorEmpresa(idFuncionario);
+    }
+
+    public Integer totalPratosInativos(Integer idFuncionario) {
+        return pratoRepository.quantidadePratosInativosPorEmpresa(idFuncionario);
     }
 }
 
