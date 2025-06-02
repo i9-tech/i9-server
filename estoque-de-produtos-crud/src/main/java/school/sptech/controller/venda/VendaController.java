@@ -68,6 +68,13 @@ public class VendaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/concluir-prato")
+    public ResponseEntity<Boolean> finalizarPratoVenda(
+            @RequestParam Integer idVenda
+    ) {
+        return ResponseEntity.ok(vendaService.finalizarVendaPrato(idVenda));
+    }
+
     @DeleteMapping("/{id}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover venda existente em uma empresa específica", description = "Remove uma venda de determinada empresa da base de dados a partir de seu ID.")
@@ -157,6 +164,17 @@ public class VendaController {
     @SecurityRequirement(name = "Bearer")
     public List<String> listarResumoItensVendidosHoje(@PathVariable Integer empresaId) {
         return vendaService.listarResumoItensVendidosPorEmpresaEData(empresaId);
+    }
+
+    @GetMapping("/pratos-vendidos/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<VendaResponseDto>> listarPratosVendidosHoje(@PathVariable Integer empresaId) {
+        List<Venda> vendas = vendaService.listarPratosVendidosPorEmpresaEData(empresaId);
+
+        List<VendaResponseDto> dtos = vendas.stream()
+                .map(VendaMapper::toDto)
+                .toList();
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/top-pratos/{empresaId}")

@@ -20,6 +20,8 @@ public class VendaMapper {
         venda.setDataVenda(dto.getDataVenda());
         venda.setValorTotal(dto.getValorTotal());
         venda.setMesa(dto.getMesa());
+        venda.setCliente(dto.getCliente());
+        venda.setFormaPagamento(dto.getFormaPagamento());
         venda.setFuncionario(funcionario);
         venda.setItensCarrinho(itens);
         venda.setVendaConcluida(dto.getVendaConcluida());
@@ -34,6 +36,8 @@ public class VendaMapper {
                 venda.getDataVenda(),
                 venda.getValorTotal(),
                 venda.getMesa(),
+                venda.getCliente(),
+                venda.getFormaPagamento(),
                 venda.getFuncionario().getNome(),
                 venda.getItensCarrinho(),
                 venda.getVendaConcluida()
