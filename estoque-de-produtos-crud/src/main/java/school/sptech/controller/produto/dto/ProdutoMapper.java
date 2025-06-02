@@ -1,7 +1,13 @@
 package school.sptech.controller.produto.dto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import school.sptech.controller.prato.dto.PratoMapper;
+import school.sptech.controller.prato.dto.RespostaPratoDashDto;
+import school.sptech.controller.prato.dto.RespostaPratoDto;
+import school.sptech.entity.prato.Prato;
 import school.sptech.entity.produto.Produto;
+
+import java.util.List;
 
 public class ProdutoMapper {
 
@@ -19,6 +25,7 @@ public class ProdutoMapper {
         Produto produto = new Produto();
         produto.setNome(requestDto.getNome());
         produto.setCodigo(requestDto.getCodigo());
+        produto.setImagem(requestDto.getImagem());
         produto.setQuantidade(requestDto.getQuantidade());
         produto.setValorCompra(requestDto.getValorCompra());
         produto.setValorUnitario(requestDto.getValorUnitario());
@@ -31,6 +38,7 @@ public class ProdutoMapper {
         return produto;
     }
 
+
     @Operation(summary = "Transforma um DTO de atualização de produto em uma entidade de produto.",
             description = "Converte os dados de um DTO de atualização de produto em uma entidade de produto, para atualizar os dados existentes no banco de dados.")
     //convertendo dto em entity
@@ -38,6 +46,7 @@ public class ProdutoMapper {
         if (produto == null || dto == null) return;
 
         produto.setNome(dto.getNome());
+        produto.setImagem(dto.getImagem());
         produto.setQuantidade(dto.getQuantidade());
         produto.setValorCompra(dto.getValorCompra());
         produto.setValorUnitario(dto.getValorUnitario());
@@ -60,6 +69,7 @@ public class ProdutoMapper {
         return new ProdutoListagemDto(
                 produto.getId(),
                 produto.getCodigo(),
+                produto.getImagem(),
                 produto.getNome(),
                 produto.getQuantidade(),
                 produto.getValorCompra(),
@@ -72,5 +82,37 @@ public class ProdutoMapper {
                 produto.getCategoria(),
                 produto.getFuncionario()
         );
+    }
+
+    @Operation(summary = "Transforma uma lista de entidades de produtos em uma lista de DTOs de resposta.",
+            description = "Converte uma lista de entidades de produtos em uma lista de DTOs de resposta, para ser enviada na resposta da API.")
+    public static List<ProdutoListagemDto> toResponseDtoList(List<Produto> entities) {
+        if (entities == null) {
+            return null;
+        }
+
+        return entities.stream()
+                .map(ProdutoMapper::toDto)
+                .toList();
+    }
+
+    public static RespostaProdutoDashDto toResponseDto(Object[] row) {
+        if (row == null || row.length < 3) return null;
+
+        String nome = (String) row[0];
+        Long quantidadeLong = (Long) row[1];
+        Double total = (Double) row[2];
+
+        Integer quantidade = quantidadeLong != null ? quantidadeLong.intValue() : 0;
+
+        return new RespostaProdutoDashDto(nome, quantidade, total != null ? total : 0.0);
+    }
+
+    public static List<RespostaProdutoDashDto> toResponseDtoListObject(List<Object[]> rows) {
+        if (rows == null) return null;
+
+        return rows.stream()
+                .map(ProdutoMapper::toResponseDto)
+                .toList();
     }
 }

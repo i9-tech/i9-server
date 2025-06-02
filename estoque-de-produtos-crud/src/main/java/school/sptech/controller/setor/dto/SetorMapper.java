@@ -50,4 +50,22 @@ public class SetorMapper {
 
         return respostasEmDto;
     }
+
+    public static RespostaSetorDashDto transformarEmRespostaDto(Object[] row) {
+        if (row == null || row.length < 3) return null;
+
+        String nome = (String) row[0];
+        Long quantidade = row[1] != null ? ((Number) row[1]).longValue() : 0L;
+        Double total = row[2] != null ? (Double) row[2] : 0.0;
+
+        return new RespostaSetorDashDto(nome, quantidade, total);
+    }
+
+    public static List<RespostaSetorDashDto> transformarEmRespostaListaObjetoDto(List<Object[]> rows) {
+        if (rows == null) return null;
+
+        return rows.stream()
+                .map(SetorMapper::transformarEmRespostaDto)
+                .toList();
+    }
 }

@@ -45,6 +45,20 @@ public class ProdutoService {
         return ProdutoMapper.toDto(produtoCadastrado);
     }
 
+    public ProdutoListagemDto buscarProdutoPorId(Integer id, Integer idFuncionario) {
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
+
+        Optional<Produto> produtoPorEmpresaFuncionario = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
+
+        if (produtoPorEmpresaFuncionario.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Produto não encontrado ou não pertence à empresa do funcionário informado.");
+        }
+        ProdutoListagemDto respostaDto = ProdutoMapper.toDto(produtoPorEmpresaFuncionario.get());
+
+        return respostaDto;
+    }
+
     public List<ProdutoListagemDto> listarProdutoPorEmpresa(Integer idFuncionario) {
 
         List<Produto> todosProdutosEmpresa = repository.buscarProdutosDaEmpresaDoFuncionario(idFuncionario);
