@@ -32,29 +32,27 @@ import java.util.Optional;
 @Service
 public class FuncionarioService {
 
-    @Autowired
-    private EmpresaRepository empresaRepository;
+    private final EmpresaRepository empresaRepository;
 
-    @Autowired
-    private FuncionarioRepository repository;
+    private final FuncionarioRepository repository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private GerenciadorTokenJwt gerenciadorTokenJwt;
+    private final GerenciadorTokenJwt gerenciadorTokenJwt;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     private final ApplicationEventPublisher eventPublisher;
 
-    private final FuncionarioRepository funcionarioRepository;
-
-    public FuncionarioService(ApplicationEventPublisher eventPublisher, FuncionarioRepository funcionarioRepository) {
+    public FuncionarioService(EmpresaRepository empresaRepository, FuncionarioRepository repository, PasswordEncoder passwordEncoder, GerenciadorTokenJwt gerenciadorTokenJwt, AuthenticationManager authenticationManager, ApplicationEventPublisher eventPublisher) {
+        this.empresaRepository = empresaRepository;
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+        this.gerenciadorTokenJwt = gerenciadorTokenJwt;
+        this.authenticationManager = authenticationManager;
         this.eventPublisher = eventPublisher;
-        this.funcionarioRepository = funcionarioRepository;
     }
+
 
     public String criptografar(String senha) {
         return passwordEncoder.encode(senha);

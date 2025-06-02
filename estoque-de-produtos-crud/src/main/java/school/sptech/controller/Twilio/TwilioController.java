@@ -11,7 +11,6 @@ public class TwilioController {
 
     private final TwilioService twilioService;
 
-    @Autowired
     public TwilioController(TwilioService twilioService) {
         this.twilioService = twilioService;
     }

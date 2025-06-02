@@ -10,8 +10,11 @@ import school.sptech.service.emailService.EmailService;
 @Component
 public class FuncionarioEventListener {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
+
+    public FuncionarioEventListener(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @EventListener
     public void handleFuncionarioEvent(FuncionarioEvent event) {

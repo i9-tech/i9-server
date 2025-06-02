@@ -50,21 +50,20 @@ public class VendaController {
     @PostMapping
     @Operation(summary = "Cadastrar nova venda", description = "Cadastra uma nova venda na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "venda cadastrada com sucesso."),
+            @ApiResponse(responseCode = "201", description = "Venda cadastrada com sucesso."),
             @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-            {
-              "mensagem": "Dados inválidos. Verifique os campos obrigatórios."
-            }
-            """))
+        {
+          "mensagem": "Dados inválidos. Verifique os campos obrigatórios."
+        }
+        """))
             )
     })
     public ResponseEntity<VendaResponseDto> criarVenda(
             @Parameter(description = "Dados da venda para cadastro.", required = true)
             @RequestBody @Valid VendaRequestDto dto) {
-        Venda venda = vendaService.criarVenda(dto);
-        VendaResponseDto response = vendaService.buscarVendaPorId(venda.getId());
+        VendaResponseDto response = vendaService.criarVendaRetornandoDto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
