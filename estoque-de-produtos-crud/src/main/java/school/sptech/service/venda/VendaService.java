@@ -4,14 +4,19 @@ import org.springframework.stereotype.Service;
 import school.sptech.controller.venda.dto.VendaMapper;
 import school.sptech.controller.venda.dto.VendaRequestDto;
 import school.sptech.controller.venda.dto.VendaResponseDto;
+import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
+import school.sptech.entity.prato.Prato;
 import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.repository.venda.VendaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.produto.ProdutoRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,6 +25,7 @@ import java.util.HashMap;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,14 +91,15 @@ public class VendaService {
     public Double valorTotalPorEmpresaHoje(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
         Double valorTotal = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
-        return valorTotal = valorTotal;
+        return valorTotal;
     }
 
     public Double lucroLiquidoPorEmpresaHoje(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
         Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
-        return lucro = lucro;
+        return lucro;
     }
+
 
     public Map<String, Double> valorTotalPorSetorHoje(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
@@ -126,7 +133,7 @@ public class VendaService {
     public Integer quantidadeVendasPorEmpresaHoje(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
         Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
-        return quantidade = quantidade;
+        return quantidade;
     }
 
     public List<Produto> listarProdutosAbaixoDaQuantidadeMinima(Integer empresaId) {
@@ -164,5 +171,55 @@ public class VendaService {
         }
 
         return resultado;
+    }
+
+    public List<Object[]> top7Pratos(Integer empresaId) {
+        Pageable limite = PageRequest.of(0, 7);
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.top7PratosMaisVendidos(empresaId, hoje, limite);
+    }
+
+    public List<Object[]> top7Produtos(Integer empresaId) {
+        Pageable limite = PageRequest.of(0, 7);
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.top7ProdutosMaisVendidos(empresaId, hoje, limite);
+    }
+
+    public List<Object[]> top5Categorias(Integer empresaId) {
+        Pageable limite = PageRequest.of(0, 7);
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.top5CategoriasMaisVendidas(empresaId, hoje, limite);
+    }
+
+
+    public List<Object[]> obterRankingSetoresMaisVendidos(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.rankingSetoresMaisVendidos(empresaId, hoje);
+
+    }
+
+    public List<Object[]> calculosKpi(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        LocalDate ontem = hoje.minusDays(1);
+        List<Object[]> resultados = new ArrayList<>();
+
+        Double brutoHoje = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
+        Double brutoOntem = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, ontem);
+        Double liquidoHoje = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
+        Double liquidoMercadoria = brutoHoje - liquidoHoje;
+        Integer vendasHoje = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
+        Integer vendasOntem = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, ontem);
+
+        resultados.add(new Object[]{
+                brutoHoje,
+                brutoOntem,
+                vendasHoje,
+                vendasOntem,
+                liquidoHoje,
+                liquidoMercadoria
+        });
+
+
+        return resultados;
     }
 }

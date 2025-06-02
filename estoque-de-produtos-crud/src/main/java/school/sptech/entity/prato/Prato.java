@@ -87,6 +87,25 @@ public class Prato {
     )
     private Categoria categoria;
 
+    private Integer quantidadeVendida;
+    private Double totalVendas;
+
+
+    public Integer getQuantidadeVendida() {
+        return quantidadeVendida;
+    }
+
+    public void setQuantidadeVendida(Integer quantidadeVendida) {
+        this.quantidadeVendida = quantidadeVendida;
+    }
+
+    public Double getTotalVendas() {
+        return totalVendas;
+    }
+
+    public void setTotalVendas(Double totalVendas) {
+        this.totalVendas = totalVendas;
+    }
 
     public int getId() {
         return id;
@@ -172,6 +191,20 @@ public class Prato {
         this.funcionario = funcionario;
         this.setor = setor;
         this.categoria = categoria;
+    }
+
+    public Prato(int id, String nome, String imagem, Double valorVenda, String descricao, Boolean disponivel, Funcionario funcionario, Setor setor, Categoria categoria, Integer quantidadeVendida, Double totalVendas) {
+        this.id = id;
+        this.nome = nome;
+        this.imagem = imagem;
+        this.valorVenda = valorVenda;
+        this.descricao = descricao;
+        this.disponivel = disponivel;
+        this.funcionario = funcionario;
+        this.setor = setor;
+        this.categoria = categoria;
+        this.quantidadeVendida = quantidadeVendida;
+        this.totalVendas = totalVendas;
     }
 
     @Override

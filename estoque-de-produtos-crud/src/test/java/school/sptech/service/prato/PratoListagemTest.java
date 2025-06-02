@@ -11,9 +11,11 @@ import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.prato.Prato;
 import school.sptech.entity.setor.Setor;
 import school.sptech.repository.prato.PratoRepository;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
