@@ -72,6 +72,15 @@ public class VendaService {
         return VendaMapper.toDto(venda);
     }
 
+    public Boolean finalizarVendaPrato(Integer idVenda) {
+        Venda venda = vendaRepository.findById(idVenda)
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+        venda.setVendaConcluida(true);
+        vendaRepository.save(venda);
+
+        return venda.getVendaConcluida();
+    }
+
 
     public void excluirVenda(Integer id) {
         Venda venda = vendaRepository.findById(id)
@@ -143,6 +152,11 @@ public class VendaService {
         return vendaRepository.buscaProdutosAbaixoDeQuantidadeMinima(empresaId);
     }
 
+    public List<Venda> listarPratosVendidosPorEmpresaEData(Integer empresaId) {
+        LocalDate hoje = LocalDate.now();
+        return vendaRepository.findVendasDePratosComItensPorEmpresaEData(empresaId, hoje);
+    }
+
     public List<String> listarResumoItensVendidosPorEmpresaEData(Integer empresaId) {
         LocalDate hoje = LocalDate.now();
         List<Venda> vendas = vendaRepository.findVendasComItensPorEmpresaEData(empresaId, hoje);
@@ -175,6 +189,7 @@ public class VendaService {
 
         return resultado;
     }
+
 
     public List<Object[]> top7Pratos(Integer empresaId) {
         Pageable limite = PageRequest.of(0, 7);

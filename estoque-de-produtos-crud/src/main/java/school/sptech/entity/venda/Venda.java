@@ -29,6 +29,10 @@ public class Venda {
     @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres")
     private String mesa;
 
+    private String cliente;
+
+    private String formaPagamento;
+
     @NotNull(message = "O funcionário responsável é obrigatório")
     @ManyToOne
     @JoinColumn(name = "fk_funcionario")
@@ -61,51 +65,67 @@ public class Venda {
         this.id = id;
     }
 
-    public LocalDate getDataVenda() {
+    public @NotNull(message = "A data da venda é obrigatória") @PastOrPresent(message = "A data da venda não pode ser no futuro") LocalDate getDataVenda() {
         return dataVenda;
     }
 
-    public void setDataVenda(LocalDate dataVenda) {
+    public void setDataVenda(@NotNull(message = "A data da venda é obrigatória") @PastOrPresent(message = "A data da venda não pode ser no futuro") LocalDate dataVenda) {
         this.dataVenda = dataVenda;
     }
 
-    public Double getValorTotal() {
+    public @NotNull(message = "O valor total é obrigatório") @PositiveOrZero(message = "O valor total deve ser positivo ou zero") Double getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(Double valorTotal) {
+    public void setValorTotal(@NotNull(message = "O valor total é obrigatório") @PositiveOrZero(message = "O valor total deve ser positivo ou zero") Double valorTotal) {
         this.valorTotal = valorTotal;
     }
 
-    public String getMesa() {
+    public @NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String getMesa() {
         return mesa;
     }
 
-    public void setMesa(String mesa) {
+    public void setMesa(@NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String mesa) {
         this.mesa = mesa;
     }
 
-    public Funcionario getFuncionario() {
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public @NotNull(message = "O funcionário responsável é obrigatório") Funcionario getFuncionario() {
         return funcionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
+    public void setFuncionario(@NotNull(message = "O funcionário responsável é obrigatório") Funcionario funcionario) {
         this.funcionario = funcionario;
     }
 
-    public List<ItemCarrinho> getItensCarrinho() {
+    public @NotEmpty(message = "A venda deve conter pelo menos um item") List<ItemCarrinho> getItensCarrinho() {
         return itensCarrinho;
     }
 
-    public void setItensCarrinho(List<ItemCarrinho> itensCarrinho) {
+    public void setItensCarrinho(@NotEmpty(message = "A venda deve conter pelo menos um item") List<ItemCarrinho> itensCarrinho) {
         this.itensCarrinho = itensCarrinho;
     }
 
-    public Boolean getVendaConcluida() {
+    public @NotNull(message = "É necessário informar se a venda foi concluída") Boolean getVendaConcluida() {
         return vendaConcluida;
     }
 
-    public void setVendaConcluida(Boolean vendaConcluida) {
+    public void setVendaConcluida(@NotNull(message = "É necessário informar se a venda foi concluída") Boolean vendaConcluida) {
         this.vendaConcluida = vendaConcluida;
     }
 

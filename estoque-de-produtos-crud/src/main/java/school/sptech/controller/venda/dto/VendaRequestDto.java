@@ -9,10 +9,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class VendaRequestDto {
+
     @Schema(description = "Identificação da mesa onde ocorreu a venda", example = "Mesa 7")
     @NotBlank(message = "A identificação da mesa é obrigatória")
     @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres")
     private String mesa;
+
+    private String cliente;
+
+    private String formaPagamento;
 
     @Schema(description = "Data em que a venda foi realizada", example = "2024-04-18")
     @NotNull(message = "A data da venda é obrigatória")
@@ -37,8 +42,10 @@ public class VendaRequestDto {
     @NotNull(message = "É necessário informar se a venda foi concluída")
     private Boolean vendaConcluida;
 
-    public VendaRequestDto(String mesa, LocalDate dataVenda, List<Integer> itens, Integer funcionarioId, Double valorTotal, Boolean vendaConcluida) {
+    public VendaRequestDto(String mesa, String cliente, String formaPagamento, LocalDate dataVenda, List<Integer> itens, Integer funcionarioId, Double valorTotal, Boolean vendaConcluida) {
         this.mesa = mesa;
+        this.cliente = cliente;
+        this.formaPagamento = formaPagamento;
         this.dataVenda = dataVenda;
         this.itens = itens;
         this.funcionarioId = funcionarioId;
@@ -46,55 +53,67 @@ public class VendaRequestDto {
         this.vendaConcluida = vendaConcluida;
     }
 
-    public VendaRequestDto() {
-
-    }
-
-    public String getMesa() {
+    public @NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String getMesa() {
         return mesa;
     }
 
-    public void setMesa(String mesa) {
+    public void setMesa(@NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String mesa) {
         this.mesa = mesa;
     }
 
-    public LocalDate getDataVenda() {
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public @NotNull(message = "A data da venda é obrigatória") @PastOrPresent(message = "A data da venda não pode ser futura") LocalDate getDataVenda() {
         return dataVenda;
     }
 
-    public void setDataVenda(LocalDate dataVenda) {
+    public void setDataVenda(@NotNull(message = "A data da venda é obrigatória") @PastOrPresent(message = "A data da venda não pode ser futura") LocalDate dataVenda) {
         this.dataVenda = dataVenda;
     }
 
-    public List<Integer> getItens() {
+    public @NotEmpty(message = "A venda deve conter pelo menos um item") List<Integer> getItens() {
         return itens;
     }
 
-    public void setItens(List<Integer> itens) {
+    public void setItens(@NotEmpty(message = "A venda deve conter pelo menos um item") List<Integer> itens) {
         this.itens = itens;
     }
 
-    public Integer getFuncionarioId() {
+    public @NotNull(message = "O ID do funcionário é obrigatório") Integer getFuncionarioId() {
         return funcionarioId;
     }
 
-    public void setFuncionarioId(Integer funcionarioId) {
+    public void setFuncionarioId(@NotNull(message = "O ID do funcionário é obrigatório") Integer funcionarioId) {
         this.funcionarioId = funcionarioId;
     }
 
-    public Double getValorTotal() {
+    public @NotNull(message = "O valor total é obrigatório") @PositiveOrZero(message = "O valor total deve ser positivo ou zero") Double getValorTotal() {
         return valorTotal;
     }
 
-    public void setValorTotal(Double valorTotal) {
+    public void setValorTotal(@NotNull(message = "O valor total é obrigatório") @PositiveOrZero(message = "O valor total deve ser positivo ou zero") Double valorTotal) {
         this.valorTotal = valorTotal;
     }
 
-    public Boolean getVendaConcluida() {
+    public @NotNull(message = "É necessário informar se a venda foi concluída") Boolean getVendaConcluida() {
         return vendaConcluida;
     }
 
-    public void setVendaConcluida(Boolean vendaConcluida) {
+    public void setVendaConcluida(@NotNull(message = "É necessário informar se a venda foi concluída") Boolean vendaConcluida) {
         this.vendaConcluida = vendaConcluida;
     }
 }
