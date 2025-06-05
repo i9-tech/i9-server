@@ -1,3 +1,5 @@
+CREATE IF NOT EXISTS i9techdata;
+USE i9techdata;
 
 -- Inserir uma empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
