@@ -10,6 +10,9 @@ import java.util.List;
 
 public class VendaRequestDto {
 
+    public VendaRequestDto() {
+    }
+
     @Schema(description = "Identificação da mesa onde ocorreu a venda", example = "Mesa 7")
     @NotBlank(message = "A identificação da mesa é obrigatória")
     @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres")
