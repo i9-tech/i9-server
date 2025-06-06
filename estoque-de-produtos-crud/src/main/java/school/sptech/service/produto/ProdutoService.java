@@ -24,11 +24,14 @@ import java.util.stream.Collectors;
 @Service
 public class ProdutoService {
 
-    @Autowired
-    private ProdutoRepository repository;
+    private final ProdutoRepository repository;
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private final FuncionarioRepository funcionarioRepository;
+
+    public ProdutoService(ProdutoRepository repository, FuncionarioRepository funcionarioRepository) {
+        this.repository = repository;
+        this.funcionarioRepository = funcionarioRepository;
+    }
 
     public ProdutoListagemDto cadastrarProduto(@Valid ProdutoCadastroDto produtoCadastroDto, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
@@ -40,6 +43,20 @@ public class ProdutoService {
         Produto produtoCadastrado = repository.save(produto);
 
         return ProdutoMapper.toDto(produtoCadastrado);
+    }
+
+    public ProdutoListagemDto buscarProdutoPorId(Integer id, Integer idFuncionario) {
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
+
+        Optional<Produto> produtoPorEmpresaFuncionario = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
+
+        if (produtoPorEmpresaFuncionario.isEmpty()) {
+            throw new EntidadeNaoEncontradaException("Produto não encontrado ou não pertence à empresa do funcionário informado.");
+        }
+        ProdutoListagemDto respostaDto = ProdutoMapper.toDto(produtoPorEmpresaFuncionario.get());
+
+        return respostaDto;
     }
 
     public List<ProdutoListagemDto> listarProdutoPorEmpresa(Integer idFuncionario) {

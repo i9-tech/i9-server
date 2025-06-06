@@ -11,8 +11,11 @@ import jakarta.mail.MessagingException;
 @RequestMapping("/envio-email")
 public class EmailController {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
+
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @PostMapping("interesse")
     public ResponseEntity<String> enviarEmail(@RequestBody String emailRecebido) throws MessagingException{

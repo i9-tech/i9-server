@@ -21,6 +21,10 @@ public class VendaResponseDto {
     @Schema(description = "Identificação da mesa", example = "A05")
     private String mesa;
 
+    private String cliente;
+
+    private String formaPagamento;
+
     @Schema(description = "Nome do funcionário responsável")
     private String funcionarioNome;
 
@@ -30,20 +34,16 @@ public class VendaResponseDto {
     @Schema(description = "Indica se a venda foi concluída", example = "true")
     private Boolean vendaConcluida;
 
-    public VendaResponseDto(Integer id, LocalDate dataVenda, Double valorTotal, String mesa, String funcionarioNome, List<ItemCarrinho> itensCarrinho, Boolean vendaConcluida) {
+    public VendaResponseDto(Integer id, LocalDate dataVenda, Double valorTotal, String mesa, String cliente, String formaPagamento, String funcionarioNome, List<ItemCarrinho> itensCarrinho, Boolean vendaConcluida) {
         this.id = id;
         this.dataVenda = dataVenda;
         this.valorTotal = valorTotal;
         this.mesa = mesa;
+        this.cliente = cliente;
+        this.formaPagamento = formaPagamento;
         this.funcionarioNome = funcionarioNome;
         this.itensCarrinho = itensCarrinho;
         this.vendaConcluida = vendaConcluida;
-    }
-
-    public VendaResponseDto() {
-    }
-
-    public VendaResponseDto(Integer id, LocalDate dataVenda, Double valorTotal, String mesa, Boolean vendaConcluida, String nome) {
     }
 
     public Integer getId() {
@@ -76,6 +76,22 @@ public class VendaResponseDto {
 
     public void setMesa(String mesa) {
         this.mesa = mesa;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 
     public String getFuncionarioNome() {

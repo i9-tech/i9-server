@@ -12,8 +12,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.controller.categoria.dto.CategoriaListagemDto;
+import school.sptech.controller.categoria.dto.CategoriaMapper;
+import school.sptech.controller.categoria.dto.RespostaCategoriaDashDto;
+import school.sptech.controller.prato.dto.PratoMapper;
+import school.sptech.controller.prato.dto.RespostaPratoDashDto;
+import school.sptech.controller.prato.dto.RespostaPratoDto;
+import school.sptech.controller.produto.dto.ProdutoListagemDto;
+import school.sptech.controller.produto.dto.ProdutoMapper;
+import school.sptech.controller.produto.dto.RespostaProdutoDashDto;
+import school.sptech.controller.venda.dto.VendaKpisRespostaDto;
+import school.sptech.controller.venda.dto.VendaMapper;
+import school.sptech.controller.setor.dto.RespostaSetorDashDto;
+import school.sptech.controller.setor.dto.SetorMapper;
 import school.sptech.controller.venda.dto.VendaRequestDto;
 import school.sptech.controller.venda.dto.VendaResponseDto;
+import school.sptech.entity.prato.Prato;
 import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
 import school.sptech.service.venda.VendaService;
@@ -36,22 +50,28 @@ public class VendaController {
     @PostMapping
     @Operation(summary = "Cadastrar nova venda", description = "Cadastra uma nova venda na base de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "venda cadastrada com sucesso."),
+            @ApiResponse(responseCode = "201", description = "Venda cadastrada com sucesso."),
             @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-            {
-              "mensagem": "Dados inválidos. Verifique os campos obrigatórios."
-            }
-            """))
+        {
+          "mensagem": "Dados inválidos. Verifique os campos obrigatórios."
+        }
+        """))
             )
     })
     public ResponseEntity<VendaResponseDto> criarVenda(
             @Parameter(description = "Dados da venda para cadastro.", required = true)
             @RequestBody @Valid VendaRequestDto dto) {
-        Venda venda = vendaService.criarVenda(dto);
-        VendaResponseDto response = vendaService.buscarVendaPorId(venda.getId());
+        VendaResponseDto response = vendaService.criarVendaRetornandoDto(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/concluir-prato")
+    public ResponseEntity<Boolean> finalizarPratoVenda(
+            @RequestParam Integer idVenda
+    ) {
+        return ResponseEntity.ok(vendaService.finalizarVendaPrato(idVenda));
     }
 
     @DeleteMapping("/{id}")
@@ -98,34 +118,40 @@ public class VendaController {
 
 
     @GetMapping("/valor-total-diario/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Double> valorTotalPorEmpresaHoje(@PathVariable Integer empresaId) {
         Double valorTotal = vendaService.valorTotalPorEmpresaHoje(empresaId);
         return ResponseEntity.ok(valorTotal);
     }
 
     @GetMapping("/valor-liquido-diario/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Double> lucroLiquidoHojePorEmpresa(@PathVariable Integer empresaId) {
         Double lucro = vendaService.lucroLiquidoPorEmpresaHoje(empresaId);
         return ResponseEntity.ok(lucro);
     }
 
     @GetMapping("/valor-total-setor-diario/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Map<String, Double>> valorTotalPorSetorHoje(@PathVariable Integer empresaId) {
         return ResponseEntity.ok(vendaService.valorTotalPorSetorHoje(empresaId));
     }
 
     @GetMapping("/valor-total-categoria-diario/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Map<String, Double>> valorTotalPorCategoriaHoje(@PathVariable Integer empresaId) {
         return ResponseEntity.ok(vendaService.valorTotalPorCategoriaHoje(empresaId));
     }
 
     @GetMapping("/quantidade-vendas/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<Integer> quantidadeVendasHoje(@PathVariable Integer empresaId) {
         Integer quantidade = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
         return ResponseEntity.ok(quantidade);
     }
 
     @GetMapping("/quantidade-minima/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public ResponseEntity<List<Produto>> listarAbaixoMinimo(@PathVariable Integer empresaId) {
         List<Produto> produtos = vendaService.listarProdutosAbaixoDaQuantidadeMinima(empresaId);
         return produtos.isEmpty()
@@ -134,8 +160,51 @@ public class VendaController {
     }
 
     @GetMapping("/itens-vendidos/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
     public List<String> listarResumoItensVendidosHoje(@PathVariable Integer empresaId) {
         return vendaService.listarResumoItensVendidosPorEmpresaEData(empresaId);
     }
 
+    @GetMapping("/pratos-vendidos/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<VendaResponseDto>> listarPratosVendidosHoje(@PathVariable Integer empresaId) {
+        List<Venda> vendas = vendaService.listarPratosVendidosPorEmpresaEData(empresaId);
+
+        List<VendaResponseDto> dtos = vendas.stream()
+                .map(VendaMapper::toDto)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/top-pratos/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<RespostaPratoDashDto>> top7Pratos(@PathVariable Integer empresaId){
+        return ResponseEntity.ok(PratoMapper.toResponseDtoListObject(vendaService.top7Pratos(empresaId)));
+    }
+
+    @GetMapping("/top-produtos/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<RespostaProdutoDashDto>> top7Produtos(@PathVariable Integer empresaId){
+        return ResponseEntity.ok(ProdutoMapper.toResponseDtoListObject(vendaService.top7Produtos(empresaId)));
+    }
+
+    @GetMapping("/top-categorias/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<RespostaCategoriaDashDto>> top5Categorias(@PathVariable Integer empresaId){
+        return ResponseEntity.ok(CategoriaMapper.transformarEmRespostaListaObjetoDto(vendaService.top5Categorias(empresaId)));
+    }
+                         
+    @GetMapping("/ranking-setores/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<RespostaSetorDashDto>> rankingSetoresMaisVendidos(@PathVariable Integer empresaId) {
+        return ResponseEntity.ok(SetorMapper.transformarEmRespostaListaObjetoDto(vendaService.obterRankingSetoresMaisVendidos(empresaId)));
+    }
+
+    @GetMapping("/kpis/{empresaId}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<List<VendaKpisRespostaDto>> kpis(@PathVariable Integer empresaId) {
+        return ResponseEntity.ok(VendaMapper.toDtoListObject(vendaService.calculosKpi(empresaId)));
+    }
+
 }
+
