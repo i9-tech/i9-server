@@ -60,6 +60,34 @@ cd estoque-de-produtos-crud
 
 ***
 
+## 🔐 Variáveis de Ambiente
+
+As variáveis de ambiente são essenciais para manter informações sensíveis (como senhas, tokens e chaves de API) fora do código-fonte e permitir configurações distintas entre os ambientes (desenvolvimento, produção, testes).
+
+### Backend (Spring Boot)
+
+Utilizamos o arquivo `application.properties` para configurar a aplicação. As variáveis são referenciadas no seguinte formato:
+
+```properties
+spring.datasource.password=${DB_PASSWORD}
+```
+O valor de DB_PASSWORD deve ser definido fora do código — localmente (em arquivos como dev.properties, não versionados) ou por meio de variáveis em ambientes de nuvem (GitHub Actions, AWS, Azure, etc.).
+
+Para variáveis personalizadas no código Java, utilizamos a anotação @Value:
+```java
+@Value("${azure.storage.account-name}")
+private String contaAzure;
+```
+
+**💡 Dica:** mantenha o `application.properties` com placeholders genéricos e utilize arquivos separados como `dev.properties` para os valores reais durante o desenvolvimento.
+
+### ⚠️ Atenção às variáveis!
+Nunca suba arquivos com variáveis sensíveis preenchidas para o repositório.
+
+Certifique-se de que arquivos como `dev.properties` estejam listados no seu `.gitignore`.
+<br/>
+***
+
 ## ⚠️ ATENÇÃO
 Para utilizar qualquer função dentro de nosso servidor, será necessário informar um `token de segurança` a partir de um **login**. existe um usuário padrão que é criado para testes, é possível utilizar seu login com as credenciais:
 
