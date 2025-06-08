@@ -63,7 +63,6 @@ public class VendaService {
                 }
 
                 produto.setQuantidade(novaQuantidade);
-                // Salve o produto com a nova quantidade
                 produtoRepository.save(produto);
             }
         }
