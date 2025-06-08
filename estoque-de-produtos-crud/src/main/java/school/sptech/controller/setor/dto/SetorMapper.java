@@ -13,6 +13,7 @@ public class SetorMapper {
     public static Setor transformarEmEntidade(SetorCadastroDto setorEnviadoDto) {
         Setor entidadeSetor = new Setor();
         entidadeSetor.setNome(setorEnviadoDto.getNome());
+        entidadeSetor.setImagem(setorEnviadoDto.getImagem());
         return entidadeSetor;
     }
 
@@ -21,6 +22,7 @@ public class SetorMapper {
     public static Setor transformarEmEntidade(SetorAtualizarDto setorEnviadoDto) {
         Setor entidadeSetorParaAtualizar = new Setor();
         entidadeSetorParaAtualizar.setNome(setorEnviadoDto.getNome());
+        entidadeSetorParaAtualizar.setImagem(setorEnviadoDto.getImagem());
         return entidadeSetorParaAtualizar;
     }
 
@@ -31,6 +33,7 @@ public class SetorMapper {
         dtoSetorParaResposta.setId(entidadeSetorResposta.getId());
         dtoSetorParaResposta.setNome(entidadeSetorResposta.getNome());
         dtoSetorParaResposta.setFuncionario(entidadeSetorResposta.getFuncionario());
+        dtoSetorParaResposta.setImagem(entidadeSetorResposta.getImagem());
         return dtoSetorParaResposta;
     }
 
@@ -44,6 +47,7 @@ public class SetorMapper {
         respostaDtoSetorParaResposta.setId(entidadesSetorResposta.get(i).getId());
         respostaDtoSetorParaResposta.setNome(entidadesSetorResposta.get(i).getNome());
         respostaDtoSetorParaResposta.setFuncionario(entidadesSetorResposta.get(i).getFuncionario());
+        respostaDtoSetorParaResposta.setImagem(entidadesSetorResposta.get(i).getImagem());
 
         respostasEmDto.add(respostaDtoSetorParaResposta);
         }
