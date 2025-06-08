@@ -33,11 +33,13 @@ public class VendaService {
     private final FuncionarioRepository funcionarioRepository;
     private final ItemCarrinhoRepository itemCarrinhoRepository;
     private final VendaRepository vendaRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository) {
+    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository, ProdutoRepository produtoRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
+        this.produtoRepository = produtoRepository;
     }
 
 
@@ -46,16 +48,33 @@ public class VendaService {
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
 
         List<ItemCarrinho> itens = itemCarrinhoRepository.findAllById(vendaRequest.getItens());
+
         if (itens.isEmpty()) {
             throw new RuntimeException("Itens não encontrados");
         }
 
+        for (ItemCarrinho item : itens) {
+            Produto produto = item.getProduto();
+            if (produto != null) {
+                int novaQuantidade = produto.getQuantidade() - 1;
+
+                if (novaQuantidade < 0) {
+                    throw new RuntimeException("Produto " + produto.getNome() + " sem estoque suficiente.");
+                }
+
+                produto.setQuantidade(novaQuantidade);
+                // Salve o produto com a nova quantidade
+                produtoRepository.save(produto);
+            }
+        }
+
         Venda venda = VendaMapper.toEntity(vendaRequest, funcionario, itens);
         venda.setValorTotal(calcularValorTotal(itens));
-
         venda = vendaRepository.save(venda);
+
         return VendaMapper.toDto(venda);
     }
+
 
 
     public Double calcularValorTotal(List<ItemCarrinho> itens) {

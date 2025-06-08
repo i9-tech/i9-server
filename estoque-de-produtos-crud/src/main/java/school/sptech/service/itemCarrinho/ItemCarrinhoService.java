@@ -51,7 +51,6 @@ public class ItemCarrinhoService {
         produtoCarrinho.setProduto(produto);
         produtoCarrinho.setFuncionario(funcionario);
         produtoCarrinho.setValorUnitario(produto.getValorUnitario());
-        produto.setQuantidade(produto.getQuantidade() - 1 );
 
         return itemCarrinhoRepository.save(produtoCarrinho);
     }
