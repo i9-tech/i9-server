@@ -46,12 +46,9 @@ import java.util.Map;
 public class VendaController {
 
     private final VendaService vendaService;
-    private  final FuncionarioRepository funcionarioRepository;
-    private final ItemCarrinhoRepository itemCarrinhoRepository;
-    public VendaController(VendaService vendaService, FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository) {
+
+    public VendaController(VendaService vendaService) {
         this.vendaService = vendaService;
-        this.funcionarioRepository = funcionarioRepository;
-        this.itemCarrinhoRepository = itemCarrinhoRepository;
     }
 
     @GetMapping("/{id}")
@@ -84,12 +81,7 @@ public class VendaController {
             @Parameter(description = "Dados da venda para cadastro.", required = true)
             @RequestBody @Valid VendaRequestDto dto) {
 
-        Funcionario funcionario = funcionarioRepository.findById(dto.getFuncionarioId())
-                .orElse(null);
-
-        List<ItemCarrinho> itens = itemCarrinhoRepository.findAllById(dto.getItens());
-
-        Venda venda = VendaMapper.toEntity(dto, funcionario, itens);
+        Venda venda = VendaMapper.toEntity(dto);
 
         Venda vendaSalva = vendaService.criarVenda(venda);
 
