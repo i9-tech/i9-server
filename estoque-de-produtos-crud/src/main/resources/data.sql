@@ -1,7 +1,7 @@
 
 -- Inserir uma empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
-VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'yasmim.silva510811@gmail.com', 'taua', '+5511942780654');
+VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'nogueiramaykoon@gmail.com', 'taua', '+5511942780654');
 
 -- Inserir outra empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
@@ -32,12 +32,12 @@ VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, f
                                                                                                     -- senha: 55566677788@tai
 
 -- Setores para restaurante/lanchonete vinculados aos funcionários
-INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Quente', 1);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Cozinha Fria', 1);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Estoque de Alimentos', 1);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Atendimento ao Cliente', 1);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Delivery', 1);
-INSERT INTO setor (nome, funcionario_id) VALUES ('Higienização', 1);
+INSERT INTO setor (nome, funcionario_id, imagem) VALUES ('Lanchonete', 1, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/lanchonete.png');
+INSERT INTO setor (nome, funcionario_id, imagem) VALUES ('Pastelaria', 1, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/pastelaria.png');
+INSERT INTO setor (nome, funcionario_id, imagem) VALUES ('Mercado', 1, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/mercado.png');
+INSERT INTO setor (nome, funcionario_id, imagem) VALUES ('Padaria', 1, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/padaria.png');
+INSERT INTO setor (nome, funcionario_id, imagem) VALUES ('Restaurante', 1, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/restaurante.png');
+INSERT INTO setor (nome, funcionario_id, imagem) VALUES ('Pizzaria', 1, 'https://i9techblobstorage.blob.core.windows.net/i9-storage/pizzaria.png');
 
 -- Categorias de produtos/ingredientes típicos do ramo alimentício
 INSERT INTO categoria (nome, funcionario_id) VALUES ('Carnes e Proteínas', 1);
