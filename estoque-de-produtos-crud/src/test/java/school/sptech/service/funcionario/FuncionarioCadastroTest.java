@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
 import school.sptech.exception.ValidacaoException;
-import school.sptech.repository.funcionario.FuncionarioRepository;
+
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -54,13 +54,13 @@ public class FuncionarioCadastroTest {
     @Test
     @DisplayName("Deve lançar exceção quando o nome for vazio ou em branco")
     void validarFuncionario_DeveLancarExcecao_QuandoNomeVazioOuEmBranco() {
-        // Arrange
+
         FuncionarioRequestDto dto = new FuncionarioRequestDto();
         dto.setNome("   "); // Nome em branco
         dto.setCpf("123.456.789-00");
         dto.setCargo("Atendente");
 
-        // Act & Assert
+
         assertThatThrownBy(() -> funcionarioService.validarFuncionario(dto))
                 .isInstanceOf(ValidacaoException.class)
                 .hasMessage("O nome do funcionário é obrigatório");
@@ -69,13 +69,13 @@ public class FuncionarioCadastroTest {
     @Test
     @DisplayName("Deve lançar exceção quando o CPF for nulo")
     void validarFuncionario_DeveLancarExcecao_QuandoCpfNulo() {
-        // Arrange
+
         FuncionarioRequestDto dto = new FuncionarioRequestDto();
         dto.setNome("Maria Souza");
         dto.setCpf(null);
         dto.setCargo("Gerente");
 
-        // Act & Assert
+
         assertThatThrownBy(() -> funcionarioService.validarFuncionario(dto))
                 .isInstanceOf(ValidacaoException.class)
                 .hasMessage("O CPF do funcionário é obrigatório");
