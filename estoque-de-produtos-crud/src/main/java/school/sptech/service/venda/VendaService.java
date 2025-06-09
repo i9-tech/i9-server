@@ -40,7 +40,6 @@ public class VendaService {
         this.vendaRepository = vendaRepository;
     }
 
-
     public Venda criarVenda(Venda venda) {
 
         Funcionario funcionario = funcionarioRepository.findById(venda.getFuncionario().getId())
@@ -68,7 +67,6 @@ public class VendaService {
 
         return vendaRepository.save(venda);
     }
-
 
     public Double calcularValorTotal(List<ItemCarrinho> itens) {
         return itens.stream()
