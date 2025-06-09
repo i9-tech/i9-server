@@ -56,14 +56,11 @@ public class VendaCriacaoTest {
     }
 
     @Test
-    @DisplayName("Criar venda com dados válidos deve retornar DTO correto")
-    void criarVendaComDadosValidos_DeveRetornarDto() {
-        VendaRequestDto request = new VendaRequestDto();
-        request.setFuncionarioId(1);
-        request.setItens(Arrays.asList(1, 2));
-
-        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionarioMock));
-        when(itemCarrinhoRepository.findAllById(Arrays.asList(1, 2))).thenReturn(Arrays.asList(item1, item2));
+    @DisplayName("Criar venda com dados válidos deve salvar venda com valorTotal correto")
+    void criarVendaComDadosValidos_DeveSalvarVendaComValorTotal() {
+        Venda venda = new Venda();
+        venda.setFuncionario(funcionarioMock);
+        venda.setItensCarrinho(Arrays.asList(item1, item2));
 
         Venda vendaSalva = new Venda();
         vendaSalva.setId(1);
@@ -73,68 +70,44 @@ public class VendaCriacaoTest {
 
         when(vendaRepository.save(any(Venda.class))).thenReturn(vendaSalva);
 
-        VendaResponseDto response = vendaService.criarVendaRetornandoDto(request);
+        Venda result = vendaService.criarVenda(venda);
 
-        assertNotNull(response);
-        assertEquals(15.0, response.getValorTotal());
+        assertNotNull(result);
+        assertEquals(15.0, result.getValorTotal());
     }
 
     @Test
-    @DisplayName("Criar venda com funcionário inexistente deve lançar exceção")
-    void criarVendaComFuncionarioInexistente_DeveLancarExcecao() {
-        VendaRequestDto request = new VendaRequestDto();
-        request.setFuncionarioId(1);
-        request.setItens(Arrays.asList(1, 2));
-
-        when(funcionarioRepository.findById(1)).thenReturn(Optional.empty());
+    @DisplayName("Criar venda com funcionário null deve lançar exceção")
+    void criarVendaComFuncionarioNull_DeveLancarExcecao() {
+        Venda venda = new Venda();
+        venda.setFuncionario(null); // simulando funcionário não encontrado
+        venda.setItensCarrinho(Arrays.asList(item1, item2));
 
         RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> vendaService.criarVendaRetornandoDto(request));
+                () -> vendaService.criarVenda(venda));
 
-        assertEquals("Funcionário não encontrado", ex.getMessage());
-    }
-
-    @Test
-    @DisplayName("Criar venda com itens inexistentes deve lançar exceção")
-    void criarVendaComItensInexistentes_DeveLancarExcecao() {
-        VendaRequestDto request = new VendaRequestDto();
-        request.setFuncionarioId(1);
-        request.setItens(Arrays.asList(1, 2));
-
-        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionarioMock));
-        when(itemCarrinhoRepository.findAllById(Arrays.asList(1, 2))).thenReturn(Collections.emptyList());
-
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> vendaService.criarVendaRetornandoDto(request));
-
-        assertEquals("Itens não encontrados", ex.getMessage());
+        assertEquals("Funcionário não encontrado.", ex.getMessage());
     }
 
     @Test
     @DisplayName("Criar venda com lista de itens vazia deve lançar exceção")
     void criarVendaComListaItensVazia_DeveLancarExcecao() {
-        VendaRequestDto request = new VendaRequestDto();
-        request.setFuncionarioId(1);
-        request.setItens(Collections.emptyList());
-
-        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionarioMock));
-        when(itemCarrinhoRepository.findAllById(Collections.emptyList())).thenReturn(Collections.emptyList());
+        Venda venda = new Venda();
+        venda.setFuncionario(funcionarioMock);
+        venda.setItensCarrinho(Collections.emptyList());
 
         RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> vendaService.criarVendaRetornandoDto(request));
+                () -> vendaService.criarVenda(venda));
 
-        assertEquals("Itens não encontrados", ex.getMessage());
+        assertEquals("Itens da venda não encontrados.", ex.getMessage());
     }
 
     @Test
     @DisplayName("Criar venda com itens repetidos deve calcular valor corretamente")
     void criarVendaComItensRepetidos_DeveCalcularValorCorretamente() {
-        VendaRequestDto request = new VendaRequestDto();
-        request.setFuncionarioId(1);
-        request.setItens(Arrays.asList(1, 1, 2));
-
-        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionarioMock));
-        when(itemCarrinhoRepository.findAllById(Arrays.asList(1, 1, 2))).thenReturn(Arrays.asList(item1, item1, item2));
+        Venda venda = new Venda();
+        venda.setFuncionario(funcionarioMock);
+        venda.setItensCarrinho(Arrays.asList(item1, item1, item2));
 
         Venda vendaSalva = new Venda();
         vendaSalva.setId(1);
@@ -144,9 +117,10 @@ public class VendaCriacaoTest {
 
         when(vendaRepository.save(any(Venda.class))).thenReturn(vendaSalva);
 
-        VendaResponseDto response = vendaService.criarVendaRetornandoDto(request);
+        Venda result = vendaService.criarVenda(venda);
 
-        assertNotNull(response);
-        assertEquals(25.0, response.getValorTotal());
+        assertNotNull(result);
+        assertEquals(25.0, result.getValorTotal());
     }
+
 }

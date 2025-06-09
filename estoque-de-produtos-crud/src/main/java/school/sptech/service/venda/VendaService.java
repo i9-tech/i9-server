@@ -31,64 +31,44 @@ import java.util.stream.Collectors;
 @Service
 public class VendaService {
     private final FuncionarioRepository funcionarioRepository;
-    private final ItemCarrinhoRepository itemCarrinhoRepository;
+
     private final VendaRepository vendaRepository;
-    private final ProdutoRepository produtoRepository;
 
-    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository, ProdutoRepository produtoRepository) {
+    public VendaService(FuncionarioRepository funcionarioRepository, VendaRepository vendaRepository) {
         this.funcionarioRepository = funcionarioRepository;
-        this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
-        this.produtoRepository = produtoRepository;
     }
 
 
-    public VendaResponseDto criarVendaRetornandoDto(VendaRequestDto vendaRequest) {
-        Funcionario funcionario = funcionarioRepository.findById(vendaRequest.getFuncionarioId())
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+    public Venda criarVenda(Venda venda) {
 
-        List<ItemCarrinho> itens = itemCarrinhoRepository.findAllById(vendaRequest.getItens());
-
-        if (itens.isEmpty()) {
-            throw new RuntimeException("Itens não encontrados");
+        if (venda.getFuncionario() == null) {
+            throw new RuntimeException("Funcionário não encontrado.");
         }
 
-        for (ItemCarrinho item : itens) {
-            Produto produto = item.getProduto();
-            if (produto != null) {
-                int novaQuantidade = produto.getQuantidade() - 1;
-
-                if (novaQuantidade < 0) {
-                    throw new RuntimeException("Produto " + produto.getNome() + " sem estoque suficiente.");
-                }
-
-                produto.setQuantidade(novaQuantidade);
-                produtoRepository.save(produto);
-            }
+        if (venda.getItensCarrinho() == null || venda.getItensCarrinho().isEmpty()) {
+            throw new RuntimeException("Itens da venda não encontrados.");
         }
 
-        Venda venda = VendaMapper.toEntity(vendaRequest, funcionario, itens);
-        venda.setValorTotal(calcularValorTotal(itens));
-        venda = vendaRepository.save(venda);
+        Double valorTotal = calcularValorTotal(venda.getItensCarrinho());
+        venda.setValorTotal(valorTotal);
 
-        return VendaMapper.toDto(venda);
+        return vendaRepository.save(venda);
     }
-
-
 
     public Double calcularValorTotal(List<ItemCarrinho> itens) {
         return itens.stream()
-                .collect(Collectors.groupingBy(item -> item))  // Agrupar os itens pelo próprio objeto
+                .collect(Collectors.groupingBy(item -> item))
                 .entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().getValorUnitario() * entry.getValue().size())  // Multiplicando valorUnitario pela quantidade (tamanho do grupo)
-                .sum();  // Somando o valor total
+                .mapToDouble(entry -> entry.getKey().getValorUnitario() * entry.getValue().size())
+                .sum();
     }
 
-    public VendaResponseDto buscarVendaPorId(Integer id) {
-        Venda venda = vendaRepository.findById(id)
+    public Venda buscarVendaPorId(Integer id) {
+        return vendaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
-        return VendaMapper.toDto(venda);
     }
+
 
     public Boolean finalizarVendaPrato(Integer idVenda) {
         Venda venda = vendaRepository.findById(idVenda)
@@ -98,7 +78,6 @@ public class VendaService {
 
         return venda.getVendaConcluida();
     }
-
 
     public void excluirVenda(Integer id) {
         Venda venda = vendaRepository.findById(id)
