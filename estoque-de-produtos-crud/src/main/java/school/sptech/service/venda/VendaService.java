@@ -31,26 +31,38 @@ import java.util.stream.Collectors;
 @Service
 public class VendaService {
     private final FuncionarioRepository funcionarioRepository;
-
+    private final ItemCarrinhoRepository itemCarrinhoRepository;
     private final VendaRepository vendaRepository;
 
-    public VendaService(FuncionarioRepository funcionarioRepository, VendaRepository vendaRepository) {
+    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository) {
         this.funcionarioRepository = funcionarioRepository;
+        this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
     }
 
-
     public Venda criarVenda(Venda venda) {
 
-        if (venda.getFuncionario() == null) {
-            throw new RuntimeException("Funcionário não encontrado.");
-        }
+        Funcionario funcionario = funcionarioRepository.findById(venda.getFuncionario().getId())
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado."));
 
         if (venda.getItensCarrinho() == null || venda.getItensCarrinho().isEmpty()) {
             throw new RuntimeException("Itens da venda não encontrados.");
         }
 
-        Double valorTotal = calcularValorTotal(venda.getItensCarrinho());
+        List<Integer> itemIds = venda.getItensCarrinho().stream()
+                .map(ItemCarrinho::getId)
+                .toList();
+
+        List<ItemCarrinho> itensCarrinho = itemCarrinhoRepository.findAllById(itemIds);
+
+        if (itensCarrinho.isEmpty()) {
+            throw new RuntimeException("Nenhum item válido encontrado para os IDs informados.");
+        }
+
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(itensCarrinho);
+
+        Double valorTotal = calcularValorTotal(itensCarrinho);
         venda.setValorTotal(valorTotal);
 
         return vendaRepository.save(venda);

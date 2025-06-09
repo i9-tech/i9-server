@@ -1,14 +1,13 @@
 package school.sptech.service.venda;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.controller.venda.dto.VendaRequestDto;
-import school.sptech.controller.venda.dto.VendaResponseDto;
+
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
 import school.sptech.entity.venda.Venda;
@@ -16,7 +15,6 @@ import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.venda.VendaRepository;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,71 +54,127 @@ public class VendaCriacaoTest {
     }
 
     @Test
-    @DisplayName("Criar venda com dados válidos deve salvar venda com valorTotal correto")
-    void criarVendaComDadosValidos_DeveSalvarVendaComValorTotal() {
+    void deveCriarVendaComSucesso() {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(1);
+
+        ItemCarrinho item1 = new ItemCarrinho();
+        item1.setId(10);
+        item1.setValorUnitario(50.0);
+
+        ItemCarrinho item2 = new ItemCarrinho();
+        item2.setId(20);
+        item2.setValorUnitario(30.0);
+
         Venda venda = new Venda();
-        venda.setFuncionario(funcionarioMock);
-        venda.setItensCarrinho(Arrays.asList(item1, item2));
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(List.of(item1, item2));
 
-        Venda vendaSalva = new Venda();
-        vendaSalva.setId(1);
-        vendaSalva.setFuncionario(funcionarioMock);
-        vendaSalva.setItensCarrinho(Arrays.asList(item1, item2));
-        vendaSalva.setValorTotal(15.0);
+        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));
+        when(itemCarrinhoRepository.findAllById(List.of(10, 20))).thenReturn(List.of(item1, item2));
+        when(vendaRepository.save(any(Venda.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(vendaRepository.save(any(Venda.class))).thenReturn(vendaSalva);
+        Venda vendaCriada = vendaService.criarVenda(venda);
 
-        Venda result = vendaService.criarVenda(venda);
-
-        assertNotNull(result);
-        assertEquals(15.0, result.getValorTotal());
+        assertNotNull(vendaCriada);
+        assertEquals(funcionario, vendaCriada.getFuncionario());
+        assertEquals(2, vendaCriada.getItensCarrinho().size());
+        assertEquals(80.0, vendaCriada.getValorTotal());
+        verify(vendaRepository, times(1)).save(vendaCriada);
     }
 
     @Test
-    @DisplayName("Criar venda com funcionário null deve lançar exceção")
-    void criarVendaComFuncionarioNull_DeveLancarExcecao() {
+    void deveLancarExcecaoQuandoFuncionarioNaoEncontrado() {
         Venda venda = new Venda();
-        venda.setFuncionario(null); // simulando funcionário não encontrado
-        venda.setItensCarrinho(Arrays.asList(item1, item2));
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(999);
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(List.of(new ItemCarrinho()));
 
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> vendaService.criarVenda(venda));
+        when(funcionarioRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertEquals("Funcionário não encontrado.", ex.getMessage());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> vendaService.criarVenda(venda));
+        assertEquals("Funcionário não encontrado.", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Criar venda com lista de itens vazia deve lançar exceção")
-    void criarVendaComListaItensVazia_DeveLancarExcecao() {
+    void deveLancarExcecaoQuandoItensCarrinhoNulos() {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(1);
+
         Venda venda = new Venda();
-        venda.setFuncionario(funcionarioMock);
-        venda.setItensCarrinho(Collections.emptyList());
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(null);  // itens nulos
 
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> vendaService.criarVenda(venda));
+        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));  // mock do funcionário válido
 
-        assertEquals("Itens da venda não encontrados.", ex.getMessage());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> vendaService.criarVenda(venda));
+        assertEquals("Itens da venda não encontrados.", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Criar venda com itens repetidos deve calcular valor corretamente")
-    void criarVendaComItensRepetidos_DeveCalcularValorCorretamente() {
+    void deveLancarExcecaoQuandoItensCarrinhoVazios() {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(1);
+
         Venda venda = new Venda();
-        venda.setFuncionario(funcionarioMock);
-        venda.setItensCarrinho(Arrays.asList(item1, item1, item2));
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(List.of());  // carrinho vazio
 
-        Venda vendaSalva = new Venda();
-        vendaSalva.setId(1);
-        vendaSalva.setFuncionario(funcionarioMock);
-        vendaSalva.setItensCarrinho(Arrays.asList(item1, item1, item2));
-        vendaSalva.setValorTotal(10.0 * 2 + 5.0); // 25.0
+        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));  // retorna funcionário válido
 
-        when(vendaRepository.save(any(Venda.class))).thenReturn(vendaSalva);
-
-        Venda result = vendaService.criarVenda(venda);
-
-        assertNotNull(result);
-        assertEquals(25.0, result.getValorTotal());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> vendaService.criarVenda(venda));
+        assertEquals("Itens da venda não encontrados.", exception.getMessage());
     }
 
+    @Test
+    void deveLancarExcecaoQuandoNenhumItemValidoEncontrado() {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(1);
+
+        ItemCarrinho item = new ItemCarrinho();
+        item.setId(5);
+
+        Venda venda = new Venda();
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(List.of(item));
+
+        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));
+        when(itemCarrinhoRepository.findAllById(List.of(5))).thenReturn(List.of()); // nenhum item encontrado
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> vendaService.criarVenda(venda));
+        assertEquals("Nenhum item válido encontrado para os IDs informados.", exception.getMessage());
+    }
+
+    @Test
+    void deveCalcularValorTotalCorreto() {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(1);
+
+        ItemCarrinho item1 = new ItemCarrinho();
+        item1.setId(10);
+        item1.setValorUnitario(15.0);
+
+        ItemCarrinho item2 = new ItemCarrinho();
+        item2.setId(20);
+        item2.setValorUnitario(25.0);
+
+        ItemCarrinho item3 = new ItemCarrinho();
+        item3.setId(30);
+        item3.setValorUnitario(10.0);
+
+        Venda venda = new Venda();
+        venda.setFuncionario(funcionario);
+        venda.setItensCarrinho(List.of(item1, item2, item3));
+
+        when(funcionarioRepository.findById(1)).thenReturn(Optional.of(funcionario));
+        when(itemCarrinhoRepository.findAllById(List.of(10, 20, 30))).thenReturn(List.of(item1, item2, item3));
+        when(vendaRepository.save(any(Venda.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Venda vendaCriada = vendaService.criarVenda(venda);
+
+        assertEquals(50.0, vendaCriada.getValorTotal());
+    }
 }
+
+

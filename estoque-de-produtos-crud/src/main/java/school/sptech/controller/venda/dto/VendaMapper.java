@@ -15,16 +15,27 @@ public class VendaMapper {
     public VendaMapper() {
     }
 
-    public static Venda toEntity(VendaRequestDto dto, Funcionario funcionario, List<ItemCarrinho> itens) {
+    public static Venda toEntity(VendaRequestDto dto) {
         Venda venda = new Venda();
-        venda.setDataVenda(dto.getDataVenda());
-        venda.setValorTotal(dto.getValorTotal());
         venda.setMesa(dto.getMesa());
         venda.setCliente(dto.getCliente());
         venda.setFormaPagamento(dto.getFormaPagamento());
+        venda.setDataVenda(dto.getDataVenda());
+
+        Funcionario funcionario = new Funcionario();
+        funcionario.setId(dto.getFuncionarioId());
         venda.setFuncionario(funcionario);
-        venda.setItensCarrinho(itens);
+
+        List<ItemCarrinho> itensCarrinho = dto.getItens().stream().map(id -> {
+            ItemCarrinho item = new ItemCarrinho();
+            item.setId(id);
+            return item;
+        }).toList();
+        venda.setItensCarrinho(itensCarrinho);
+
+        venda.setValorTotal(dto.getValorTotal());
         venda.setVendaConcluida(dto.getVendaConcluida());
+
         return venda;
     }
 
