@@ -33,11 +33,13 @@ public class VendaService {
     private final FuncionarioRepository funcionarioRepository;
     private final ItemCarrinhoRepository itemCarrinhoRepository;
     private final VendaRepository vendaRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository) {
+    public VendaService(FuncionarioRepository funcionarioRepository, ItemCarrinhoRepository itemCarrinhoRepository, VendaRepository vendaRepository, ProdutoRepository produtoRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
+        this.produtoRepository = produtoRepository;
     }
 
     public Venda criarVenda(Venda venda) {
@@ -54,6 +56,20 @@ public class VendaService {
                 .toList();
 
         List<ItemCarrinho> itensCarrinho = itemCarrinhoRepository.findAllById(itemIds);
+
+        for (ItemCarrinho item : itensCarrinho) {
+            Produto produto = item.getProduto();
+            if (produto != null) {
+                int novaQuantidade = produto.getQuantidade() - 1;
+
+                if (novaQuantidade < 0) {
+                    throw new RuntimeException("Produto " + produto.getNome() + " sem estoque suficiente.");
+                }
+
+                produto.setQuantidade(novaQuantidade);
+                produtoRepository.save(produto);
+            }
+        }
 
         if (itensCarrinho.isEmpty()) {
             throw new RuntimeException("Nenhum item válido encontrado para os IDs informados.");
