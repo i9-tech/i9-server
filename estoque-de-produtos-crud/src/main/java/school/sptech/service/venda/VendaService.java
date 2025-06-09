@@ -31,16 +31,14 @@ import java.util.stream.Collectors;
 @Service
 public class VendaService {
     private final FuncionarioRepository funcionarioRepository;
-    private final ItemCarrinhoRepository itemCarrinhoRepository;
+
     private final VendaRepository vendaRepository;
-    private final ProdutoRepository produtoRepository;
 
     public VendaService(FuncionarioRepository funcionarioRepository, VendaRepository vendaRepository) {
         this.funcionarioRepository = funcionarioRepository;
-        this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.vendaRepository = vendaRepository;
-        this.produtoRepository = produtoRepository;
     }
+
 
     public Venda criarVenda(Venda venda) {
 
