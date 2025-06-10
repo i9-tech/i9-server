@@ -2,6 +2,7 @@ package school.sptech.service.venda;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -54,6 +55,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Criar venda com dados válidos deve retornar a venda criada com sucesso")
     void deveCriarVendaComSucesso() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);
