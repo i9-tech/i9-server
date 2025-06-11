@@ -42,13 +42,6 @@ jobs:
       - name: Build with Maven # Compila o projeto Maven
         run: mvn clean install # Executa o comando Maven para limpar e instalar
         working-directory: ./estoque-de-produtos-crud # Define o diretório de trabalho para o módulo do seu backend
-
-      - name: Upload Surefire Reports # NOVA ETAPA: Faz upload dos relatórios de teste
-        uses: actions/upload-artifact@v4
-        if: always() # Garante que este passo rode mesmo se os testes falharem
-        with:
-          name: surefire-reports
-          path: './estoque-de-produtos-crud/target/surefire-reports/'
       
       - name: Upload artifact for deployment job # Faz upload do JAR compilado como um artefato
         uses: actions/upload-artifact@v4
