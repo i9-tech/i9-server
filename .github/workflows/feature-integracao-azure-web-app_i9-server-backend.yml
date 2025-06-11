@@ -7,60 +7,77 @@ on:
   push:
     branches:
       - feature/integracao-azure-web-app
-  workflow_dispatch:
+  workflow_dispatch: # Permite disparar o workflow manualmente no GitHub UI
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # O runner do GitHub Actions será uma máquina Ubuntu
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # Permissão necessária para o actions/checkout
 
+    env: # Variáveis de ambiente que serão acessíveis durante o job de build
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      AZURE_ACCOUNT_NAME: ${{ secrets.AZURE_ACCOUNT_NAME }}
+      AZURE_CONTAINER_NAME: ${{ secrets.AZURE_CONTAINER_NAME }}
+      AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository # Clona o repositório para o runner
+        uses: actions/checkout@v4
 
-      - name: Set up Java version
+      - name: Set up Java version # Configura o ambiente Java 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'microsoft'
+          distribution: 'microsoft' # Distribuição Microsoft OpenJDK
+          cache: 'maven' # Habilita o cache do Maven para builds mais rápidos
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build with Maven # Compila o projeto Maven
+        run: mvn clean install # Executa o comando Maven para limpar e instalar
+        working-directory: ./estoque-de-produtos-crud # Define o diretório de trabalho para o módulo do seu backend
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact for deployment job # Faz upload do JAR compilado como um artefato
         uses: actions/upload-artifact@v4
         with:
-          name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          name: java-app # Nome do artefato
+          # Caminho para o JAR dentro do diretório de trabalho do módulo Maven
+          path: './estoque-de-produtos-crud/target/*.jar'
 
   deploy:
-    runs-on: ubuntu-latest
-    needs: build
+    runs-on: ubuntu-latest # O runner para o job de deploy
+    needs: build # Garante que o job de build seja concluído antes deste
     environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      name: 'Production' # Ambiente de deploy (configurado no GitHub)
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }} # URL da aplicação após deploy
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-  
+      id-token: write # Necessário para autenticação com o Azure (OIDC)
+      contents: read # Necessário para o actions/checkout (embora não esteja diretamente aqui, é uma boa prática)
+      
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact from build job # Baixa o artefato JAR do job de build
         uses: actions/download-artifact@v4
         with:
-          name: java-app
-      
-      - name: Login to Azure
+          name: java-app # Nome do artefato a ser baixado (o JAR estará na raiz do diretório de trabalho do runner)
+          
+      - name: Login to Azure # Realiza o login no Azure usando as credenciais do Service Principal
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_80FBD64D5A18485E934D320140BAEA51 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F7D35A08F1744C988CA90AD506795DC8 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A8FF7D02F156413791F48D62EF441D90 }}
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App # Implanta o JAR no Azure App Service
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'i9-server-backend'
-          slot-name: 'Production'
-          package: '*.jar'
-          
+          app-name: 'i9-server-backend' # Nome do seu novo Azure App Service
+          slot-name: 'Production' # Slot de implantação (neste caso, o slot de produção principal)
+          # O pacote a ser implantado. O JAR foi baixado para a raiz do diretório do runner.
+          package: 'estoque-de-produtos-0.0.1-SNAPSHOT.jar'
