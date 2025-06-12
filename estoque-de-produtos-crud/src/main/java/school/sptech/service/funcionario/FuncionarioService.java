@@ -80,7 +80,7 @@ public class FuncionarioService {
 
     public FuncionarioResponseDto cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
 
-        boolean funcionarioExisteByCpf = repository.existsByCpfIgnoreCaseAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
+        boolean funcionarioExisteByCpf = repository.existsByCpfAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
 
         if (funcionarioExisteByCpf) {
             throw new EntidadeConflictException("Esse usuário já está cadastrado!");

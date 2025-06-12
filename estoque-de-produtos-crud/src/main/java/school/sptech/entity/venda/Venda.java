@@ -25,7 +25,6 @@ public class Venda {
     @PositiveOrZero(message = "O valor total deve ser positivo ou zero")
     private Double valorTotal;
 
-    @NotBlank(message = "A identificação da mesa é obrigatória")
     @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres")
     private String mesa;
 
@@ -81,11 +80,11 @@ public class Venda {
         this.valorTotal = valorTotal;
     }
 
-    public @NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String getMesa() {
+    public @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String getMesa() {
         return mesa;
     }
 
-    public void setMesa(@NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String mesa) {
+    public void setMesa(@Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String mesa) {
         this.mesa = mesa;
     }
 
