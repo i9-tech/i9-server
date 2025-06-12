@@ -133,7 +133,7 @@ public class SetorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoSetor);
     }
 
-    @PutMapping("/{idSetor}/{idFuncionario}")
+    @PatchMapping("/{idSetor}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar setor existente", description = "Atualiza um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {

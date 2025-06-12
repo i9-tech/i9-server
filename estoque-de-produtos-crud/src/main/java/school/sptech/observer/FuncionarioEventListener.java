@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.service.emailService.EmailService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class FuncionarioEventListener {
 
@@ -20,6 +23,7 @@ public class FuncionarioEventListener {
     public void handleFuncionarioEvent(FuncionarioEvent event) {
         Funcionario funcionario = event.getFuncionario();
 
+        String cargoGerado = determinarCargo(funcionario);
         String destinatario = funcionario.getEmpresa().getEmail(); // Certifique-se de que Empresa tem um e-mail válido
         String assunto = "Novo Funcionário Cadastrado";
         String conteudoHtml = String.format(
@@ -32,7 +36,7 @@ public class FuncionarioEventListener {
                         "</ul>" +
                         "<p>Atenciosamente,<br/>Equipe i9 Tech</p>" +
                         "</body></html>",
-                funcionario.getNome(), funcionario.getCpf(), funcionario.getCargo()
+                funcionario.getNome(), funcionario.getCpf(), cargoGerado
         );
 
         try {
@@ -42,4 +46,25 @@ public class FuncionarioEventListener {
             e.printStackTrace();
         }
     }
+
+    private String determinarCargo(Funcionario funcionario) {
+        if (funcionario.isProprietario()) {
+            return "Proprietário";
+        }
+
+        List<String> cargos = new ArrayList<>();
+
+        if (funcionario.isAcessoSetorAtendimento()) {
+            cargos.add("Atendente");
+        }
+        if (funcionario.isAcessoSetorEstoque()) {
+            cargos.add("Estoquista");
+        }
+        if (funcionario.isAcessoSetorCozinha()) {
+            cargos.add("Cozinheiro(a)");
+        }
+
+        return String.join(" | ", cargos);
+    }
+
 }

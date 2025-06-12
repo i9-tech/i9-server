@@ -10,8 +10,10 @@ import java.util.List;
 
 public class VendaRequestDto {
 
+    public VendaRequestDto() {
+    }
+
     @Schema(description = "Identificação da mesa onde ocorreu a venda", example = "Mesa 7")
-    @NotBlank(message = "A identificação da mesa é obrigatória")
     @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres")
     private String mesa;
 
@@ -53,11 +55,12 @@ public class VendaRequestDto {
         this.vendaConcluida = vendaConcluida;
     }
 
-    public @NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String getMesa() {
+
+    public @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String getMesa() {
         return mesa;
     }
 
-    public void setMesa(@NotBlank(message = "A identificação da mesa é obrigatória") @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String mesa) {
+    public void setMesa(@Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres") String mesa) {
         this.mesa = mesa;
     }
 

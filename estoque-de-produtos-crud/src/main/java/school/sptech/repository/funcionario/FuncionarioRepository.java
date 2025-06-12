@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
     Optional<Funcionario> findByIdAndEmpresaId(int id, Integer idEmpresa);
 
-    boolean existsByCpfIgnoreCaseAndEmpresa_Id(String cpf, Integer idEmpresa);
+    boolean existsByCpfAndEmpresa_Id(String cpf, Integer idEmpresa);
 
     @Modifying
     @Transactional
