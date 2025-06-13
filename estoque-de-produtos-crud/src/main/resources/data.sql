@@ -29,16 +29,6 @@ VALUES ('Pedro Santos', '111.222.333-44', 'Estoquista', '2022-12-10', false, tru
 INSERT INTO funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
 VALUES ('Ana Paula', '555.666.777-88', 'Auxiliar', '2024-01-05', false, false, false, false, true, '$2a$10$xUpX3.bXqE5RtOuSZtNYZ.3BJdn9ZWfQUgq9INkqvq9g2cvNDwI0G', 2);
                                                                                                     -- senha: 55566677788@tai
-
--- Inserir uma empresa
-insert into empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
-values ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'yasmim.silva510@gmail.com', 'taua', '+5511942780654');
-
-
--- Inserir funcionário
-insert into funcionario (nome, cpf, cargo, data_admissao, acesso_setor_cozinha, acesso_setor_estoque, acesso_setor_atendimento, proprietario, ativo, senha, empresa_id)
-values ('João Silva', '123.456.789-00', 'Gerente', '2023-05-15', true, true, true, true, true, '$2a$10$G2/SarKppek1QTyQ0fw1Le.DwFHuw5st2bai9T2edfysLey2BwmYC', 1);
-
 -- Inserir setor
 insert into setor (nome, funcionario_id) values
 ('Pastelaria', 1),
@@ -46,19 +36,23 @@ insert into setor (nome, funcionario_id) values
 ('Restaurante', 1),
 ('Lanchonete', 1);
 
-
 -- Inserir categoria
 insert into categoria (nome, funcionario_id) values
-('Pratos Principais', 1),
-('Guarnições', 1),
-('Pastéis Salgados', 1),
-('Pastéis Doces', 1),
-('Lanches', 1),
-('Sucos Naturais', 1),
-('Refrigerantes', 1),
-('Cervejas', 1),
-('Bebidas Alcoólicas', 1),
-('Bebidas Naturais', 1);
+('Pratos Principais', 1), -- 1
+('Guarnições', 1), -- 2
+('Pastéis Salgados', 1), -- 3
+('Pastéis Doces', 1), -- 4
+('Lanches', 1), -- 5
+('Sucos Naturais', 1), -- 6
+('Refrigerantes', 1), -- 7
+('Cervejas', 1), -- 8
+('Bebidas Alcoólicas', 1), -- -9
+('Bebidas Naturais', 1), -- 10
+('Sorvetes', 1), -- 11
+('Doces e sobremesas', 1), -- 12
+('Bebidas', 1), -- 13
+('Salgadinhos', 1); -- 14
+
 
 -- Inserir prato
 
@@ -216,3 +210,90 @@ INSERT INTO prato (
 ('Caldo De Cana 500ml', '', 9.00, 'Caldo De Cana 500ml', true, 1, 1, 10, NULL, NULL),
 ('Caldo De Cana 1 Litro', '', 18.00, 'Caldo De Cana 1 Litro', true, 1, 1, 10, NULL, NULL),
 ('Coco Verde', '', 8.00, 'Coco Verde', true, 1, 1, 10, NULL, NULL);
+
+
+
+
+
+
+
+
+-- PRODUTOS
+INSERT INTO produto (
+  codigo, imagem, nome, quantidade, valor_compra, valor_unitario,
+  quantidade_max, quantidade_min, descricao, data_registro,
+  setor_id, categoria_id, funcionario_id
+) VALUES
+(1001, '', 'Hamburgão', 50, 2.50, 8.00, 100, 20, 'Hamburgão com carne sem cheddar', CURRENT_DATE, 4, 5, 1),
+(1002, '', 'Empada de Frango', 30, 2.50, 8.00, 80, 15, 'Empada frango', CURRENT_DATE, 4, 5, 1),
+(1004, '', 'Kibe', 30, 2.50, 7.00, 80, 15, 'Kibe de carne', CURRENT_DATE, 4, 5, 1),
+(1005, '', 'Enroladinho de presunto', 30, 2.50, 7.00, 80, 15, 'Enroladinho de presunto', CURRENT_DATE, 4, 5, 1),
+(1006, '', 'Enroladinho de queijo', 30, 2.50, 7.00, 80, 15, 'Enroladinho de queijo', CURRENT_DATE, 4, 5, 1),
+(1007, '', 'Coxinha', 30, 2.50, 7.00, 80, 15, 'Coxinha tradicional de frango', CURRENT_DATE, 4, 5, 1),
+(1008, '', 'Pão de batata de calabresa', 30, 2.50, 7.00, 80, 15, 'Pão de batata de calabresa', CURRENT_DATE, 4, 5, 1),
+(1009, '', 'Esfiha de carne', 80, 2.00, 7.00, 120, 30, 'Esfihas de carne', CURRENT_DATE, 4, 5, 1),
+(1010, '', 'Esfiha de queijo', 80, 2.00, 7.00, 120, 30, 'Esfihas de queijo', CURRENT_DATE, 4, 5, 1),
+(1011, '', 'Esfiha de frango', 80, 2.00, 7.00, 120, 30, 'Esfihas de frango', CURRENT_DATE, 4, 5, 1),
+(1012, '', 'Pão de queijo', 80, 2.00, 6.00, 120, 30, 'Pão de queijo', CURRENT_DATE, 4, 5, 1),
+(1013, '', 'Barra de chocolate', 80, 2.00, 12.00, 120, 30, 'Barra de chocolate de qualquer sabor/marca', CURRENT_DATE, 2, 12, 1),
+(1014, '', 'Bombons', 80, 2.00, 2.50, 120, 30, 'Unidade do bombom de várias marcas', CURRENT_DATE, 2, 12, 1),
+(1015, '', 'Chockito', 80, 2.00, 4.90, 120, 30, 'Chocolate Bombom Chockito', CURRENT_DATE, 2, 12, 1),
+(1016, '', 'Suflair', 80, 2.00, 8.90, 120, 30, 'Chocolate Suflair', CURRENT_DATE, 2, 12, 1),
+(1017, '', 'Pira Kids', 80, 2.00, 4.00, 120, 30, 'Achocolatado Pira Kids', CURRENT_DATE, 2, 13, 1),
+(1018, '', 'Coko', 80, 1.50, 4.00, 120, 30, 'Água de coco sabor tradicional', CURRENT_DATE, 2, 13, 1),
+(1019, '', 'Bolacha waffle', 80, 2.00, 6.50, 120, 30, 'Bolacha waffle vários sabores', CURRENT_DATE, 2, 12, 1),
+(1020, '', 'Bolacha passatempo', 80, 2.00, 6.50, 120, 30, 'Bolacha passatempo', CURRENT_DATE, 2, 12, 1),
+(1021, '', 'Iorgute Frutap', 80, 2.00, 4.00, 120, 30, 'Iorgute Frutap sabor morango', CURRENT_DATE, 2, 13, 1),
+(1022, '', 'Danet', 80, 2.00, 4.50, 120, 30, 'Danet sabor chocolate', CURRENT_DATE, 2, 12, 1),
+(1023, '', 'Bis', 80, 2.00, 10.90, 120, 30, 'Chocolate bis', CURRENT_DATE, 2, 12, 1),
+(1024, '', 'Bolacha Trakinas', 80, 2.00, 6.50, 120, 30, 'Bolacha Trakinas qualquer sabor', CURRENT_DATE, 2, 12, 1),
+(1025, '', 'Bolacha recheada bauduco', 80, 2.00, 4.50, 120, 30, 'Bolacha recheada bauduco qualquer sabor', CURRENT_DATE, 2, 12, 1),
+(1026, '', 'Batata Fritop', 80, 2.00, 6.00, 120, 30, 'Batata Fritop original', CURRENT_DATE, 2, 14, 1),
+(1027, '', 'Ebicem Camarão', 80, 2.00, 4.50, 120, 30, 'Ebicem sabor Camarão', CURRENT_DATE, 2, 14, 1),
+(1028, '', 'Sequilho', 80, 2.00, 4.50, 120, 30, 'Sequilho original', CURRENT_DATE, 2, 14, 1),
+(1029, '', 'Pipoca doce', 80, 2.00, 4.00, 120, 30, 'Pipoca doce Emília', CURRENT_DATE, 2, 14, 1),
+(1030, '', 'Biscoito de polvilho', 80, 2.00, 5.00, 120, 30, 'Biscoito de polvilho salgado', CURRENT_DATE, 2, 14, 1),
+(1031, '', 'Salgadinho de bacon', 80, 2.00, 5.00, 120, 30, 'Salgadinho de bacon', CURRENT_DATE, 2, 14, 1),
+(2001, '', 'Doce sortido', 80, 1.50, 3.00, 100, 20, 'Doce de qualquer tipo', CURRENT_DATE, 2, 12, 1),
+(2004, '', 'Fofura', 80, 2.50, 5.00, 100, 20, 'Salgadinho Fofura de qualquer sabor', CURRENT_DATE, 2, 14, 1),
+(2005, '', 'Torcida', 80, 2.00, 4.00, 100, 20, 'Salgadinho Torcida de qualquer sabor', CURRENT_DATE, 2, 14, 1),
+(2006, '', 'Bolinho Ana Maria', 80, 3.00, 6.00, 100, 20, 'Bolinho Ana Maria de qualquer sabor', CURRENT_DATE, 2, 12, 1);
+
+INSERT INTO produto
+(codigo, imagem, nome, quantidade, valor_compra, valor_unitario, quantidade_max, quantidade_min, descricao, data_registro, setor_id, categoria_id, funcionario_id)
+VALUES
+(3000, '', 'Picolé Laka', 50, 18.50, 21.90, 50, 10, 'Sorvete picolé da marca Lacta Laka Branco', CURRENT_DATE, 2, 11, 1),
+(3001, '', 'Picolé Laka Oreo', 50, 18.90, 21.90, 50, 10, 'Sorvete picolé da marca Lacta Laka Oreo Branco', CURRENT_DATE, 2, 11, 1),
+(3002, '', 'Picolé Sonho de Valsa', 50, 18.90, 21.90, 50, 10, 'Sorvete picolé da marca Lacta Sonho de Valsa', CURRENT_DATE, 2, 11, 1),
+(3003, '', 'Picolé Diamante Negro', 50, 18.90, 21.90, 50, 10, 'Sorvete picolé da marca Lacta Diamante Negro', CURRENT_DATE, 2, 11, 1),
+(3004, '', 'Picolé Mega Pistache', 50, 18.50, 21.90, 50, 10, 'Sorvete picolé Mega sabor pistache com chocolate', CURRENT_DATE, 2, 11, 1),
+(3005, '', 'Picolé Mega Amêndoas', 50, 18.50, 21.90, 50, 10, 'Sorvete picolé Mega sabor amêndoas com chocolate', CURRENT_DATE, 2, 11, 1),
+(3006, '', 'Picolé Mega Trufa Branca', 50, 18.50, 21.90, 50, 10, 'Sorvete picolé Mega sabor trufa branca', CURRENT_DATE, 2, 11, 1),
+(3007, '', 'Picolé Mega Clássico', 50, 17.00, 19.90, 50, 10, 'Sorvete picolé Mega sabor chocolate clássico', CURRENT_DATE, 2, 11, 1),
+(3008, '', 'Picolé Oreo', 50, 17.50, 20.50, 50, 10, 'Sorvete picolé da marca Oreo', CURRENT_DATE, 2, 11, 1),
+(3009, '', 'Sorvete Oreo Bites', 50, 16.50, 25.50, 50, 10, 'Pedaços de Oreo com recheio gelado coberto com chocolate', CURRENT_DATE, 2, 11, 1),
+(3010, '', 'Sorvete Sandwich Oreo', 50, 9.00, 19.90, 50, 10, 'Sandwich de sorvete com biscoito Oreo', CURRENT_DATE, 2, 11, 1),
+(3011, '', 'Sorvete Cone KitKat', 50, 20.00, 20.90, 50, 10, 'Sorvete no cone com sabor de KitKat', CURRENT_DATE, 2, 11, 1),
+(3012, '', 'Sorvete KitKat', 50, 18.00, 21.90, 50, 10, 'Sorvete no cone com cobertura de KitKat branco', CURRENT_DATE, 2, 11, 1),
+(3013, '', 'Sorvete Caixa Bombomzim', 50, 8.00, 17.90, 50, 10, 'Sorvete da marca garoto bombomzim sabor bauninha com casquinha de chocolate', CURRENT_DATE, 2, 11, 1),
+(3014, '', 'Picolé Moça Tradicional', 50, 8.00, 12.00, 50, 10, 'Picolé da marca Moça Tradicional Nestlé', CURRENT_DATE, 2, 11, 1),
+(3015, '', 'Picolé Moça Brigadeiro', 50, 8.00, 12.00, 50, 10, 'Picolé da marca Moça sabor brigadeiro', CURRENT_DATE, 2, 11, 1),
+(3016, '', 'Cone Serenata de Amor', 50, 15.00, 17.90, 50, 10, 'Sorvete no cone com cobertura Serenata de Amor', CURRENT_DATE, 2, 11, 1),
+(3017, '', 'Picolé Nestlé Classic', 50, 9.00, 12.00, 50, 10, 'Picolé Nestlé sabor chocolate Classic', CURRENT_DATE, 2, 11, 1),
+(3018, '', 'Picolé Caribe', 50, 9.00, 12.00, 50, 10, 'Picolé Nestlé Caribe com banana e cobertura de chocolate', CURRENT_DATE, 2, 11, 1),
+(3019, '', 'Bombom Crocante', 50, 15.00, 17.90, 50, 10, 'Bombom de sorvete coberto com chocolate crocante', CURRENT_DATE, 2, 11, 1),
+(3020, '', 'Picolé Crocante', 50, 9.00, 17.90, 50, 10, 'Picolé crocrante da marca Nestlé', CURRENT_DATE, 2, 11, 1),
+(3021, '', 'Picolé Prestígio', 50, 9.00, 17.90, 50, 10, 'Picolé Prestígio Nestlé', CURRENT_DATE, 2, 11, 1),
+(3022, '', 'Sorvete Cone Crocante', 50, 9.00, 17.90, 50, 10, 'Sorvete da marca crocante cone 2 sabores com cobertura', CURRENT_DATE, 2, 11, 1),
+(3023, '', 'Picolé La Frutta Manga', 50, 6.00, 7.00, 50, 10, 'Sorvete Picolé La Frutta sabor manga', CURRENT_DATE, 2, 11, 1),
+(3024, '', 'Picolé La Frutta Morango ao Leite', 50, 9.00, 10.90, 50, 10, 'Sorvete Picolé La Frutta sabor morango ao leite', CURRENT_DATE, 2, 11, 1),
+(3025, '', 'Picolé La Frutta Coco', 50, 6.00, 10.90, 50, 10, 'Sorvete Picolé La Frutta sabor coco', CURRENT_DATE, 2, 11, 1),
+(3026, '', 'Picolé La Frutta Limão', 50, 6.00, 10.90, 50, 10, 'Sorvete Picolé La Frutta sabor limão', CURRENT_DATE, 2, 11, 1),
+(3027, '', 'Picolé La Frutta Uva', 50, 6.00, 10.90, 50, 10, 'Sorvete Picolé La Frutta sabor uva', CURRENT_DATE, 2, 11, 1),
+(3028, '', 'Picolé Fini Tubes Morango', 50, 4.00, 5.50, 50, 10, 'Picolé Fini Tubes sabor morango', CURRENT_DATE, 2, 11, 1),
+(3029, '', 'Picolé Fini Tubes Tuti-Frut', 50, 4.00, 5.50, 50, 10, 'Picolé Fini Tubes sabor Tuti-Frut', CURRENT_DATE, 2, 11, 1),
+(3030, '', 'Picolé Fini Torção Azul', 50, 6.00, 7.00, 50, 10, 'Picolé Fini Torção Azul sabor marshmallow de baunilha', CURRENT_DATE, 2, 11, 1),
+(3031, '', 'Picolé Fini Dentadura', 50, 9.00, 11.90, 50, 10, 'Picolé Fini em formato de dentadura', CURRENT_DATE, 2, 11, 1),
+(3032, '', 'Picolé Chambinho', 50, 9.00, 11.90, 50, 10, 'Picolé Chambinho em formato de coração', CURRENT_DATE, 2, 11, 1),
+(3033, '', 'Sorvete Baton', 50, 7.00, 7.90, 50, 10, 'Sorvete da marca batom sabor chocolate ao leite', CURRENT_DATE, 2, 11, 1);
+
