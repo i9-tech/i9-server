@@ -28,6 +28,7 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       EMAIL_USER: ${{ secrets.EMAIL_USER }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
       
     steps:
       - name: Checkout repository # Clona o repositório para o runner
