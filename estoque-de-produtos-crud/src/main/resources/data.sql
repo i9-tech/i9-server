@@ -224,8 +224,8 @@ INSERT INTO produto (
   quantidade_max, quantidade_min, descricao, data_registro,
   setor_id, categoria_id, funcionario_id
 ) VALUES
-(1001, '', 'Hamburgão', 50, 2.50, 8.00, 100, 20, 'Hamburgão com carne sem cheddar', CURRENT_DATE, 4, 5, 1),
-(1002, '', 'Empada de Frango', 30, 2.50, 8.00, 80, 15, 'Empada frango', CURRENT_DATE, 4, 5, 1),
+(1001, '', 'Hamburgão', 2, 2.50, 8.00, 100, 20, 'Hamburgão com carne sem cheddar', CURRENT_DATE, 4, 5, 1),
+(1002, '', 'Empada de Frango', 10, 2.50, 8.00, 80, 15, 'Empada frango', CURRENT_DATE, 4, 5, 1),
 (1004, '', 'Kibe', 30, 2.50, 7.00, 80, 15, 'Kibe de carne', CURRENT_DATE, 4, 5, 1),
 (1005, '', 'Enroladinho de presunto', 30, 2.50, 7.00, 80, 15, 'Enroladinho de presunto', CURRENT_DATE, 4, 5, 1),
 (1006, '', 'Enroladinho de queijo', 30, 2.50, 7.00, 80, 15, 'Enroladinho de queijo', CURRENT_DATE, 4, 5, 1),

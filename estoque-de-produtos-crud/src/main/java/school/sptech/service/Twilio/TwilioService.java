@@ -95,7 +95,7 @@ public class TwilioService {
             );
         }
 
-        mensagem.append(String.format("\n📋 *Resumo dos itens vendidos:*\n"));
+        mensagem.append("\n📋 *Top 5 itens mais vendidos hoje:*\n");
 
         if (resumoItens.isEmpty()) {
             mensagem.append("⚠️ Nenhum item vendido hoje.\n");

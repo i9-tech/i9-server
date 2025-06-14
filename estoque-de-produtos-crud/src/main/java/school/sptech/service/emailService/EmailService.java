@@ -21,7 +21,7 @@ public class EmailService{
 
 
     public void enviarEmail(String destinatario) throws MessagingException {
-
+        try {
             MimeMessage mensagem = mailSender.createMimeMessage();
             MimeMessageHelper helperMensagem = new MimeMessageHelper(mensagem, true);
 
@@ -53,6 +53,10 @@ public class EmailService{
             helperMensagem.setText(htmlContent, true);
 
             mailSender.send(mensagem);
+        } catch (MailException e) {
+            System.err.println("Erro ao enviar e-mail para " + destinatario + ": " + e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 
