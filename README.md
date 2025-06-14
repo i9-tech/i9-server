@@ -1,4 +1,7 @@
 # 🖥️ Servidor i9
+![CI](https://github.com/i9-tech/i9-server/actions/workflows/feature-integracao-azure-web-app_i9-server-backend.yml/badge.svg?branch=feature-integracao-azure-web-app)
+
+***
 
 ### 🌟 Boas-vindas!
 Esse é o repositório da **i9 Tech** referente aos servidores de nosso sistema. Esse repositório tem como propósito **armazenar** toda nossa **regra de negócio** junto a **camadas de segurança** e **fluxos de funcionamento**, tudo em **um só servidor**. Cada nova implementação é desenvolvida em uma nova branch, para que não haja conflitos na aplicação final, então o que estiver presente na branch principal será o conteúdo mais atualizado e homologado.
@@ -50,7 +53,7 @@ cd estoque-de-produtos-crud
 
 5. Espere as dependências serem carregadas para que então possa executar a aplicação
 
-6. Acesse a classe `i9Application` e aperte o play (símbolo verde na linha 7 e aguarde a aplicação iniciar)
+6. Acesse a classe `i9Application` e aperte o play *(símbolo verde na linha 7 e aguarde a aplicação iniciar)*
 
 7. Pronto! A aplicação estará rodando com sucesso na `porta 8080` do seu `localhost`!
 
@@ -62,16 +65,16 @@ cd estoque-de-produtos-crud
 
 ## 🔐 Variáveis de Ambiente
 
-As variáveis de ambiente são essenciais para manter informações sensíveis (como senhas, tokens e chaves de API) fora do código-fonte e permitir configurações distintas entre os ambientes (desenvolvimento, produção, testes).
+As variáveis de ambiente são essenciais para manter informações sensíveis *(como senhas, tokens e chaves de API)* fora do código-fonte e permitir configurações distintas entre os ambientes *(desenvolvimento, produção, testes)*.
 
-### Backend (Spring Boot)
+### Backend *(Spring Boot)*
 
 Utilizamos o arquivo `application.properties` para configurar a aplicação. As variáveis são referenciadas no seguinte formato:
 
 ```properties
 spring.datasource.password=${DB_PASSWORD}
 ```
-O valor de DB_PASSWORD deve ser definido fora do código — localmente (em arquivos como dev.properties, não versionados) ou por meio de variáveis em ambientes de nuvem (GitHub Actions, AWS, Azure, etc.).
+O valor de DB_PASSWORD deve ser definido fora do código — localmente *(em arquivos como dev.properties, não versionados)* ou por meio de variáveis em ambientes de nuvem *(GitHub Actions, AWS, Azure, etc.)*.
 
 Para variáveis personalizadas no código Java, utilizamos a anotação @Value:
 ```java
