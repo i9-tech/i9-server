@@ -36,12 +36,15 @@ public class RecuperacaoSenhaTokenService {
     @Value("${app.frontend.url}")
     private String frontendUrl;
 
+    @Transactional
     public void iniciarRecuperacaoSenha(String cpf) {
         Funcionario funcionario = funcionarioRepository.findByCpf(cpf).orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado!"));
 
         if(!funcionario.isAtivo()) {
             throw new EntidadeInativaException("Funcionário inativo!");
         }
+
+        senhaTokenRepository.invalidateActiveTokensByFuncionarioId(funcionario.getId(), LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
 
         senhaTokenRepository.findByFuncionarioId(funcionario.getId())
                 .ifPresent(token -> {
