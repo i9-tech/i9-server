@@ -18,9 +18,9 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
 
     boolean existsByCpfAndEmpresa_Id(String cpf, Integer idEmpresa);
 
-    @Modifying
     @Transactional
-    @Query("UPDATE Funcionario f SET f.ativo = false WHERE f.id = :id AND f.empresa.id = :idEmpresa")
+    @Modifying
+    @Query("UPDATE Funcionario f SET f.ativo = false, f.cpf = '00000000000' WHERE f.id = :id AND f.empresa.id = :idEmpresa")
     void softDeleteByIdAndEmpresa(@Param("id") int id, @Param("idEmpresa") Integer idEmpresa);
 
     List<Funcionario> findByEmpresaIdAndAtivoTrue(Integer idEmpresa);

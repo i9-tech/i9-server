@@ -208,12 +208,11 @@ public class VendaService {
             }
         }
 
-        List<String> resultado = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : resumo.entrySet()) {
-            resultado.add(entry.getKey() + " - " + entry.getValue() + " unidade(s)");
-        }
-
-        return resultado;
+        return resumo.entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(5)
+                .map(entry -> entry.getKey() + " - " + entry.getValue() + " unidade(s)")
+                .collect(Collectors.toList());
     }
 
 
@@ -230,7 +229,7 @@ public class VendaService {
     }
 
     public List<Object[]> top5Categorias(Integer empresaId) {
-        Pageable limite = PageRequest.of(0, 7);
+        Pageable limite = PageRequest.of(0, 5);
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
         return vendaRepository.top5CategoriasMaisVendidas(empresaId, hojeNoBrasil, limite);
     }

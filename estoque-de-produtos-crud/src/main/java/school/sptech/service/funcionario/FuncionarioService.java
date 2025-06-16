@@ -2,6 +2,7 @@ package school.sptech.service.funcionario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -70,6 +71,11 @@ public class FuncionarioService {
                         .orElseThrow(
                                 () -> new ResponseStatusException(404, "CPF do usuário não cadastrado", null)
                         );
+
+        if (!funcionarioAutenticado.isAtivo()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Usuário inativo. Solicite ativação com um administrador.");
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
