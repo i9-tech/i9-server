@@ -55,7 +55,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
-    @DisplayName("Deve retornar uma venda quando criada com dados corretos")
+    @DisplayName("Criar venda com dados válidos deve retornar a venda criada com sucesso")
     void deveCriarVendaComSucesso() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);

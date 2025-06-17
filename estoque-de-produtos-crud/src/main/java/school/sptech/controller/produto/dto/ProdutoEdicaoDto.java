@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import school.sptech.controller.categoria.dto.CategoriaListagemDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.controller.setor.dto.SetorListagemDto;
@@ -71,7 +72,7 @@ public class ProdutoEdicaoDto {
     )
     private Integer quantidadeMax;
 
-
+    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres")
     @Schema(
             description = "Descrição do produto a ser cadastrado. Campo opcional que facilita visualização do produto.",
             example = "O Bolinho Ana Maria é um produto de confeitaria, embalado individualmente, ideal para lanches rápidos.",
@@ -115,76 +116,68 @@ public class ProdutoEdicaoDto {
         this.imagem = imagem;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public String getNome() {
+    public @NotBlank String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@NotBlank String nome) {
         this.nome = nome;
     }
 
-    public Integer getQuantidade() {
+    public @NotNull @Min(1) Integer getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidade(@NotNull @Min(1) Integer quantidade) {
         this.quantidade = quantidade;
     }
 
-    public Double getValorCompra() {
+    public @NotNull Double getValorCompra() {
         return valorCompra;
     }
 
-    public void setValorCompra(Double valorCompra) {
+    public void setValorCompra(@NotNull Double valorCompra) {
         this.valorCompra = valorCompra;
     }
 
-    public Double getValorUnitario() {
+    public @NotNull Double getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(Double valorUnitario) {
+    public void setValorUnitario(@NotNull Double valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 
-    public Integer getQuantidadeMin() {
+    public @NotNull Integer getQuantidadeMin() {
         return quantidadeMin;
     }
 
-    public void setQuantidadeMin(Integer quantidadeMin) {
+    public void setQuantidadeMin(@NotNull Integer quantidadeMin) {
         this.quantidadeMin = quantidadeMin;
     }
 
-    public Integer getQuantidadeMax() {
+    public @NotNull Integer getQuantidadeMax() {
         return quantidadeMax;
     }
 
-    public void setQuantidadeMax(Integer quantidadeMax) {
+    public void setQuantidadeMax(@NotNull Integer quantidadeMax) {
         this.quantidadeMax = quantidadeMax;
     }
 
-    public String getDescricao() {
+    public @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres") String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
+    public void setDescricao(@Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres") String descricao) {
         this.descricao = descricao;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public @NotNull LocalDate getDataRegistro() {
+        return dataRegistro;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setDataRegistro(@NotNull LocalDate dataRegistro) {
+        this.dataRegistro = dataRegistro;
     }
 
     public Setor getSetor() {
@@ -195,11 +188,19 @@ public class ProdutoEdicaoDto {
         this.setor = setor;
     }
 
-    public LocalDate getDataRegistro() {
-        return dataRegistro;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setDataRegistro(LocalDate dataRegistro) {
-        this.dataRegistro = dataRegistro;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 }

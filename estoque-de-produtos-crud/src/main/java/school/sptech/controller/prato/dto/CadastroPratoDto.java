@@ -5,6 +5,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import school.sptech.controller.categoria.dto.CategoriaListagemDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.controller.setor.dto.SetorListagemDto;
@@ -34,6 +35,7 @@ public class CadastroPratoDto {
     )
     private Double valorVenda;
 
+    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres")
     @Schema(
             description = "Descrição do prato a ser cadastrado. Campo opcional que facilita visualização do prato.",
             example = "Pão, Alface, Tomate e Molho.",
@@ -95,11 +97,11 @@ public class CadastroPratoDto {
         this.valorVenda = valorVenda;
     }
 
-    public String getDescricao() {
+    public @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres") String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
+    public void setDescricao(@Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres") String descricao) {
         this.descricao = descricao;
     }
 
@@ -109,6 +111,14 @@ public class CadastroPratoDto {
 
     public void setImagem(String imagem) {
         this.imagem = imagem;
+    }
+
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 
     public Funcionario getFuncionario() {
@@ -133,13 +143,5 @@ public class CadastroPratoDto {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
-    }
-
-    public boolean isDisponivel() {
-        return disponivel;
-    }
-
-    public void setDisponivel(boolean disponivel) {
-        this.disponivel = disponivel;
     }
 }

@@ -17,6 +17,7 @@ public class VendaRequestDto {
     @Size(max = 10, message = "A mesa deve ter no máximo 10 caracteres")
     private String mesa;
 
+    @Size(max = 40, message = "A mesa deve ter no máximo 40 caracteres")
     private String cliente;
 
     private String formaPagamento;
@@ -64,11 +65,11 @@ public class VendaRequestDto {
         this.mesa = mesa;
     }
 
-    public String getCliente() {
+    public @Size(max = 40, message = "A mesa deve ter no máximo 40 caracteres") String getCliente() {
         return cliente;
     }
 
-    public void setCliente(String cliente) {
+    public void setCliente(@Size(max = 40, message = "A mesa deve ter no máximo 40 caracteres") String cliente) {
         this.cliente = cliente;
     }
 
