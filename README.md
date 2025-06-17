@@ -1,5 +1,5 @@
 # 🖥️ Servidor i9
-![CI](https://github.com/i9-tech/i9-server/actions/workflows/feature-integracao-azure-web-app_i9-server-backend.yml/badge.svg?branch=feature-integracao-azure-web-app)
+[![☕ Serviço de App Web Backend Java na Azure CI/CD](https://github.com/i9-tech/i9-server/actions/workflows/feature-integracao-azure-web-app_i9-server-backend.yml/badge.svg)](https://github.com/i9-tech/i9-server/actions/workflows/feature-integracao-azure-web-app_i9-server-backend.yml)
 
 ***
 
