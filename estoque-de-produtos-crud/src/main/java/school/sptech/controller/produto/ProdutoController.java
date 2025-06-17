@@ -127,6 +127,17 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(responseDto);
     }
 
+    @GetMapping("/{idProduto}/{idFuncionario}")
+    public ResponseEntity<ProdutoListagemDto> listarProdutoPorId(
+            @Parameter(description = "ID do produto para busca.", required = true)
+            @PathVariable Integer idProduto,
+            @Parameter(description = "ID do funcionário para busca do produto.", required = true)
+            @PathVariable Integer idFuncionario
+    ) {
+        ProdutoListagemDto responseDto = service.buscarProdutoPorId(idProduto, idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
+    }
+
     @PatchMapping("/{id}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar produto existente de determinada empresa", description = "Atualiza um produto existente de determinada empresa da base de dados a partir de seu ID.")

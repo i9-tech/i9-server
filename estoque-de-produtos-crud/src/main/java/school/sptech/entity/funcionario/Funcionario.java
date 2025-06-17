@@ -27,7 +27,7 @@ public class Funcionario {
     private int id;
 
     @NotBlank(message = "O nome é obrigatório.")
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 40)
     @Schema(
             description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
             example = "Agatha Nunes",
@@ -124,35 +124,35 @@ public class Funcionario {
         this.id = id;
     }
 
-    public String getNome() {
+    public @NotBlank(message = "O nome é obrigatório.") @Size(min = 3, max = 40) String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@NotBlank(message = "O nome é obrigatório.") @Size(min = 3, max = 40) String nome) {
         this.nome = nome;
     }
 
-    public String getCpf() {
+    public @NotBlank(message = "O CPF é obrigatório") @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 999.999.999-99") String getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(@NotBlank(message = "O CPF é obrigatório") @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 999.999.999-99") String cpf) {
         this.cpf = cpf;
     }
 
-    public String getCargo() {
+    public @NotBlank(message = "O cargo é obrigatório.") String getCargo() {
         return cargo;
     }
 
-    public void setCargo(String cargo) {
+    public void setCargo(@NotBlank(message = "O cargo é obrigatório.") String cargo) {
         this.cargo = cargo;
     }
 
-    public LocalDate getDataAdmissao() {
+    public @NotNull(message = "A data de admissão é obrigatória.") @PastOrPresent(message = "A data de admissão não pode ser no futuro.") LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(LocalDate dataAdmissao) {
+    public void setDataAdmissao(@NotNull(message = "A data de admissão é obrigatória.") @PastOrPresent(message = "A data de admissão não pode ser no futuro.") LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 
@@ -196,19 +196,19 @@ public class Funcionario {
         this.ativo = ativo;
     }
 
-    public String getSenha() {
+    public @NotBlank(message = "A senha é obrigatória.") @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres.") String getSenha() {
         return senha;
     }
 
-    public void setSenha(String senha) {
+    public void setSenha(@NotBlank(message = "A senha é obrigatória.") @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres.") String senha) {
         this.senha = senha;
     }
 
-    public Empresa getEmpresa() {
+    public @NotNull(message = "A empresa vinculada é obrigatória.") Empresa getEmpresa() {
         return empresa;
     }
 
-    public void setEmpresa(Empresa empresa) {
+    public void setEmpresa(@NotNull(message = "A empresa vinculada é obrigatória.") Empresa empresa) {
         this.empresa = empresa;
     }
 }

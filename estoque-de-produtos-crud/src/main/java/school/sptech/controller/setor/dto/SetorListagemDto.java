@@ -31,6 +31,9 @@ public class SetorListagemDto {
     )
     private Funcionario funcionario;
 
+    private String imagem;
+
+
     public Integer getId() {
         return id;
     }
@@ -53,5 +56,13 @@ public class SetorListagemDto {
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

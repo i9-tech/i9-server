@@ -28,6 +28,8 @@ public class SetorAtualizarDto {
     )
     private Funcionario funcionario;
 
+    private String imagem;
+
     public String getNome() {
         return nome;
     }
@@ -42,5 +44,13 @@ public class SetorAtualizarDto {
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

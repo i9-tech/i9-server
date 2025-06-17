@@ -41,10 +41,10 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where produto.setor.id = :setorId and funcionarioProduto.empresa = ( select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
     List<Produto> listarProdutoPorSetorEmpresa(@Param("setorId") Integer setorId, @Param("idFuncionario") Integer idFuncionario);
 
-    @Query("SELECT produto FROM Produto produto JOIN produto.funcionario funcionarioProduto WHERE LOWER(produto.nome) LIKE LOWER(CONCAT('%', :nome, '%')) AND funcionarioProduto.empresa = (SELECT funcionarioParametro.empresa FROM Funcionario funcionarioParametro WHERE funcionarioParametro.id = :idFuncionario)")
+    @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where lower(produto.nome) like lower(concat('%', :nome, '%')) and funcionarioProduto.empresa = (select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
     List<Produto> listarProdutoPorNomeLikeEmpresa(@Param("nome") String categoria, @Param("idFuncionario") Integer idFuncionario);
 
     @Modifying
-    @Query("UPDATE ItemCarrinho ic SET ic.produto = NULL WHERE ic.produto.id = :produtoId")
+    @Query("update ItemCarrinho ic set ic.produto = null where ic.produto.id = :produtoId")
     void desvincularProdutoDosItens(@Param("produtoId") Integer produtoId);
 }

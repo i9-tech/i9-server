@@ -37,6 +37,9 @@ public class Setor {
     )
     private Funcionario funcionario;
 
+    private String imagem;
+
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +62,13 @@ public class Setor {
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

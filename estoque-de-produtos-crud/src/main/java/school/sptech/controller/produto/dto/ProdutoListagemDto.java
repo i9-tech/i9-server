@@ -30,6 +30,8 @@ public class ProdutoListagemDto {
     )
     private int codigo;
 
+    private String imagem;
+
 
     @Schema(
             description = "Nome do produto a ser cadastrado.",
@@ -117,9 +119,10 @@ public class ProdutoListagemDto {
     private Funcionario funcionario;
 
 
-    public ProdutoListagemDto(Integer id, int codigo, String nome, int quantidade, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, LocalDate dataRegistro, Setor setor, Categoria categoria, Funcionario funcionario) {
+    public ProdutoListagemDto(Integer id, int codigo, String imagem, String nome, int quantidade, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, LocalDate dataRegistro, Setor setor, Categoria categoria, Funcionario funcionario) {
         this.id = id;
         this.codigo = codigo;
+        this.imagem = imagem;
         this.nome = nome;
         this.quantidade = quantidade;
         this.valorCompra = valorCompra;
@@ -131,6 +134,14 @@ public class ProdutoListagemDto {
         this.setor = setor;
         this.categoria = categoria;
         this.funcionario = funcionario;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public Integer getId() {

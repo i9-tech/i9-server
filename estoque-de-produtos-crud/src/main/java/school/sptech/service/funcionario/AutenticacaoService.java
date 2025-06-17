@@ -15,8 +15,11 @@ import java.util.Optional;
 @Service
 public class AutenticacaoService implements UserDetailsService {
 
-    @Autowired
-    private FuncionarioRepository repository;
+    private final FuncionarioRepository repository;
+
+    public AutenticacaoService(FuncionarioRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

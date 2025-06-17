@@ -14,7 +14,7 @@ import java.util.Date;
         description = "DTO para transferência de dados cadastrais ou de atualização do funcionário.")
 public class FuncionarioRequestDto {
 
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 40)
     @NotBlank(message = "O nome é obrigatório")
     @Schema(
             description = "Nome de registro ou social de pessoas que empregam uma determinada empresa.",
@@ -81,7 +81,6 @@ public class FuncionarioRequestDto {
     )
     private boolean proprietario;
 
-    @NotBlank(message = "A senha é obrigatória.")
     @Size(min = 11,
             message = "A senha deve ter no mínimo 11 caracteres.")
     @Schema(
@@ -92,35 +91,37 @@ public class FuncionarioRequestDto {
     private String senha;
 
 
-    public String getNome() {
+    public @Size(min = 3, max = 40) @NotBlank(message = "O nome é obrigatório") String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@Size(min = 3, max = 40) @NotBlank(message = "O nome é obrigatório") String nome) {
         this.nome = nome;
     }
 
-    public String getCpf() {
+    public @NotBlank(message = "O CPF é obrigatório") @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+            message = "O cpf deve ser no formato 999.999.999-99 ") String getCpf() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(@NotBlank(message = "O CPF é obrigatório") @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+            message = "O cpf deve ser no formato 999.999.999-99 ") String cpf) {
         this.cpf = cpf;
     }
 
-    public String getCargo() {
+    public @NotBlank(message = "O cargo é obrigatório") String getCargo() {
         return cargo;
     }
 
-    public void setCargo(String cargo) {
+    public void setCargo(@NotBlank(message = "O cargo é obrigatório") String cargo) {
         this.cargo = cargo;
     }
 
-    public LocalDate getDataAdmissao() {
+    public @NotNull(message = "A data de admissão é obrigatória.") @PastOrPresent(message = "A data de admissão não pode ser no futuro.") LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(LocalDate dataAdmissao) {
+    public void setDataAdmissao(@NotNull(message = "A data de admissão é obrigatória.") @PastOrPresent(message = "A data de admissão não pode ser no futuro.") LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
     }
 
@@ -156,11 +157,13 @@ public class FuncionarioRequestDto {
         this.proprietario = proprietario;
     }
 
-    public String getSenha() {
+    public @Size(min = 11,
+            message = "A senha deve ter no mínimo 11 caracteres.") String getSenha() {
         return senha;
     }
 
-    public void setSenha(String senha) {
+    public void setSenha(@Size(min = 11,
+            message = "A senha deve ter no mínimo 11 caracteres.") String senha) {
         this.senha = senha;
     }
 }

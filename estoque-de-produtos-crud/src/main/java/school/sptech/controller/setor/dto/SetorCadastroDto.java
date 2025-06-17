@@ -32,6 +32,8 @@ public class SetorCadastroDto {
         return nome;
     }
 
+    private String imagem;
+
     public void setNome(@NotBlank(message = "O nome não pode estar em branco.") @Size(min = 2, max = 100, message = "O nome deve ter no máximo 100 caracteres.") String nome) {
         this.nome = nome;
     }
@@ -42,5 +44,13 @@ public class SetorCadastroDto {
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 }

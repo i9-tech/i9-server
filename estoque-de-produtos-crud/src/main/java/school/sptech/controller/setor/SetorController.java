@@ -83,16 +83,12 @@ public class SetorController {
             """))
             )
     })
-    public ResponseEntity<List<SetorListagemDto>> listagem(
-            @Parameter(description = "Identificação do funcionário que está cadastrando setor.", required = true)
-            @PathVariable Integer idFuncionario) {
-        List<Setor> buscarSetor = setorService.listarTodosSetores(idFuncionario);
-        if (buscarSetor.isEmpty()) {
+    public ResponseEntity<List<SetorListagemDto>> listagem(@PathVariable Integer idFuncionario) {
+        List<SetorListagemDto> setores = setorService.listarTodosSetores(idFuncionario);
+        if (setores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(SetorMapper.transformarEmListaRespostaDto(buscarSetor));
+        return ResponseEntity.ok(setores);
     }
 
     @GetMapping("/{idSetor}/{idFuncionario}")
@@ -112,15 +108,8 @@ public class SetorController {
     public ResponseEntity<SetorListagemDto> listagemId(
             @PathVariable Integer idSetor,
             @PathVariable Integer idFuncionario) {
-        Optional<Setor> setorEncontrado = setorService.buscarSetorPorId(idSetor, idFuncionario);
-
-        if (setorEncontrado.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-
-        SetorListagemDto respostaListagemIdDto = SetorMapper.transformarEmRespostaDto(setorEncontrado.get());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(respostaListagemIdDto);
+        SetorListagemDto setor = setorService.buscarSetorPorId(idSetor, idFuncionario);
+        return ResponseEntity.ok(setor);
     }
 
     @PostMapping("/{idFuncionario}")
@@ -138,18 +127,13 @@ public class SetorController {
             )
     })
     public ResponseEntity<SetorListagemDto> cadastrar(
-            @Parameter(description = "Dados do setor para cadastro.", required = true)
             @Valid @RequestBody SetorCadastroDto setorParaCadastro,
-            @Parameter(description = "Identificação do funcionário que está cadastrando setor.", required = true)
             @PathVariable Integer idFuncionario) {
-        Setor novoSetor = setorService.cadastrarSetor(SetorMapper.transformarEmEntidade(setorParaCadastro), idFuncionario);
-
-        SetorListagemDto respostaSetorDto = SetorMapper.transformarEmRespostaDto(novoSetor);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(respostaSetorDto);
+        SetorListagemDto novoSetor = setorService.cadastrarSetor(setorParaCadastro, idFuncionario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoSetor);
     }
 
-    @PutMapping("/{idSetor}/{idFuncionario}")
+    @PatchMapping("/{idSetor}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Atualizar setor existente", description = "Atualiza um setor da base de dados a partir de seu ID.")
     @ApiResponses(value = {
@@ -186,19 +170,12 @@ public class SetorController {
             )
     })
     public ResponseEntity<SetorListagemDto> atualizar(
-            @Parameter(description = "ID do setor.", example = "1", required = true)
             @PathVariable Integer idSetor,
-            @Parameter(description = "Dados do setor para atualização.", required = true)
             @Valid @RequestBody SetorAtualizarDto setorParaAtualizar,
-            @Parameter(description = "ID do funcionário encarregado pela atualização.", example = "1", required = true)
             @PathVariable Integer idFuncionario) {
-        Setor entidadeParaAtualizar = setorService.atualizarSetor(idSetor, SetorMapper.transformarEmEntidade(setorParaAtualizar), idFuncionario);
-
-        SetorListagemDto respostaAtualizadaDto = SetorMapper.transformarEmRespostaDto(entidadeParaAtualizar);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(respostaAtualizadaDto);
+        SetorListagemDto atualizado = setorService.atualizarSetor(idSetor, setorParaAtualizar, idFuncionario);
+        return ResponseEntity.ok(atualizado);
     }
-
 
     @DeleteMapping("/{idSetor}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
@@ -214,15 +191,11 @@ public class SetorController {
             """)))
 
     })
-    public ResponseEntity<SetorListagemDto> remover(
-            @Parameter(description = "ID do setor", example = "1", required = true)
+    public ResponseEntity<Void> remover(
             @PathVariable Integer idSetor,
-            @Parameter(description = "ID do funcionário responsável pela remoção do setor.", example = "1", required = true)
-            @PathVariable Integer idFuncionario
-            ) {
-
-
+            @PathVariable Integer idFuncionario) {
         setorService.removerSetor(idSetor, idFuncionario);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
+
 }
