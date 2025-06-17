@@ -6,7 +6,7 @@ name: ☕ Serviço de App Web Backend Java na Azure CI/CD
 on:
   push:
     branches:
-      - feature/integracao-azure-web-app
+      - main
   workflow_dispatch: 
 
 jobs:
