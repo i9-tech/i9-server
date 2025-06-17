@@ -16,7 +16,8 @@ import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
 import school.sptech.repository.produto.ProdutoRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -126,21 +127,21 @@ public class VendaService {
     }
 
     public Double valorTotalPorEmpresaHoje(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        Double valorTotal = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        Double valorTotal = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hojeNoBrasil);
         return valorTotal;
     }
 
     public Double lucroLiquidoPorEmpresaHoje(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hojeNoBrasil);
         return lucro;
     }
 
 
     public Map<String, Double> valorTotalPorSetorHoje(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorSetorEmpresa(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorSetorEmpresa(empresaId, hojeNoBrasil);
 
         Map<String, Double> totalPorSetor = new HashMap<>();
         for (Object[] linha : resultados) {
@@ -153,8 +154,8 @@ public class VendaService {
     }
 
     public Map<String, Double> valorTotalPorCategoriaHoje(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorCategoriaEmpresa(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        List<Object[]> resultados = vendaRepository.valorTotalDiarioPorCategoriaEmpresa(empresaId, hojeNoBrasil);
 
         Map<String, Double> totalPorCategoria = new HashMap<>();
         for (Object[] linha : resultados) {
@@ -168,8 +169,8 @@ public class VendaService {
 
 
     public Integer quantidadeVendasPorEmpresaHoje(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hojeNoBrasil);
         return quantidade;
     }
 
@@ -178,13 +179,13 @@ public class VendaService {
     }
 
     public List<Venda> listarPratosVendidosPorEmpresaEData(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        return vendaRepository.findVendasDePratosComItensPorEmpresaEData(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        return vendaRepository.findVendasDePratosComItensPorEmpresaEData(empresaId, hojeNoBrasil);
     }
 
     public List<String> listarResumoItensVendidosPorEmpresaEData(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        List<Venda> vendas = vendaRepository.findVendasComItensPorEmpresaEData(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        List<Venda> vendas = vendaRepository.findVendasComItensPorEmpresaEData(empresaId, hojeNoBrasil);
 
         List<ItemCarrinho> itensVendidos = new ArrayList<>();
         for (Venda venda : vendas) {
@@ -207,50 +208,49 @@ public class VendaService {
             }
         }
 
-        List<String> resultado = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : resumo.entrySet()) {
-            resultado.add(entry.getKey() + " - " + entry.getValue() + " unidade(s)");
-        }
-
-        return resultado;
+        return resumo.entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(5)
+                .map(entry -> entry.getKey() + " - " + entry.getValue() + " unidade(s)")
+                .collect(Collectors.toList());
     }
 
 
     public List<Object[]> top7Pratos(Integer empresaId) {
         Pageable limite = PageRequest.of(0, 7);
-        LocalDate hoje = LocalDate.now();
-        return vendaRepository.top7PratosMaisVendidos(empresaId, hoje, limite);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        return vendaRepository.top7PratosMaisVendidos(empresaId, hojeNoBrasil, limite);
     }
 
     public List<Object[]> top7Produtos(Integer empresaId) {
         Pageable limite = PageRequest.of(0, 7);
-        LocalDate hoje = LocalDate.now();
-        return vendaRepository.top7ProdutosMaisVendidos(empresaId, hoje, limite);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        return vendaRepository.top7ProdutosMaisVendidos(empresaId, hojeNoBrasil, limite);
     }
 
     public List<Object[]> top5Categorias(Integer empresaId) {
-        Pageable limite = PageRequest.of(0, 7);
-        LocalDate hoje = LocalDate.now();
-        return vendaRepository.top5CategoriasMaisVendidas(empresaId, hoje, limite);
+        Pageable limite = PageRequest.of(0, 5);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        return vendaRepository.top5CategoriasMaisVendidas(empresaId, hojeNoBrasil, limite);
     }
 
 
     public List<Object[]> obterRankingSetoresMaisVendidos(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        return vendaRepository.rankingSetoresMaisVendidos(empresaId, hoje);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        return vendaRepository.rankingSetoresMaisVendidos(empresaId, hojeNoBrasil);
 
     }
 
     public List<Object[]> calculosKpi(Integer empresaId) {
-        LocalDate hoje = LocalDate.now();
-        LocalDate ontem = hoje.minusDays(1);
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+        LocalDate ontem = hojeNoBrasil.minusDays(1);
         List<Object[]> resultados = new ArrayList<>();
 
-        Double brutoHoje = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hoje);
+        Double brutoHoje = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hojeNoBrasil);
         Double brutoOntem = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, ontem);
-        Double liquidoHoje = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hoje);
+        Double liquidoHoje = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hojeNoBrasil);
         Double liquidoMercadoria = brutoHoje - liquidoHoje;
-        Integer vendasHoje = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje);
+        Integer vendasHoje = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hojeNoBrasil);
         Integer vendasOntem = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, ontem);
 
         resultados.add(new Object[]{

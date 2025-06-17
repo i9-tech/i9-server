@@ -21,7 +21,7 @@ public class EmailController {
     public ResponseEntity<String> enviarEmail(@RequestBody String emailRecebido) throws MessagingException{
         try {
             emailService.enviarEmail(emailRecebido);
-            return ResponseEntity.ok("Email enviado com sucesso (confira os logs do observer)");
+            return ResponseEntity.ok("Email enviado com sucesso");
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao enviar email: " + e.getMessage());

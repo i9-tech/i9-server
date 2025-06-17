@@ -40,10 +40,10 @@ class EmpresaRemocaoTest {
 
 
         // WHEN - CONDIÇÃO
-       when(empresaRepository.existsById(anyInt())).thenReturn(true);
-       when(empresaRepository.findById(anyInt())).thenReturn(Optional.of(empresaMock));
-       // SE FOSSE UM DELETE DE VERDADE, UTILIZARIAMOS ESSE WHEN:
-       // doNothing().when(empresaRepository).deleteById(anyInt());
+        when(empresaRepository.existsById(anyInt())).thenReturn(true);
+        when(empresaRepository.findById(anyInt())).thenReturn(Optional.of(empresaMock));
+        // SE FOSSE UM DELETE DE VERDADE, UTILIZARIAMOS ESSE WHEN:
+        // doNothing().when(empresaRepository).deleteById(anyInt());
 
         // THEN - RESPOSTA
         empresaService.removerEmpresa(1);

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.empresa.EmpresaRepository;
@@ -16,10 +17,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FuncionarioAtualizacaoTest {
@@ -28,7 +26,10 @@ public class FuncionarioAtualizacaoTest {
     private FuncionarioRepository funcionarioRepository;
 
     @Mock
-    private EmpresaRepository empresaRepository; // não usado nesse método, mas presente no Service
+    private EmpresaRepository empresaRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private FuncionarioService funcionarioService;
@@ -54,6 +55,9 @@ public class FuncionarioAtualizacaoTest {
         when(funcionarioRepository.findByIdAndEmpresaId(1, 10))
                 .thenReturn(Optional.of(funcionarioExistente));
 
+        when(passwordEncoder.matches("nova-senha", "senha-antiga")).thenReturn(false);
+        when(passwordEncoder.encode("nova-senha")).thenReturn("nova-senha");
+
         Funcionario dadosAtualizados = new Funcionario();
         dadosAtualizados.setCpf("555.666.777-88");
         dadosAtualizados.setNome("Funcionario Novo");
@@ -71,7 +75,7 @@ public class FuncionarioAtualizacaoTest {
         assertThat(resultado.getNome()).isEqualTo("Funcionario Novo");
         assertThat(resultado.getCpf()).isEqualTo("555.666.777-88");
         assertThat(resultado.getCargo()).isEqualTo("Novo Cargo");
-        assertThat(resultado.getSenha()).isEqualTo("nova-senha");
+        assertThat(resultado.getSenha()).isEqualTo("nova-senha"); // agora deve passar
         assertThat(resultado.isAcessoSetorCozinha()).isTrue();
         assertThat(resultado.isAcessoSetorAtendimento()).isTrue();
         assertThat(resultado.isAcessoSetorEstoque()).isTrue();
@@ -100,11 +104,13 @@ public class FuncionarioAtualizacaoTest {
         when(funcionarioRepository.findByIdAndEmpresaId(1, 10))
                 .thenReturn(Optional.of(funcionarioExistente));
 
+        when(passwordEncoder.matches(any(), any())).thenReturn(true);
+
         Funcionario dadosAtualizados = new Funcionario();
-        dadosAtualizados.setCpf(funcionarioExistente.getCpf()); // mantém igual
+        dadosAtualizados.setCpf(funcionarioExistente.getCpf());
         dadosAtualizados.setNome("Novo Nome");
         dadosAtualizados.setCargo("Novo Cargo");
-        dadosAtualizados.setSenha(funcionarioExistente.getSenha()); // mantém igual
+        dadosAtualizados.setSenha(funcionarioExistente.getSenha());
         dadosAtualizados.setAcessoSetorCozinha(funcionarioExistente.isAcessoSetorCozinha());
         dadosAtualizados.setAcessoSetorAtendimento(funcionarioExistente.isAcessoSetorAtendimento());
         dadosAtualizados.setAcessoSetorEstoque(funcionarioExistente.isAcessoSetorEstoque());
@@ -116,7 +122,6 @@ public class FuncionarioAtualizacaoTest {
 
         assertThat(resultado.getNome()).isEqualTo("Novo Nome");
         assertThat(resultado.getCargo()).isEqualTo("Novo Cargo");
-
         assertThat(resultado.getSenha()).isEqualTo("senha-antiga");
         assertThat(resultado.getCpf()).isEqualTo("111.222.333-44");
         assertThat(resultado.isAcessoSetorCozinha()).isFalse();
@@ -131,6 +136,9 @@ public class FuncionarioAtualizacaoTest {
     void editarFuncionario_DeveAtualizarSenha() {
         when(funcionarioRepository.findByIdAndEmpresaId(1, 10))
                 .thenReturn(Optional.of(funcionarioExistente));
+
+        when(passwordEncoder.matches("senha-nova", "senha-antiga")).thenReturn(false);
+        when(passwordEncoder.encode("senha-nova")).thenReturn("senha-nova");
 
         Funcionario dadosAtualizados = new Funcionario();
         dadosAtualizados.setCpf(funcionarioExistente.getCpf());
@@ -151,11 +159,14 @@ public class FuncionarioAtualizacaoTest {
         verify(funcionarioRepository).save(any(Funcionario.class));
     }
 
+
     @Test
     @DisplayName("Deve atualizar acessos corretamente")
     void editarFuncionario_DeveAtualizarAcessos() {
         when(funcionarioRepository.findByIdAndEmpresaId(1, 10))
                 .thenReturn(Optional.of(funcionarioExistente));
+
+        when(passwordEncoder.matches(any(), any())).thenReturn(true);
 
         Funcionario dadosAtualizados = new Funcionario();
         dadosAtualizados.setCpf(funcionarioExistente.getCpf());

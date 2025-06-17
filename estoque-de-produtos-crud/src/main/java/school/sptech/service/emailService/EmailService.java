@@ -3,6 +3,8 @@ package school.sptech.service.emailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class EmailService{
 
 
     public void enviarEmail(String destinatario) throws MessagingException {
-
+        try {
             MimeMessage mensagem = mailSender.createMimeMessage();
             MimeMessageHelper helperMensagem = new MimeMessageHelper(mensagem, true);
 
@@ -51,6 +53,10 @@ public class EmailService{
             helperMensagem.setText(htmlContent, true);
 
             mailSender.send(mensagem);
+        } catch (MailException e) {
+            System.err.println("Erro ao enviar e-mail para " + destinatario + ": " + e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 
@@ -73,5 +79,28 @@ public class EmailService{
         }
     }
 
+    public void enviarEmailRecuperacao(String destinatario, String nomeFuncionario, String cpfFuncionario, String linkRecuperacao) { // Removi 'throws MessagingException' temporariamente para a sugestão
+        try {
+            String assunto = "Recuperação de Senha para " + nomeFuncionario;
+
+            String corpoEmail = "Prezado(a) responsável pela empresa " + nomeFuncionario + ",\n\n"
+                    + "Foi solicitada uma recuperação de senha para o CPF " + cpfFuncionario + ".\n"
+                    + "Para redefinir a senha, clique no link abaixo:\n"
+                    + linkRecuperacao + "\n\n"
+                    + "Este link expirará em 30 minutos. Se você não solicitou esta recuperação, por favor, ignore este e-mail.\n\n"
+                    + "Atenciosamente,\nSua Aplicação";
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(destinatario);
+            message.setSubject(assunto);
+            message.setText(corpoEmail);
+
+            mailSender.send(message);
+
+        } catch (MailException e) {
+            System.err.println("Erro ao enviar e-mail de recuperação para " + destinatario + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
 

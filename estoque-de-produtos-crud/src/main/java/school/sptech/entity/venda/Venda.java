@@ -34,7 +34,6 @@ public class Venda {
 
     @NotNull(message = "O funcionário responsável é obrigatório")
     @ManyToOne
-    @JoinColumn(name = "fk_funcionario")
     private Funcionario funcionario;
 
     @OneToMany
