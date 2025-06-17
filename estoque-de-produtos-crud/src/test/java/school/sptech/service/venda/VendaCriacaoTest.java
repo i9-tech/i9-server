@@ -2,6 +2,7 @@ package school.sptech.service.venda;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -54,6 +55,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Deve retornar uma venda quando criada com dados corretos")
     void deveCriarVendaComSucesso() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);
@@ -84,6 +86,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando o funcionário não for encontrado")
     void deveLancarExcecaoQuandoFuncionarioNaoEncontrado() {
         Venda venda = new Venda();
         Funcionario funcionario = new Funcionario();
@@ -98,6 +101,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando os itens da venda forem nulos")
     void deveLancarExcecaoQuandoItensCarrinhoNulos() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);
@@ -113,6 +117,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando os itens da venda forem vazios")
     void deveLancarExcecaoQuandoItensCarrinhoVazios() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);
@@ -128,6 +133,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando nenhum item for encontrado")
     void deveLancarExcecaoQuandoNenhumItemValidoEncontrado() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);
@@ -147,6 +153,7 @@ public class VendaCriacaoTest {
     }
 
     @Test
+    @DisplayName("Deve retornar valor total calculado corretamente")
     void deveCalcularValorTotalCorreto() {
         Funcionario funcionario = new Funcionario();
         funcionario.setId(1);
