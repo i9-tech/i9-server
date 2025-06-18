@@ -79,16 +79,16 @@ public class EmailService{
         }
     }
 
-    public void enviarEmailRecuperacao(String destinatario, String nomeFuncionario, String cpfFuncionario, String linkRecuperacao) { // Removi 'throws MessagingException' temporariamente para a sugestão
+    public void enviarEmailRecuperacao(String destinatario, String nomeFuncionario, String nomeEmpresa, String cpfFuncionario, String linkRecuperacao) { // Removi 'throws MessagingException' temporariamente para a sugestão
         try {
             String assunto = "Recuperação de Senha para " + nomeFuncionario;
 
-            String corpoEmail = "Prezado(a) responsável pela empresa " + nomeFuncionario + ",\n\n"
+            String corpoEmail = "Prezado(a) responsável pela empresa " + nomeEmpresa + ",\n\n"
                     + "Foi solicitada uma recuperação de senha para o CPF " + cpfFuncionario + ".\n"
                     + "Para redefinir a senha, clique no link abaixo:\n"
                     + linkRecuperacao + "\n\n"
                     + "Este link expirará em 30 minutos. Se você não solicitou esta recuperação, por favor, ignore este e-mail.\n\n"
-                    + "Atenciosamente,\nSua Aplicação";
+                    + "Atenciosamente,\ni9 Tech";
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(destinatario);

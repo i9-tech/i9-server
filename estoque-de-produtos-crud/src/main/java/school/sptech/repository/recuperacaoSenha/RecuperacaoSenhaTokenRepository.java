@@ -19,14 +19,14 @@ public interface RecuperacaoSenhaTokenRepository extends JpaRepository<Recuperac
     Optional<RecuperacaoSenhaToken> findByToken(String token);
 
     // Opcional: Para encontrar tokens de um funcionário específico, se necessário
-    Optional<RecuperacaoSenhaToken> findByFuncionarioId(Integer funcionarioId);
+    List<RecuperacaoSenhaToken> findAllByFuncionarioId(Integer funcionarioId);
 
     // Método para buscar todos os tokens ativos (não usados e não expirados) de um funcionário
     List<RecuperacaoSenhaToken> findByFuncionarioIdAndTokenUsadoFalseAndExpiracaoAfter(Integer funcionarioId, LocalDateTime now);
 
     // Método para invalidar todos os tokens de recuperação de senha não usados e não expirados para um funcionário específico
     @Modifying
-    @Query("UPDATE RecuperacaoSenhaToken t SET t.tokenUsado = true WHERE t.funcionario.id = :funcionarioId AND t.expiracao > :now")
-    void invalidateActiveTokensByFuncionarioId(@Param("funcionarioId") Integer funcionarioId, @Param("now") LocalDateTime now);
+    @Query("UPDATE RecuperacaoSenhaToken t SET t.tokenUsado = true WHERE t.funcionario.id = :funcionarioId AND t.tokenUsado = false")
+    void invalidateActiveTokensByFuncionarioId(@Param("funcionarioId") Integer funcionarioId);
 
 }
