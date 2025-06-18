@@ -38,19 +38,14 @@ public class RecuperacaoSenhaTokenService {
 
     @Transactional
     public void iniciarRecuperacaoSenha(String cpf) {
-        Funcionario funcionario = funcionarioRepository.findByCpf(cpf).orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado!"));
+        Funcionario funcionario = funcionarioRepository.findByCpf(cpf)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado!"));
 
-        if(!funcionario.isAtivo()) {
+        if (!funcionario.isAtivo()) {
             throw new EntidadeInativaException("Funcionário inativo!");
         }
 
-        senhaTokenRepository.invalidateActiveTokensByFuncionarioId(funcionario.getId(), LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
-
-        senhaTokenRepository.findByFuncionarioId(funcionario.getId())
-                .ifPresent(token -> {
-                    token.setTokenUsado(true);
-                    senhaTokenRepository.save(token);
-        });
+        senhaTokenRepository.invalidateActiveTokensByFuncionarioId(funcionario.getId());
 
         String token = UUID.randomUUID().toString();
         LocalDateTime expiracao = LocalDateTime.now(ZoneId.of("America/Sao_Paulo")).plusMinutes(30);
@@ -65,8 +60,15 @@ public class RecuperacaoSenhaTokenService {
         String linkRecuperacao = frontendUrl + "/redefinir-senha/" + token;
 
         String emailDestinatario = funcionario.getEmpresa().getEmail();
-        emailService.enviarEmailRecuperacao(emailDestinatario, funcionario.getNome(), funcionario.getCpf(), linkRecuperacao);
+        emailService.enviarEmailRecuperacao(
+                emailDestinatario,
+                funcionario.getNome(),
+                funcionario.getEmpresa().getNome(),
+                funcionario.getCpf(),
+                linkRecuperacao
+        );
     }
+
 
     @Transactional
     public void redefinirSenha(String token, String novaSenha) {
