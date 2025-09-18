@@ -1,12 +1,9 @@
 package school.sptech.controller.funcionario.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import school.sptech.entity.funcionario.TipoIdentificador;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class FuncionarioResponseDto {
 
@@ -84,9 +81,16 @@ public class FuncionarioResponseDto {
     )
     private boolean proprietario;
 
+    @Schema(
+            description = "Endereço de e-mail do funcionário utilizado para reset de senha.",
+            example = "funcionario@empresa.com",
+            type = "string"
+    )
+    private String email;
+
     public FuncionarioResponseDto(Integer id, String nome, String cpf, TipoIdentificador identificadorPrincipal, String login, String cargo,
                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                  boolean acessoSetorAtendimento, boolean proprietario) {
+                                  boolean acessoSetorAtendimento, boolean proprietario, String email) {
 
         this.id = id;
         this.nome = nome;
@@ -99,6 +103,7 @@ public class FuncionarioResponseDto {
         this.acessoSetorEstoque = acessoSetorEstoque;
         this.acessoSetorAtendimento = acessoSetorAtendimento;
         this.proprietario = proprietario;
+        this.email = email;
 
     }
 
@@ -184,5 +189,13 @@ public class FuncionarioResponseDto {
 
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
