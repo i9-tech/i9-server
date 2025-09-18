@@ -25,11 +25,8 @@ public class RecuperacaoSenhaTokenService {
     private final FuncionarioRepository funcionarioRepository;
     private final RecuperacaoSenhaTokenRepository senhaTokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final NotificacaoProducer notificacaoProducer; // 3. NOVA DEPENDÊNCIA
+    private final NotificacaoProducer notificacaoProducer;
 
-    // 4. DEPENDÊNCIA ANTIGA REMOVIDA: private final EmailService emailService;
-
-    // 5. CONSTRUTOR ATUALIZADO
     public RecuperacaoSenhaTokenService(FuncionarioRepository funcionarioRepository, RecuperacaoSenhaTokenRepository senhaTokenRepository, PasswordEncoder passwordEncoder, NotificacaoProducer notificacaoProducer) {
         this.funcionarioRepository = funcionarioRepository;
         this.senhaTokenRepository = senhaTokenRepository;
@@ -63,7 +60,6 @@ public class RecuperacaoSenhaTokenService {
                         funcionario.getEmpresa().getEmail() :
                         funcionario.getEmail();
 
-        // 6. MUDANÇA PRINCIPAL: De chamada direta para publicação de evento
         notificacaoProducer.publicarEventoRecuperacaoSenha(
                 emailDestinatario,
                 funcionario.getNome(),

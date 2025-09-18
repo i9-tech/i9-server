@@ -98,10 +98,8 @@ public class FuncionarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
         funcionario.setEmpresa(empresa);
 
-        // Aqui, geramos a senha automática SEM usar a senha da requisição
         String senhaGerada = gerarSenha(empresa.getId(), funcionario.getCpf());
 
-        // Criptografamos a senha gerada
         String senhaCriptografada = passwordEncoder.encode(senhaGerada);
 
         funcionario.setSenha(senhaCriptografada);
@@ -116,7 +114,6 @@ public class FuncionarioService {
                         funcionarioSalvo.getEmpresa().getEmail() :
                         funcionarioSalvo.getEmail();
 
-        // 🔴 EVENTO
         notificacaoProducer.publicarEventoFuncionarioCadastrado(
                 funcionarioSalvo.getNome(),
                 funcionarioSalvo.getCpf(),
