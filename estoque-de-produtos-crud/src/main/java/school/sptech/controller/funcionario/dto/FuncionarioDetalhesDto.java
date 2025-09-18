@@ -74,7 +74,7 @@ public class FuncionarioDetalhesDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return cpf;
+        return funcionario.getLogin();
     }
 
     @Override
