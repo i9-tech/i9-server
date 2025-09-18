@@ -23,8 +23,10 @@ import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.exception.ValidacaoException;
 import school.sptech.observer.FuncionarioEvent;
+import school.sptech.observer.FuncionarioEventListener;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
+import school.sptech.service.emailService.NotificacaoProducer;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,17 +45,17 @@ public class FuncionarioService {
 
     private final AuthenticationManager authenticationManager;
 
-    private final ApplicationEventPublisher eventPublisher;
+//    private final ApplicationEventPublisher eventPublisher;
+    private final NotificacaoProducer notificacaoProducer;
 
-    public FuncionarioService(EmpresaRepository empresaRepository, FuncionarioRepository repository, PasswordEncoder passwordEncoder, GerenciadorTokenJwt gerenciadorTokenJwt, AuthenticationManager authenticationManager, ApplicationEventPublisher eventPublisher) {
+    public FuncionarioService(EmpresaRepository empresaRepository, FuncionarioRepository repository, PasswordEncoder passwordEncoder, GerenciadorTokenJwt gerenciadorTokenJwt, AuthenticationManager authenticationManager, NotificacaoProducer notificacaoProducer) {
         this.empresaRepository = empresaRepository;
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.gerenciadorTokenJwt = gerenciadorTokenJwt;
         this.authenticationManager = authenticationManager;
-        this.eventPublisher = eventPublisher;
+        this.notificacaoProducer = notificacaoProducer;
     }
-
 
     public String criptografar(String senha) {
         return passwordEncoder.encode(senha);
@@ -102,16 +104,25 @@ public class FuncionarioService {
         // Criptografamos a senha gerada
         String senhaCriptografada = passwordEncoder.encode(senhaGerada);
 
-        // Definimos essa senha criptografada na entidade
         funcionario.setSenha(senhaCriptografada);
 
         funcionario.setSenha(senhaCriptografada);
         funcionario.setId(funcionario.getId());
 
-        funcionario = repository.save(funcionario);
+        Funcionario funcionarioSalvo = repository.save(funcionario);
+        String cargos = FuncionarioEventListener.determinarCargo(funcionarioSalvo);
+        String emailDestinatario =
+                funcionarioSalvo.getEmail() == null ?
+                        funcionarioSalvo.getEmpresa().getEmail() :
+                        funcionarioSalvo.getEmail();
 
         // 🔴 EVENTO
-        eventPublisher.publishEvent(new FuncionarioEvent(this, funcionario));
+        notificacaoProducer.publicarEventoFuncionarioCadastrado(
+                funcionarioSalvo.getNome(),
+                funcionarioSalvo.getCpf(),
+                cargos,
+                emailDestinatario
+        );
 
         return FuncionarioMapper.toDto(funcionario);
     }

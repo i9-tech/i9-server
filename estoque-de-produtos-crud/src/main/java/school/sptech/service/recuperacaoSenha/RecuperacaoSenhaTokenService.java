@@ -13,6 +13,7 @@ import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.recuperacaoSenha.RecuperacaoSenhaTokenRepository;
 import school.sptech.service.emailService.EmailService;
+import school.sptech.service.emailService.NotificacaoProducer;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,18 +24,18 @@ public class RecuperacaoSenhaTokenService {
 
     private final FuncionarioRepository funcionarioRepository;
     private final RecuperacaoSenhaTokenRepository senhaTokenRepository;
-    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificacaoProducer notificacaoProducer; // 3. NOVA DEPENDÊNCIA
 
-    public RecuperacaoSenhaTokenService(FuncionarioRepository funcionarioRepository, RecuperacaoSenhaTokenRepository senhaTokenRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
+    // 4. DEPENDÊNCIA ANTIGA REMOVIDA: private final EmailService emailService;
+
+    // 5. CONSTRUTOR ATUALIZADO
+    public RecuperacaoSenhaTokenService(FuncionarioRepository funcionarioRepository, RecuperacaoSenhaTokenRepository senhaTokenRepository, PasswordEncoder passwordEncoder, NotificacaoProducer notificacaoProducer) {
         this.funcionarioRepository = funcionarioRepository;
         this.senhaTokenRepository = senhaTokenRepository;
-        this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.notificacaoProducer = notificacaoProducer;
     }
-
-    @Value("${app.frontend.url}")
-    private String frontendUrl;
 
     @Transactional
     public void iniciarRecuperacaoSenha(String cpf) {
@@ -57,15 +58,18 @@ public class RecuperacaoSenhaTokenService {
         recuperacaoToken.setTokenUsado(false);
         senhaTokenRepository.save(recuperacaoToken);
 
-        String linkRecuperacao = frontendUrl + "/redefinir-senha/" + token;
+        String emailDestinatario =
+                funcionario.getEmail() == null ?
+                        funcionario.getEmpresa().getEmail() :
+                        funcionario.getEmail();
 
-        String emailDestinatario = funcionario.getEmpresa().getEmail();
-        emailService.enviarEmailRecuperacao(
+        // 6. MUDANÇA PRINCIPAL: De chamada direta para publicação de evento
+        notificacaoProducer.publicarEventoRecuperacaoSenha(
                 emailDestinatario,
                 funcionario.getNome(),
                 funcionario.getEmpresa().getNome(),
                 funcionario.getCpf(),
-                linkRecuperacao
+                token
         );
     }
 

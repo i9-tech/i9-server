@@ -108,6 +108,9 @@ public class Funcionario {
     )
     private String senha;
 
+    @Email
+    private String email;
+
     @NotNull(message = "A empresa vinculada é obrigatória.")
     @ManyToOne
     @Schema(
@@ -138,6 +141,14 @@ public class Funcionario {
 
     public void setCpf(@NotBlank(message = "O CPF é obrigatório") @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 999.999.999-99") String cpf) {
         this.cpf = cpf;
+    }
+
+    public @Email String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Email String email) {
+        this.email = email;
     }
 
     public @NotBlank(message = "O cargo é obrigatório.") String getCargo() {

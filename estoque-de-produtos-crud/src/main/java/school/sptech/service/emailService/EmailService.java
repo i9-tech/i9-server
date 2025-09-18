@@ -83,7 +83,7 @@ public class EmailService{
         try {
             String assunto = "Recuperação de Senha para " + nomeFuncionario;
 
-            String corpoEmail = "Prezado(a) responsável pela empresa " + nomeEmpresa + ",\n\n"
+            String corpoEmail = "Prezado(a) " + nomeFuncionario + " da Empresa " + nomeEmpresa + ",\n\n"
                     + "Foi solicitada uma recuperação de senha para o CPF " + cpfFuncionario + ".\n"
                     + "Para redefinir a senha, clique no link abaixo:\n"
                     + linkRecuperacao + "\n\n"
