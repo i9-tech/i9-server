@@ -22,6 +22,8 @@ public class FuncionarioMapper {
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(requestDto.getNome());
         funcionario.setCpf(requestDto.getCpf());
+        funcionario.setIdentificadorPrincipal(requestDto.getIdentificadorPrincipal());
+        funcionario.setLogin(requestDto.getLogin());
         funcionario.setCargo(requestDto.getCargo());
         funcionario.setDataAdmissao(requestDto.getDataAdmissao());
         funcionario.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
@@ -47,6 +49,8 @@ public class FuncionarioMapper {
                 funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
+                funcionario.getIdentificadorPrincipal(),
+                funcionario.getLogin(),
                 funcionario.getCargo(),
                 funcionario.getDataAdmissao(),
                 funcionario.isAcessoSetorCozinha(),
@@ -59,7 +63,7 @@ public class FuncionarioMapper {
     public static Funcionario of(FuncionarioLoginDto funcionarioLoginDto){
         Funcionario funcionario = new Funcionario();
 
-        funcionario.setCpf(funcionarioLoginDto.getCpf());
+        funcionario.setLogin(funcionarioLoginDto.getLogin());
         funcionario.setSenha(funcionarioLoginDto.getSenha());
 
         return funcionario;

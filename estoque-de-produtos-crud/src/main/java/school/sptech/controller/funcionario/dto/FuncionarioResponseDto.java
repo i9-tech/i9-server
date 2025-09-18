@@ -2,6 +2,8 @@ package school.sptech.controller.funcionario.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import school.sptech.entity.funcionario.TipoIdentificador;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -24,6 +26,20 @@ public class FuncionarioResponseDto {
             type = "string"
     )
     private String cpf;
+
+    @Schema(
+            description = "Define qual identificador será usado para login.",
+            example = "CPF",
+            allowableValues = {"CPF", "EMAIL", "MATRICULA", "TELEFONE"}
+    )
+    private TipoIdentificador identificadorPrincipal;
+
+    @Schema(
+            description = "Login do funcionário, conforme definido pelo tipo de identificador escolhido (CPF, email, telefone ou matrícula).",
+            example = "999.999.999-99"
+    )
+    private String login;
+
 
     @Schema(
             description = "Cargo da pessoa contratada pela empresa.",
@@ -68,13 +84,15 @@ public class FuncionarioResponseDto {
     )
     private boolean proprietario;
 
-    public FuncionarioResponseDto(Integer id, String nome, String cpf, String cargo,
+    public FuncionarioResponseDto(Integer id, String nome, String cpf, TipoIdentificador identificadorPrincipal, String login, String cargo,
                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
                                   boolean acessoSetorAtendimento, boolean proprietario) {
 
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
+        this.identificadorPrincipal = identificadorPrincipal;
+        this.login = login;
         this.cargo = cargo;
         this.dataAdmissao = dataAdmissao;
         this.acessoSetorCozinha = acessoSetorCozinha;
@@ -98,6 +116,22 @@ public class FuncionarioResponseDto {
 
     public String getCpf() {
         return cpf;
+    }
+
+    public TipoIdentificador getIdentificadorPrincipal() {
+        return identificadorPrincipal;
+    }
+
+    public void setIdentificadorPrincipal(TipoIdentificador identificadorPrincipal) {
+        this.identificadorPrincipal = identificadorPrincipal;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public void setCpf(String cpf) {

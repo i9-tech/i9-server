@@ -17,6 +17,7 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     Optional<Funcionario> findByIdAndEmpresaId(int id, Integer idEmpresa);
 
     boolean existsByCpfAndEmpresa_Id(String cpf, Integer idEmpresa);
+    boolean existsByLogin(String login);
 
     @Transactional
     @Modifying
@@ -26,6 +27,9 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     List<Funcionario> findByEmpresaIdAndAtivoTrue(Integer idEmpresa);
 
     Optional<Funcionario> findByCpf(String cpf);
+
+    Optional<Funcionario> findByLogin(String login);
+
 
 
 }

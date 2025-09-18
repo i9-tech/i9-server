@@ -52,7 +52,6 @@ public class FuncionarioController {
             @PathVariable Integer idEmpresa) {
 
 
-        // Corrigido: aqui já retorna um DTO
         FuncionarioResponseDto respostaFuncionarioDto = service.cadastrarFuncionario(
                 FuncionarioMapper.toEntity(requestDto),
                 idEmpresa

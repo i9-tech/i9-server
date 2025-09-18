@@ -1,13 +1,10 @@
 package school.sptech.controller.funcionario.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
-import org.springframework.cglib.core.Local;
-import school.sptech.entity.empresa.Empresa;
+import school.sptech.entity.funcionario.TipoIdentificador;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Schema(
         name = "FuncionarioRequestDto",
@@ -33,6 +30,21 @@ public class FuncionarioRequestDto {
             type = "string"
     )
     private String cpf;
+
+    @NotNull(message = "O tipo de identificador é obrigatório.")
+    @Schema(
+            description = "Define qual identificador será usado para login.",
+            example = "CPF",
+            allowableValues = {"CPF", "EMAIL", "MATRICULA", "TELEFONE"}
+    )
+    private TipoIdentificador identificadorPrincipal;
+
+    @NotBlank(message = "O login é obrigatório.")
+    @Schema(
+            description = "Login do funcionário, conforme definido pelo tipo de identificador escolhido (CPF, email, telefone ou matrícula).",
+            example = "999.999.999-99"
+    )
+    private String login;
 
     @NotBlank(message = "O cargo é obrigatório")
     @Schema(
@@ -165,5 +177,21 @@ public class FuncionarioRequestDto {
     public void setSenha(@Size(min = 11,
             message = "A senha deve ter no mínimo 11 caracteres.") String senha) {
         this.senha = senha;
+    }
+
+    public TipoIdentificador getIdentificadorPrincipal() {
+        return identificadorPrincipal;
+    }
+
+    public void setIdentificadorPrincipal(TipoIdentificador identificadorPrincipal) {
+        this.identificadorPrincipal = identificadorPrincipal;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }
