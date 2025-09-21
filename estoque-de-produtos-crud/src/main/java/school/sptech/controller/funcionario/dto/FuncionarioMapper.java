@@ -31,6 +31,7 @@ public class FuncionarioMapper {
         funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionario.setProprietario(requestDto.isProprietario());
         funcionario.setSenha(requestDto.getSenha());
+        funcionario.setEmail(requestDto.getEmail());
 
         return funcionario;
     }
@@ -56,7 +57,8 @@ public class FuncionarioMapper {
                 funcionario.isAcessoSetorCozinha(),
                 funcionario.isAcessoSetorEstoque(),
                 funcionario.isAcessoSetorAtendimento(),
-                funcionario.isProprietario()
+                funcionario.isProprietario(),
+                funcionario.getEmail()
         );
     }
 

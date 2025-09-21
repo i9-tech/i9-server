@@ -194,6 +194,7 @@ public class FuncionarioService {
         funcionarioExistente.setCpf(funcionarioParaEditar.getCpf());
         funcionarioExistente.setNome(funcionarioParaEditar.getNome());
         funcionarioExistente.setCargo(funcionarioParaEditar.getCargo());
+        funcionarioExistente.setEmail(funcionarioParaEditar.getEmail());
 
         if (funcionarioParaEditar.getSenha() != null && !funcionarioParaEditar.getSenha().isBlank()) {
             if (!passwordEncoder.matches(funcionarioParaEditar.getSenha(), funcionarioExistente.getSenha())) {
@@ -205,6 +206,7 @@ public class FuncionarioService {
         funcionarioExistente.setAcessoSetorCozinha(funcionarioParaEditar.isAcessoSetorCozinha());
         funcionarioExistente.setAcessoSetorAtendimento(funcionarioParaEditar.isAcessoSetorAtendimento());
         funcionarioExistente.setAcessoSetorEstoque(funcionarioParaEditar.isAcessoSetorEstoque());
+        funcionarioExistente.setProprietario(funcionarioParaEditar.isProprietario());
 
         return repository.save(funcionarioExistente);
     }

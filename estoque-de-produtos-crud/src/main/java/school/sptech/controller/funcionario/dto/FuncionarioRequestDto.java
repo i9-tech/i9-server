@@ -102,6 +102,13 @@ public class FuncionarioRequestDto {
     )
     private String senha;
 
+    @Email
+    @Schema(
+            description = "Endereço de e-mail do funcionário utilizado para reset de senha.",
+            example = "funcionario@empresa.com",
+            type = "string"
+    )
+    private String email;
 
     public @Size(min = 3, max = 40) @NotBlank(message = "O nome é obrigatório") String getNome() {
         return nome;
@@ -193,5 +200,13 @@ public class FuncionarioRequestDto {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
