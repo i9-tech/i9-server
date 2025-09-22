@@ -85,8 +85,8 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     @Query("select distinct v from Venda v join fetch v.itensCarrinho where v.funcionario.empresa.id = :empresaId and v.dataVenda = :hoje")
     List<Venda> findVendasComItensPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
 
-    @Query("select distinct v from Venda v join fetch v.itensCarrinho ic where v.funcionario.empresa.id = :empresaId and v.dataVenda = :hoje and ic.produto is null")
-    List<Venda> findVendasDePratosComItensPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
+    @Query("select distinct v from Venda v join fetch v.itensCarrinho ic where v.funcionario.empresa.id = :empresaId and v.dataVenda between :inicio and :fim and ic.produto is null")
+    List<Venda> findVendasDePratosComItensPorEmpresaNoPeriodo(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
     @Query("""
     select p.nome, count(ic), sum(ic.valorUnitario)
