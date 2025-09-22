@@ -31,6 +31,13 @@ public class FuncionarioTokenDto {
     )
     private String token;
 
+    @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
 
     public Integer getEmpresaId() {
         return empresaId;
@@ -62,5 +69,13 @@ public class FuncionarioTokenDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean isPrimeiroAcesso() {
+        return primeiroAcesso;
+    }
+
+    public void setPrimeiroAcesso(boolean primeiroAcesso) {
+        this.primeiroAcesso = primeiroAcesso;
     }
 }

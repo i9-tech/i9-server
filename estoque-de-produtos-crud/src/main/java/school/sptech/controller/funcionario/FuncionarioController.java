@@ -217,4 +217,15 @@ public class FuncionarioController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @PatchMapping("/primeiro-acesso/{id}/{idEmpresa}")
+    public ResponseEntity<Void> redefinirSenha(
+            @PathVariable int id,
+            @PathVariable Integer idEmpresa,
+            @RequestBody RedefinirSenhaDto dto) {
+
+        service.redefinirSenhaPrimeiroAcesso(id, idEmpresa, dto.getSenha(), dto.isPrimeiroAcesso());
+        return ResponseEntity.ok().build();
+    }
+
+
 }

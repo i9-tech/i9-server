@@ -1,7 +1,5 @@
 package school.sptech.service.funcionario;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,19 +18,15 @@ import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.funcionario.IdentificadorFactory;
 import school.sptech.entity.funcionario.IdentificadorPrincipal;
-import school.sptech.entity.funcionario.TipoIdentificador;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.exception.EnumBadRequestException;
 import school.sptech.exception.ValidacaoException;
-import school.sptech.observer.FuncionarioEvent;
 import school.sptech.observer.FuncionarioEventListener;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.service.emailService.NotificacaoProducer;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -220,6 +214,21 @@ public class FuncionarioService {
         } if (requestDto.getCargo() == null || requestDto.getCargo().trim().isEmpty()){
             throw new ValidacaoException("O cargo do funcionário é obrigatório");
         }
+    }
+
+    public Funcionario redefinirSenhaPrimeiroAcesso(int idFuncionario, Integer idEmpresa, String novaSenha, boolean primeiroAcesso) {
+        Funcionario funcionario = repository.findByIdAndEmpresaId(idFuncionario, idEmpresa)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada."));
+
+        if (novaSenha == null || novaSenha.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nova senha é obrigatória");
+        }
+
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        funcionario.setSenha(senhaCriptografada);
+        funcionario.setPrimeiroAcesso(false);
+
+        return repository.save(funcionario);
     }
 
 }

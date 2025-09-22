@@ -111,6 +111,14 @@ public class Funcionario {
     private boolean proprietario;
 
     @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
+
+    @Schema(
             description = "Indica se o contrato da pessoa está ativo no sistema da empresa. 'true' para ativa, 'false' para inativa.",
             example = "true",
             type = "boolean"
@@ -221,6 +229,10 @@ public class Funcionario {
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
     }
+
+    public boolean isPrimeiroAcesso() { return primeiroAcesso;}
+
+    public void setPrimeiroAcesso(boolean primeiroAcesso) {this.primeiroAcesso = primeiroAcesso;}
 
     public boolean isAtivo() {
         return ativo;

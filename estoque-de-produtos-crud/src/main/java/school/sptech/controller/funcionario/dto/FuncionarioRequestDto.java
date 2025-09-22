@@ -93,6 +93,14 @@ public class FuncionarioRequestDto {
     )
     private boolean proprietario;
 
+
+    @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
     @Size(min = 11,
             message = "A senha deve ter no mínimo 11 caracteres.")
     @Schema(
@@ -175,6 +183,10 @@ public class FuncionarioRequestDto {
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
     }
+
+    public boolean isPrimeiroAcesso() { return primeiroAcesso;}
+
+    public void setPrimeiroAcesso(boolean primeiroAcesso) {this.primeiroAcesso = primeiroAcesso;}
 
     public @Size(min = 11,
             message = "A senha deve ter no mínimo 11 caracteres.") String getSenha() {
