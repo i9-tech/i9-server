@@ -82,6 +82,14 @@ public class FuncionarioResponseDto {
     private boolean proprietario;
 
     @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
+
+    @Schema(
             description = "Endereço de e-mail do funcionário utilizado para reset de senha.",
             example = "funcionario@empresa.com",
             type = "string"
@@ -90,7 +98,7 @@ public class FuncionarioResponseDto {
 
     public FuncionarioResponseDto(Integer id, String nome, String cpf, TipoIdentificador identificadorPrincipal, String login, String cargo,
                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                  boolean acessoSetorAtendimento, boolean proprietario, String email) {
+                                  boolean acessoSetorAtendimento, boolean proprietario,  boolean primeiroAcesso, String email) {
 
         this.id = id;
         this.nome = nome;
@@ -103,6 +111,7 @@ public class FuncionarioResponseDto {
         this.acessoSetorEstoque = acessoSetorEstoque;
         this.acessoSetorAtendimento = acessoSetorAtendimento;
         this.proprietario = proprietario;
+        this.primeiroAcesso = primeiroAcesso;
         this.email = email;
 
     }
@@ -190,6 +199,10 @@ public class FuncionarioResponseDto {
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
     }
+
+    public boolean isPrimeiroAcesso() {return primeiroAcesso;}
+
+    public void setPrimeiroAcesso(boolean primeiroAcesso) {this.primeiroAcesso = primeiroAcesso;}
 
     public String getEmail() {
         return email;

@@ -30,6 +30,7 @@ public class FuncionarioMapper {
         funcionario.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
         funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionario.setProprietario(requestDto.isProprietario());
+        funcionario.setPrimeiroAcesso(requestDto.isPrimeiroAcesso());
         funcionario.setSenha(requestDto.getSenha());
         funcionario.setEmail(requestDto.getEmail());
 
@@ -58,6 +59,7 @@ public class FuncionarioMapper {
                 funcionario.isAcessoSetorEstoque(),
                 funcionario.isAcessoSetorAtendimento(),
                 funcionario.isProprietario(),
+                funcionario.isPrimeiroAcesso(),
                 funcionario.getEmail()
         );
     }
@@ -78,6 +80,7 @@ public class FuncionarioMapper {
         funcionarioTokenDto.setEmpresaId(funcionario.getEmpresa().getId());
         funcionarioTokenDto.setNome(funcionario.getNome());
         funcionarioTokenDto.setToken(token);
+        funcionarioTokenDto.setPrimeiroAcesso(funcionario.isPrimeiroAcesso());
 
         return funcionarioTokenDto;
     }
