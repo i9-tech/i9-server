@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -126,18 +127,39 @@ public class VendaService {
                 .sum();
     }
 
-    public Double valorTotalPorEmpresaHoje(Integer empresaId) {
+    public Double valorTotalPorEmpresaNoPeriodo(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        Double valorTotal = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hojeNoBrasil);
-        return valorTotal;
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        Double valorTotal = vendaRepository.valorTotalPorEmpresaNoPeriodo(empresaId, inicio, fim);
+        return valorTotal != null ? valorTotal : 0.0;
     }
 
-    public Double lucroLiquidoPorEmpresaHoje(Integer empresaId) {
+    public Double lucroLiquidoPorEmpresaNoPeriodo(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hojeNoBrasil);
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaNoPeriodo(empresaId, inicio, fim);
         return lucro;
     }
-
 
     public Map<String, Double> valorTotalPorSetorHoje(Integer empresaId) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
@@ -167,10 +189,20 @@ public class VendaService {
         return totalPorCategoria;
     }
 
-
-    public Integer quantidadeVendasPorEmpresaHoje(Integer empresaId) {
+    public Integer quantidadeVendasPorEmpresaNoPeriodo(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hojeNoBrasil);
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEPeriodo(empresaId, inicio, fim);
         return quantidade;
     }
 
@@ -216,42 +248,111 @@ public class VendaService {
     }
 
 
-    public List<Object[]> top7Pratos(Integer empresaId) {
-        Pageable limite = PageRequest.of(0, 7);
+    public List<Object[]> top7Pratos(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        return vendaRepository.top7PratosMaisVendidos(empresaId, hojeNoBrasil, limite);
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        Pageable limite = PageRequest.of(0, 7);
+        return vendaRepository.top7PratosMaisVendidos(empresaId, inicio, fim, limite);
     }
 
-    public List<Object[]> top7Produtos(Integer empresaId) {
-        Pageable limite = PageRequest.of(0, 7);
+    public List<Object[]> top7Produtos(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        return vendaRepository.top7ProdutosMaisVendidos(empresaId, hojeNoBrasil, limite);
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        Pageable limite = PageRequest.of(0, 7);
+        return vendaRepository.top7ProdutosMaisVendidos(empresaId, inicio, fim, limite);
     }
 
-    public List<Object[]> top5Categorias(Integer empresaId) {
+    public List<Object[]> top5Categorias(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
+        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
         Pageable limite = PageRequest.of(0, 5);
-        LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        return vendaRepository.top5CategoriasMaisVendidas(empresaId, hojeNoBrasil, limite);
+        return vendaRepository.top5CategoriasMaisVendidas(empresaId, inicio, fim, limite);
     }
 
 
-    public List<Object[]> obterRankingSetoresMaisVendidos(Integer empresaId) {
+    public List<Object[]> obterRankingSetoresMaisVendidos(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        return vendaRepository.rankingSetoresMaisVendidos(empresaId, hojeNoBrasil);
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        return vendaRepository.rankingSetoresMaisVendidos(empresaId, inicio, fim);
 
     }
 
-    public List<Object[]> calculosKpi(Integer empresaId) {
+    public List<Object[]> calculosKpi(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        LocalDate ontem = hojeNoBrasil.minusDays(1);
         List<Object[]> resultados = new ArrayList<>();
 
-        Double brutoHoje = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, hojeNoBrasil);
-        Double brutoOntem = vendaRepository.valorTotalVendasPorEmpresaEData(empresaId, ontem);
-        Double liquidoHoje = vendaRepository.calcularLucroLiquidoPorEmpresaEData(empresaId, hojeNoBrasil);
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        long diasDoPeriodo = ChronoUnit.DAYS.between(inicio, fim) + 1;
+        LocalDate fimAnterior = inicio.minusDays(1);
+        LocalDate inicioAnterior = fimAnterior.minusDays(diasDoPeriodo - 1);
+
+
+        Double brutoHoje = vendaRepository.valorTotalPorEmpresaNoPeriodo(empresaId, inicio, fim);
+        brutoHoje = brutoHoje != null ? brutoHoje.doubleValue() : 0.0;
+
+        Double brutoOntem = vendaRepository.valorTotalPorEmpresaNoPeriodo(empresaId, inicioAnterior, fimAnterior);
+        brutoOntem = brutoOntem != null ? brutoOntem.doubleValue() : 0.0;
+
+        Double liquidoHoje = vendaRepository.calcularLucroLiquidoPorEmpresaNoPeriodo(empresaId, inicio, fim);
+        liquidoHoje = liquidoHoje != null ? liquidoHoje.doubleValue() : 0.0;
+
         Double liquidoMercadoria = brutoHoje - liquidoHoje;
-        Integer vendasHoje = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hojeNoBrasil);
-        Integer vendasOntem = vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, ontem);
+        liquidoMercadoria = liquidoMercadoria != null ? liquidoMercadoria.doubleValue() : 0.0;
+
+        Integer vendasHoje = vendaRepository.contarVendasConcluidasPorEmpresaEPeriodo(empresaId, inicio, fim);
+        vendasHoje = vendasHoje != null ? vendasHoje.intValue() : 0;
+
+        Integer vendasOntem = vendaRepository.contarVendasConcluidasPorEmpresaEPeriodo(empresaId, inicioAnterior, fimAnterior);
+        vendasOntem = vendasOntem != null ? vendasOntem.intValue() : 0;
 
         resultados.add(new Object[]{
                 brutoHoje,
@@ -261,8 +362,6 @@ public class VendaService {
                 liquidoHoje,
                 liquidoMercadoria
         });
-
-
         return resultados;
     }
 }

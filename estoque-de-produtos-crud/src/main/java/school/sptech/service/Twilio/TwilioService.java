@@ -37,9 +37,9 @@ public class TwilioService {
     }
 
     public void enviarMensagemRelatorioCompletoHoje(Integer empresaId) {
-        Double valorTotal = vendaService.valorTotalPorEmpresaHoje(empresaId);
-        Double valorLiquido = vendaService.lucroLiquidoPorEmpresaHoje(empresaId);
-        Integer quantidadeVendas = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
+        Double valorTotal = vendaService.valorTotalPorEmpresaNoPeriodo(empresaId, null, null);
+        Double valorLiquido = vendaService.lucroLiquidoPorEmpresaNoPeriodo(empresaId, null, null);
+        Integer quantidadeVendas = vendaService.quantidadeVendasPorEmpresaNoPeriodo(empresaId, null, null);
         Map<String, Double> totalPorSetor = vendaService.valorTotalPorSetorHoje(empresaId);
         Map<String, Double> totalPorCategoria = vendaService.valorTotalPorCategoriaHoje(empresaId);
         List<Produto> produtosBaixoEstoque = vendaService.listarProdutosAbaixoDaQuantidadeMinima(empresaId);
