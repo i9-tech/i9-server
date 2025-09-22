@@ -210,9 +210,20 @@ public class VendaService {
         return vendaRepository.buscaProdutosAbaixoDeQuantidadeMinima(empresaId);
     }
 
-    public List<Venda> listarPratosVendidosPorEmpresaEData(Integer empresaId) {
+    public List<Venda> listarPratosVendidosPorEmpresaNoPeriodo(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-        return vendaRepository.findVendasDePratosComItensPorEmpresaEData(empresaId, hojeNoBrasil);
+
+        LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        if (dataInicio != null) {
+            inicio = dataInicio.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+        if (dataFim != null) {
+            fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        }
+
+        return vendaRepository.findVendasDePratosComItensPorEmpresaNoPeriodo(empresaId, inicio, fim);
     }
 
     public List<String> listarResumoItensVendidosPorEmpresaEData(Integer empresaId) {

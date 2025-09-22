@@ -340,8 +340,12 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<VendaResponseDto>> listarPratosVendidosHoje(@PathVariable Integer empresaId) {
-        List<Venda> vendas = vendaService.listarPratosVendidosPorEmpresaEData(empresaId);
+    public ResponseEntity<List<VendaResponseDto>> listarPratosVendidos(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        List<Venda> vendas = vendaService.listarPratosVendidosPorEmpresaNoPeriodo(empresaId, inicio, fim);
 
         List<VendaResponseDto> dtos = vendas.stream()
                 .map(VendaMapper::toDto)
