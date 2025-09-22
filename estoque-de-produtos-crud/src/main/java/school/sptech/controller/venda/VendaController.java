@@ -160,7 +160,7 @@ public class VendaController {
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Valor total diário por empresa",
-            description = "Retorna o valor total das vendas realizadas hoje para a empresa especificada pelo ID."
+            description = "Retorna o valor total das vendas realizadas em um determinado período para a empresa especificada pelo ID."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Valor total diário retornado com sucesso."),
@@ -174,8 +174,12 @@ public class VendaController {
             """))
             )
     })
-    public ResponseEntity<Double> valorTotalPorEmpresaHoje(@PathVariable Integer empresaId) {
-        Double valorTotal = vendaService.valorTotalPorEmpresaHoje(empresaId);
+    public ResponseEntity<Double> valorTotalPorEmpresa(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        Double valorTotal = vendaService.valorTotalPorEmpresaNoPeriodo(empresaId, inicio, fim);
         return ResponseEntity.ok(valorTotal);
     }
 
@@ -183,7 +187,7 @@ public class VendaController {
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Lucro líquido diário por empresa",
-            description = "Retorna o lucro líquido das vendas realizadas hoje para a empresa especificada pelo ID."
+            description = "Retorna o lucro líquido das vendas realizadas em um determinado período para a empresa especificada pelo ID."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lucro líquido diário retornado com sucesso."),
@@ -197,8 +201,11 @@ public class VendaController {
             """))
             )
     })
-    public ResponseEntity<Double> lucroLiquidoHojePorEmpresa(@PathVariable Integer empresaId) {
-        Double lucro = vendaService.lucroLiquidoPorEmpresaHoje(empresaId);
+    public ResponseEntity<Double> lucroLiquidoPorEmpresa(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        Double lucro = vendaService.lucroLiquidoPorEmpresaNoPeriodo(empresaId, inicio, fim);
         return ResponseEntity.ok(lucro);
     }
 
@@ -250,7 +257,7 @@ public class VendaController {
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Quantidade de vendas hoje por empresa",
-            description = "Retorna a quantidade de vendas realizadas hoje para a empresa especificada pelo ID."
+            description = "Retorna a quantidade de vendas realizadas em um determinado período para a empresa especificada pelo ID."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Quantidade de vendas retornada com sucesso."),
@@ -264,8 +271,12 @@ public class VendaController {
             """))
             )
     })
-    public ResponseEntity<Integer> quantidadeVendasHoje(@PathVariable Integer empresaId) {
-        Integer quantidade = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
+    public ResponseEntity<Integer> quantidadeVendas(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        Integer quantidade = vendaService.quantidadeVendasPorEmpresaNoPeriodo(empresaId, inicio, fim);
         return ResponseEntity.ok(quantidade);
     }
 
@@ -342,60 +353,76 @@ public class VendaController {
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Top 7 pratos mais vendidos",
-            description = "Retorna os 7 pratos mais vendidos da empresa informada hoje."
+            description = "Retorna os 7 pratos mais vendidos da empresa informada em determinado período."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista dos top 7 pratos retornada com sucesso."),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<RespostaPratoDashDto>> top7Pratos(@PathVariable Integer empresaId){
-        return ResponseEntity.ok(PratoMapper.toResponseDtoListObject(vendaService.top7Pratos(empresaId)));
+    public ResponseEntity<List<RespostaPratoDashDto>> top7Pratos(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        return ResponseEntity.ok(PratoMapper.toResponseDtoListObject(vendaService.top7Pratos(empresaId, inicio, fim)));
     }
 
     @GetMapping("/top-produtos/{empresaId}")
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Top 7 produtos mais vendidos",
-            description = "Retorna os 7 produtos mais vendidos da empresa informada hoje."
+            description = "Retorna os 7 produtos mais vendidos da empresa informada em determinado período."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista dos top 7 produtos retornada com sucesso."),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<RespostaProdutoDashDto>> top7Produtos(@PathVariable Integer empresaId){
-        return ResponseEntity.ok(ProdutoMapper.toResponseDtoListObject(vendaService.top7Produtos(empresaId)));
+    public ResponseEntity<List<RespostaProdutoDashDto>> top7Produtos(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        return ResponseEntity.ok(ProdutoMapper.toResponseDtoListObject(vendaService.top7Produtos(empresaId, inicio, fim)));
     }
 
     @GetMapping("/top-categorias/{empresaId}")
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Top 5 categorias mais vendidas",
-            description = "Retorna as 5 categorias mais vendidas da empresa informada hoje."
+            description = "Retorna as 5 categorias mais vendidas da empresa informada em determinado período."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista das top 5 categorias retornada com sucesso."),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<RespostaCategoriaDashDto>> top5Categorias(@PathVariable Integer empresaId){
-        return ResponseEntity.ok(CategoriaMapper.transformarEmRespostaListaObjetoDto(vendaService.top5Categorias(empresaId)));
+    public ResponseEntity<List<RespostaCategoriaDashDto>> top5Categorias(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        return ResponseEntity.ok(CategoriaMapper.transformarEmRespostaListaObjetoDto(vendaService.top5Categorias(empresaId, inicio, fim)));
     }
                          
     @GetMapping("/ranking-setores/{empresaId}")
     @SecurityRequirement(name = "Bearer")
     @Operation(
             summary = "Ranking dos setores mais vendidos",
-            description = "Retorna o ranking dos setores com maiores vendas para a empresa informada hoje."
+            description = "Retorna o ranking dos setores com maiores vendas para a empresa informada em determinado período."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ranking dos setores retornado com sucesso."),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<RespostaSetorDashDto>> rankingSetoresMaisVendidos(@PathVariable Integer empresaId) {
-        return ResponseEntity.ok(SetorMapper.transformarEmRespostaListaObjetoDto(vendaService.obterRankingSetoresMaisVendidos(empresaId)));
+    public ResponseEntity<List<RespostaSetorDashDto>> rankingSetoresMaisVendidos(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        return ResponseEntity.ok(SetorMapper.transformarEmRespostaListaObjetoDto(vendaService.obterRankingSetoresMaisVendidos(empresaId, inicio, fim)));
     }
 
     @GetMapping("/kpis/{empresaId}")
@@ -409,8 +436,12 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<VendaKpisRespostaDto>> kpis(@PathVariable Integer empresaId) {
-        return ResponseEntity.ok(VendaMapper.toDtoListObject(vendaService.calculosKpi(empresaId)));
+    public ResponseEntity<List<VendaKpisRespostaDto>> kpis(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+
+        LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
+        LocalDate fim = dataFim != null ? dataFim : inicio;
+
+        return ResponseEntity.ok(VendaMapper.toDtoListObject(vendaService.calculosKpi(empresaId, inicio, fim)));
     }
 
 }
