@@ -13,7 +13,7 @@ public class FuncionarioLoginDto {
             maxLength = 14,
             type = "string"
     )
-    private String cpf;
+    private String login;
 
     @Schema(
             description = "Senha que dará acesso ao sistema para a pessoa contratada.",
@@ -21,12 +21,12 @@ public class FuncionarioLoginDto {
     )
     private String senha;
 
-    public String getCpf() {
-        return cpf;
+    public String getLogin() {
+        return login;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSenha() {

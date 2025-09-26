@@ -22,13 +22,17 @@ public class FuncionarioMapper {
         Funcionario funcionario = new Funcionario();
         funcionario.setNome(requestDto.getNome());
         funcionario.setCpf(requestDto.getCpf());
+        funcionario.setIdentificadorPrincipal(requestDto.getIdentificadorPrincipal());
+        funcionario.setLogin(requestDto.getLogin());
         funcionario.setCargo(requestDto.getCargo());
         funcionario.setDataAdmissao(requestDto.getDataAdmissao());
         funcionario.setAcessoSetorCozinha(requestDto.isAcessoSetorCozinha());
         funcionario.setAcessoSetorEstoque(requestDto.isAcessoSetorEstoque());
         funcionario.setAcessoSetorAtendimento(requestDto.isAcessoSetorAtendimento());
         funcionario.setProprietario(requestDto.isProprietario());
+        funcionario.setPrimeiroAcesso(requestDto.isPrimeiroAcesso());
         funcionario.setSenha(requestDto.getSenha());
+        funcionario.setEmail(requestDto.getEmail());
 
         return funcionario;
     }
@@ -47,19 +51,23 @@ public class FuncionarioMapper {
                 funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
+                funcionario.getIdentificadorPrincipal(),
+                funcionario.getLogin(),
                 funcionario.getCargo(),
                 funcionario.getDataAdmissao(),
                 funcionario.isAcessoSetorCozinha(),
                 funcionario.isAcessoSetorEstoque(),
                 funcionario.isAcessoSetorAtendimento(),
-                funcionario.isProprietario()
+                funcionario.isProprietario(),
+                funcionario.isPrimeiroAcesso(),
+                funcionario.getEmail()
         );
     }
 
     public static Funcionario of(FuncionarioLoginDto funcionarioLoginDto){
         Funcionario funcionario = new Funcionario();
 
-        funcionario.setCpf(funcionarioLoginDto.getCpf());
+        funcionario.setLogin(funcionarioLoginDto.getLogin());
         funcionario.setSenha(funcionarioLoginDto.getSenha());
 
         return funcionario;
@@ -72,6 +80,7 @@ public class FuncionarioMapper {
         funcionarioTokenDto.setEmpresaId(funcionario.getEmpresa().getId());
         funcionarioTokenDto.setNome(funcionario.getNome());
         funcionarioTokenDto.setToken(token);
+        funcionarioTokenDto.setPrimeiroAcesso(funcionario.isPrimeiroAcesso());
 
         return funcionarioTokenDto;
     }

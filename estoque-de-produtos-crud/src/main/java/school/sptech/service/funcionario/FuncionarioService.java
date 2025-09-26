@@ -1,7 +1,5 @@
 package school.sptech.service.funcionario;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,11 +16,12 @@ import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.controller.funcionario.dto.FuncionarioTokenDto;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.funcionario.IdentificadorFactory;
+import school.sptech.entity.funcionario.IdentificadorPrincipal;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.exception.ValidacaoException;
-import school.sptech.observer.FuncionarioEvent;
 import school.sptech.observer.FuncionarioEventListener;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
@@ -64,14 +63,14 @@ public class FuncionarioService {
     public FuncionarioTokenDto autenticar(Funcionario funcionario) {
 
         final UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                funcionario.getCpf(), funcionario.getSenha());
+                funcionario.getLogin(), funcionario.getSenha());
 
         final Authentication authentication = this.authenticationManager.authenticate(credentials);
 
         Funcionario funcionarioAutenticado =
-                repository.findByCpf(funcionario.getCpf())
+                repository.findByLogin(funcionario.getLogin())
                         .orElseThrow(
-                                () -> new ResponseStatusException(404, "CPF do usuário não cadastrado", null)
+                                () -> new ResponseStatusException(404, "Login do usuário não cadastrado", null)
                         );
 
         if (!funcionarioAutenticado.isAtivo()) {
@@ -89,14 +88,26 @@ public class FuncionarioService {
     public FuncionarioResponseDto cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
 
         boolean funcionarioExisteByCpf = repository.existsByCpfAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
-
         if (funcionarioExisteByCpf) {
-            throw new EntidadeConflictException("Esse usuário já está cadastrado!");
+            throw new EntidadeConflictException("O CPF informado já está em uso!");
+        }
+
+        boolean loginExiste = repository.existsByLogin(funcionario.getLogin());
+        if (loginExiste) {
+            throw new EntidadeConflictException("O login informado já está em uso!");
         }
 
         Empresa empresa = empresaRepository.findById(idEmpresa)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empresa não encontrada"));
         funcionario.setEmpresa(empresa);
+
+        IdentificadorPrincipal validador = IdentificadorFactory.criar(funcionario.getIdentificadorPrincipal());
+        if (!validador.validar(funcionario.getLogin())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Login inválido para o tipo " + validador.getTipo()
+            );
+        }
 
         String senhaGerada = gerarSenha(empresa.getId(), funcionario.getCpf());
 
@@ -177,6 +188,7 @@ public class FuncionarioService {
         funcionarioExistente.setCpf(funcionarioParaEditar.getCpf());
         funcionarioExistente.setNome(funcionarioParaEditar.getNome());
         funcionarioExistente.setCargo(funcionarioParaEditar.getCargo());
+        funcionarioExistente.setEmail(funcionarioParaEditar.getEmail());
 
         if (funcionarioParaEditar.getSenha() != null && !funcionarioParaEditar.getSenha().isBlank()) {
             if (!passwordEncoder.matches(funcionarioParaEditar.getSenha(), funcionarioExistente.getSenha())) {
@@ -188,6 +200,7 @@ public class FuncionarioService {
         funcionarioExistente.setAcessoSetorCozinha(funcionarioParaEditar.isAcessoSetorCozinha());
         funcionarioExistente.setAcessoSetorAtendimento(funcionarioParaEditar.isAcessoSetorAtendimento());
         funcionarioExistente.setAcessoSetorEstoque(funcionarioParaEditar.isAcessoSetorEstoque());
+        funcionarioExistente.setProprietario(funcionarioParaEditar.isProprietario());
 
         return repository.save(funcionarioExistente);
     }
@@ -201,6 +214,21 @@ public class FuncionarioService {
         } if (requestDto.getCargo() == null || requestDto.getCargo().trim().isEmpty()){
             throw new ValidacaoException("O cargo do funcionário é obrigatório");
         }
+    }
+
+    public Funcionario redefinirSenhaPrimeiroAcesso(int idFuncionario, Integer idEmpresa, String novaSenha, boolean primeiroAcesso) {
+        Funcionario funcionario = repository.findByIdAndEmpresaId(idFuncionario, idEmpresa)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada."));
+
+        if (novaSenha == null || novaSenha.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nova senha é obrigatória");
+        }
+
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        funcionario.setSenha(senhaCriptografada);
+        funcionario.setPrimeiroAcesso(false);
+
+        return repository.save(funcionario);
     }
 
 }

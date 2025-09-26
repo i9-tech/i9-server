@@ -13,6 +13,7 @@ import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.venda.VendaRepository;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,7 +51,7 @@ public class VendaConsultaTest {
         venda2.setFuncionario(funcionario);
 
         List<Venda> vendas = List.of(venda1, venda2);
-        LocalDate data = LocalDate.now();
+        LocalDate data = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         when(vendaRepository.findAllByDataVenda(data)).thenReturn(vendas);
 
@@ -65,7 +66,7 @@ public class VendaConsultaTest {
     void calcularLucroTotalQuandoAcionadoComDadosValidosDeveLancarExcecao() {
         when(funcionarioRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> vendaService.calcularLucroTotal(1, LocalDate.now()));
+        assertThrows(NoSuchElementException.class, () -> vendaService.calcularLucroTotal(1, LocalDate.now(ZoneId.of("America/Sao_Paulo"))));
     }
 
     // QUANTIDADE DE VENDAS IGUAL A ZERO
@@ -73,7 +74,7 @@ public class VendaConsultaTest {
     @DisplayName("quantidadeVendasPorEmpresaHoje quando acionado com produtos normais deve retornar lista vazia")
     void quantidadeVendasPorEmpresaHojeQuandoAcionadoComProdutosNormaisDeveRetornarListaVazia() {
         Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         when(vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje)).thenReturn(0);
 
@@ -87,7 +88,7 @@ public class VendaConsultaTest {
     @DisplayName("valorTotalPorCategoriaHoje quando acionado com produtos normais deve retornar resultado esperado")
     void valorTotalPorCategoriaHojeQuandoAcionadoComProdutosNormaisDeveRetornarResultadoEsperado() {
         Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         List<Object[]> mockResultado = List.of(
                 new Object[]{"Categoria A", 100.0},
@@ -108,7 +109,7 @@ public class VendaConsultaTest {
     @DisplayName("valorTotalPorCategoriaHoje quando acionado com venda inexistente deve lançar exceção")
     void valorTotalPorCategoriaHojeQuandoAcionadoComVendaInexistenteDeveLancarExcecao() {
         Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         when(vendaRepository.valorTotalDiarioPorCategoriaEmpresa(eq(empresaId), eq(hoje))).thenReturn(Collections.emptyList());
 
@@ -122,7 +123,7 @@ public class VendaConsultaTest {
     @DisplayName("valorTotalPorSetorHoje quando acionado com produtos normais deve retornar resultado esperado")
     void valorTotalPorSetorHojeQuandoAcionadoComProdutosNormaisDeveRetornarResultadoEsperado() {
         Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         List<Object[]> mockResultado = List.of(
                 new Object[]{"Setor A", 150.0},
