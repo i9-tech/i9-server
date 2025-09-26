@@ -30,9 +30,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue())
-                .to(topicExchange())
-                .with("evento.#");
+    public Binding javamailBinding(Queue queue, TopicExchange topicExchange) {
+        return BindingBuilder.bind(queue)
+                .to(topicExchange)
+                .with("evento.javamail.#");
+    }
+
+    @Bean
+    public Binding twilioBinding(Queue queue, TopicExchange topicExchange) {
+        return BindingBuilder.bind(queue)
+                .to(topicExchange)
+                .with("evento.twilio.#");
     }
 }
