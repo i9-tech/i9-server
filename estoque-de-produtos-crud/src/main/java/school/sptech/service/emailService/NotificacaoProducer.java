@@ -10,13 +10,16 @@ import java.util.Map;
 @Service
 public class NotificacaoProducer {
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     private final String exchange = "notificacoes.topic";
 
+    public NotificacaoProducer(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
     public void publicarEventoFuncionarioCadastrado(String nome, String cpf, String cargos, String email) {
-        String routingKey = "evento.funcionario.cadastrado";
+        String routingKey = "evento.javamail.funcionario.cadastrado";
         Map<String, Object> payload = Map.of(
                 "nome", nome,
                 "cpf", cpf,
@@ -28,7 +31,7 @@ public class NotificacaoProducer {
     }
 
     public void publicarEventoRecuperacaoSenha(String emailUsuario, String nome, String nomeEmpresa, String cpf, String token) {
-        String routingKey = "evento.usuario.recuperacao_senha";
+        String routingKey = "evento.javamail.usuario.recuperacao_senha";
         Map<String, Object> payload = Map.of(
                 "email", emailUsuario,
                 "nome", nome,
@@ -41,7 +44,7 @@ public class NotificacaoProducer {
     }
 
     public void publicarEventoChamadaAcao(String emailAssinante) {
-        String routingKey = "evento.marketing.chamada_acao";
+        String routingKey = "evento.javamail.marketing.chamada_acao";
         Map<String, Object> payload = Map.of("email", emailAssinante);
         EventoNotificacaoDto evento = new EventoNotificacaoDto("CHAMADA_ACAO_SITE", payload);
         rabbitTemplate.convertAndSend(exchange, routingKey, evento);
