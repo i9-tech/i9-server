@@ -1,7 +1,7 @@
 package school.sptech.controller.javamail;
 
 import org.springframework.web.bind.annotation.*;
-import school.sptech.service.emailService.NotificacaoProducer; // Nova dependência
+import school.sptech.service.emailService.NotificacaoProducer;
 import org.springframework.http.ResponseEntity;
 
 @RestController
