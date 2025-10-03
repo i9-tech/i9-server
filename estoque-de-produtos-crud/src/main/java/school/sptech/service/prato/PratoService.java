@@ -1,6 +1,10 @@
 package school.sptech.service.prato;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.prato.Prato;
@@ -23,15 +27,29 @@ public class PratoService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public List<Prato> listarPratos(Integer idFuncionario) {
-        if (pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario).isEmpty()) {
+    public List<Prato> listarTodosPratos(Integer idFuncionario) {
+        if (pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario).isEmpty()) {
             throw new EntidadeNaoEncontradaException("Pratos não encontrados!");
         }
-        return pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario);
+        return pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario);
     }
 
+    public Page<Prato> listarPratos(Integer idFuncionario, int pagina, int quantidadePorPagina, String ordem, String termoBusca, Boolean disponivel, Integer setorSelecionado, Integer categoriaSelecionada) {
+
+        Sort ordenacao = Sort.by("nome");
+        ordenacao = ordem.equalsIgnoreCase("desc") ? ordenacao.descending() : ordenacao.ascending();
+        Pageable pageable = PageRequest.of(pagina, quantidadePorPagina, ordenacao);
+
+        if ((termoBusca == null || termoBusca.isEmpty()) && disponivel == null && setorSelecionado== null && categoriaSelecionada == null) {
+            return pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario, pageable);
+        }
+
+        return pratoRepository.buscarPratosComFiltros(idFuncionario, termoBusca, disponivel, setorSelecionado, categoriaSelecionada, pageable);
+    }
+
+
     public Prato buscarPratoPorId(Integer id, Integer idFuncionario) {
-        if (pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario).isEmpty()) {
+        if (pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).isEmpty()) {
             throw new EntidadeNaoEncontradaException("Pratos não encontrados!");
         }
 
@@ -119,5 +137,14 @@ public class PratoService {
     public Integer totalPratosInativos(Integer idFuncionario) {
         return pratoRepository.quantidadePratosInativosPorEmpresa(idFuncionario);
     }
+
+    public Integer totalSetoresPratosPorEmpresa(Integer idFuncionario) {
+        return pratoRepository.quantidadeSetoresPratoPorEmpresa(idFuncionario);
+    }
+
+    public Integer totalCategoriasPratosPorEmpresa(Integer idFuncionario) {
+        return pratoRepository.quantidadeCategoriasPratoPorEmpresa(idFuncionario);
+    }
+
 }
 
