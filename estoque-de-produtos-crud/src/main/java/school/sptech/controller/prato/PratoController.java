@@ -1,5 +1,7 @@
 package school.sptech.controller.prato;
 
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import org.springframework.data.domain.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -31,7 +33,7 @@ public class PratoController {
         this.pratoService = pratoService;
     }
 
-    @GetMapping("/{idFuncionario}")
+    @GetMapping("/todos-pratos/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar pratos", description = "Lista todos os pratos de uma determinada empresa.")
     @ApiResponses(value = {
@@ -90,13 +92,96 @@ public class PratoController {
                                     """))
             )
     })
-    public ResponseEntity<List<RespostaPratoDto>> listarPratos(
+    public ResponseEntity<List<RespostaPratoDto>> listarTodosPratos(
             @Parameter(description = "ID do funcionário para listagem de pratos.", required = true)
             @PathVariable Integer idFuncionario
     ) {
         return ResponseEntity
                 .ok(PratoMapper
-                        .toResponseDtoList(pratoService.listarPratos(idFuncionario)));
+                        .toResponseDtoList(pratoService.listarTodosPratos(idFuncionario)));
+    }
+
+    @GetMapping("/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(
+            summary = "Listar pratos com paginação",
+            description = "Lista todos os pratos de uma determinada empresa, com paginação, ordenação e filtro por nome."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pratos listados com sucesso.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = RespostaPratoDto.class),
+                            examples = @ExampleObject(value = """
+                                {
+                                    "content": [
+                                        {
+                                            "id": 1,
+                                            "nome": "Feijoada",
+                                            "descricao": "Feijão preto com carnes diversas.",
+                                            "preco": 45.90,
+                                            "disponivel": true,
+                                            "categoria": { "id": 3, "nome": "Pratos Típicos" },
+                                            "setor": { "id": 3, "nome": "Cozinha" },
+                                            "funcionario": { "id": 1, "empresa": { "id": 1 } }
+                                        },
+                                        {
+                                            "id": 2,
+                                            "nome": "Salada Caesar",
+                                            "descricao": "Alface americana, croutons, parmesão e molho Caesar.",
+                                            "preco": 29.50,
+                                            "disponivel": true,
+                                            "categoria": { "id": 4, "nome": "Saladas" },
+                                            "setor": { "id": 4, "nome": "Cozinha" },
+                                            "funcionario": { "id": 1, "empresa": { "id": 1 } }
+                                        }
+                                    ],
+                                    "number": 0,
+                                    "size": 10,
+                                    "totalElements": 2,
+                                    "totalPages": 1
+                                }
+                                """)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Nenhum prato encontrado para esta empresa.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = """
+                                {
+                                    "mensagem": "Não foram encontrados pratos para esta empresa."
+                                }
+                                """)
+                    )
+            )
+    })
+    public ResponseEntity<Page<RespostaPratoDto>> listarPratosPaginado(
+            @Parameter(description = "ID do funcionário para listagem de pratos.", required = true)
+            @PathVariable Integer idFuncionario,
+            @Parameter(description = "Número da página a ser retornada. Padrão: 0")
+            @RequestParam(defaultValue = "0") int pagina,
+            @Parameter(description = "Quantidade de itens por página. Padrão: 10")
+            @RequestParam(defaultValue = "10") int quantidadePorPagina,
+            @Parameter(description = "Ordem de exibição: 'asc' ou 'desc'. Padrão: 'asc'")
+            @RequestParam(defaultValue = "asc") String ordem,
+            @Parameter(description = "Filtro opcional pelo nome do prato.")
+            @RequestParam(required = false) String termoBusca,
+            @Parameter(description = "Filtro opcional por disponibilidade do prato.")
+            @RequestParam(required = false) Boolean disponivel,
+            @Parameter(description = "Filtro opcional pelo setor do prato.")
+            @RequestParam(required = false) Integer setorId,
+            @Parameter(description = "Filtro opcional pela categoria do prato.")
+            @RequestParam(required = false) Integer categoriaId
+    ) {
+        return ResponseEntity.ok(
+                PratoMapper.toResponseDtoPage(
+                        pratoService.listarPratosPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId)
+                )
+        );
     }
 
     @GetMapping("/{id}/{idFuncionario}")
@@ -407,5 +492,23 @@ public class PratoController {
             @PathVariable Integer idFuncionario
     ) {
         return ResponseEntity.ok(pratoService.totalPratosInativos(idFuncionario));
+    }
+
+    @GetMapping("/total-setores-pratos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Integer> buscarQuantidadeSetores(
+            @Parameter(description = "ID do funcionário que está buscando a quantidade de setores por pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ){
+        return ResponseEntity.ok(pratoService.totalSetoresPratosPorEmpresa(idFuncionario));
+    }
+
+    @GetMapping("/total-categorias-pratos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    public ResponseEntity<Integer> buscarQuantidadeCategorias(
+            @Parameter(description = "ID do funcionário que está buscando a quantidade de categorias por pratos.", required = true)
+            @PathVariable Integer idFuncionario
+    ){
+        return ResponseEntity.ok(pratoService.totalCategoriasPratosPorEmpresa(idFuncionario));
     }
 }
