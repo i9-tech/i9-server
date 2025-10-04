@@ -34,8 +34,7 @@ public class PratoService {
         return pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario);
     }
 
-    public Page<Prato> listarPratos(Integer idFuncionario, int pagina, int quantidadePorPagina, String ordem, String termoBusca, Boolean disponivel, Integer setorSelecionado, Integer categoriaSelecionada) {
-
+    public Page<Prato> listarPratosPaginado(Integer idFuncionario, int pagina, int quantidadePorPagina, String ordem, String termoBusca, Boolean disponivel, Integer setorSelecionado, Integer categoriaSelecionada) {
         Sort ordenacao = Sort.by("nome");
         ordenacao = ordem.equalsIgnoreCase("desc") ? ordenacao.descending() : ordenacao.ascending();
         Pageable pageable = PageRequest.of(pagina, quantidadePorPagina, ordenacao);

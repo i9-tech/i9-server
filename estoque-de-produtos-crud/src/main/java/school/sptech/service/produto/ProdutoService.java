@@ -3,6 +3,10 @@ package school.sptech.service.produto;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
 import school.sptech.controller.produto.dto.ProdutoMapper;
@@ -59,9 +63,9 @@ public class ProdutoService {
         return respostaDto;
     }
 
-    public List<ProdutoListagemDto> listarProdutoPorEmpresa(Integer idFuncionario) {
+    public List<ProdutoListagemDto> listarTodosProdutoPorEmpresa(Integer idFuncionario) {
 
-        List<Produto> todosProdutosEmpresa = repository.buscarProdutosDaEmpresaDoFuncionario(idFuncionario);
+        List<Produto> todosProdutosEmpresa = repository.buscarTodosProdutosDaEmpresaDoFuncionario(idFuncionario);
         if (todosProdutosEmpresa.isEmpty()) {
             return Collections.emptyList();
         }
@@ -69,6 +73,21 @@ public class ProdutoService {
         return todosProdutosEmpresa.stream()
                 .map(ProdutoMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public Page<ProdutoListagemDto> listarProdutoPorEmpresaPaginado(Integer idFuncionario,  int pagina, int quantidadePorPagina, String ordem, String termoBusca, String statusEstoque, Integer setorSelecionado, Integer categoriaSelecionada) {
+        Sort ordenacao = Sort.by("nome");
+        ordenacao = ordem.equalsIgnoreCase("desc") ? ordenacao.descending() : ordenacao.ascending();
+        Pageable pageable = PageRequest.of(pagina, quantidadePorPagina, ordenacao);
+
+
+        if ((termoBusca == null || termoBusca.isEmpty()) && (statusEstoque == null || statusEstoque.isEmpty()) && setorSelecionado== null && categoriaSelecionada == null) {
+            Page<Produto> produtos = repository.buscarProdutosDaEmpresaDoFuncionarioPaginado(idFuncionario, pageable);
+            return produtos.map(ProdutoMapper::toDto);
+        }
+
+        Page<Produto> produtosFiltrados = repository.buscarProdutosDaEmpresaDoFuncionarioPaginadoComFiltro(idFuncionario, termoBusca, statusEstoque, setorSelecionado, categoriaSelecionada, pageable);
+        return produtosFiltrados.map(ProdutoMapper::toDto);
     }
 
 
@@ -124,8 +143,8 @@ public class ProdutoService {
         return valorTotal;
     }
 
-    public Double lucroPrevistoEstoqueProduto(Integer idFuncionario) {
-        Double valorTotal = repository.lucroTotalProdutosEstoqueEmpresa(idFuncionario);
+    public Double lucroBrutoPrevistoEstoqueProduto(Integer idFuncionario) {
+        Double valorTotal = repository.lucroBrutoTotalProdutosEstoqueEmpresa(idFuncionario);
         if (valorTotal == null) {
             valorTotal = 0.0;
         }
@@ -133,6 +152,14 @@ public class ProdutoService {
         return valorTotal;
     }
 
+    public Double lucroLiquidoPrevistoEstoqueProduto(Integer idFuncionario) {
+        Double valorTotal = repository.lucroLiquidoTotalProdutosEstoqueEmpresa(idFuncionario);
+        if (valorTotal == null) {
+            valorTotal = 0.0;
+        }
+
+        return valorTotal;
+    }
 
     public Integer quantidadeProdutoEstoque(Integer idFuncionario) {
         Integer quantidadeProduto = repository.quantidadeProdutoEstoqueEmpresa(idFuncionario);
@@ -143,8 +170,26 @@ public class ProdutoService {
         return quantidadeProduto;
     }
 
+    public Integer quantidadeProdutosDiferentesCadastrados(Integer idFuncionario) {
+        Integer quantidadeProdutos = repository.quantidadeProdutosDiferentesCadastrados(idFuncionario);
+
+        if (quantidadeProdutos == null) {
+            quantidadeProdutos = 0;
+        }
+        return quantidadeProdutos;
+    }
+
     public Integer quantidadeProdutoEstoqueBaixo(Integer idFuncionario) {
         Integer quantidadeProduto = repository.quantidadeProdutoEstoqueBaixoEmpresa(idFuncionario);
+
+        if (quantidadeProduto == null) {
+            quantidadeProduto = 0;
+        }
+        return quantidadeProduto;
+    }
+
+    public Integer quantidadeProdutoSemEstoque(Integer idFuncionario) {
+        Integer quantidadeProduto = repository.quantidadeProdutoSemEstoqueEmpresa(idFuncionario);
 
         if (quantidadeProduto == null) {
             quantidadeProduto = 0;

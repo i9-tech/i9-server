@@ -159,7 +159,7 @@ public class PratoController {
                     )
             )
     })
-    public ResponseEntity<Page<RespostaPratoDto>> listarPratos(
+    public ResponseEntity<Page<RespostaPratoDto>> listarPratosPaginado(
             @Parameter(description = "ID do funcionário para listagem de pratos.", required = true)
             @PathVariable Integer idFuncionario,
             @Parameter(description = "Número da página a ser retornada. Padrão: 0")
@@ -179,7 +179,7 @@ public class PratoController {
     ) {
         return ResponseEntity.ok(
                 PratoMapper.toResponseDtoPage(
-                        pratoService.listarPratos(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId)
+                        pratoService.listarPratosPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId)
                 )
         );
     }
