@@ -34,4 +34,4 @@ build/
 
 ### Variáveis de Ambiente ###
 application-dev.properties
-.env
+*.env
