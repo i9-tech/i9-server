@@ -6,12 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import school.sptech.controller.images.EventoProcessamentoImagemDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.prato.Prato;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.prato.PratoRepository;
+import school.sptech.service.imagesService.ImagemProducer;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +26,12 @@ public class PratoService {
 
     private final FuncionarioRepository funcionarioRepository;
 
-    public PratoService(PratoRepository pratoRepository, FuncionarioRepository funcionarioRepository) {
+    private final ImagemProducer rabbitMQProducerService;
+
+    public PratoService(PratoRepository pratoRepository, FuncionarioRepository funcionarioRepository, ImagemProducer rabbitMQProducerService) {
         this.pratoRepository = pratoRepository;
         this.funcionarioRepository = funcionarioRepository;
+        this.rabbitMQProducerService = rabbitMQProducerService;
     }
 
     public List<Prato> listarTodosPratos(Integer idFuncionario) {
@@ -55,15 +62,42 @@ public class PratoService {
         return pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).get();
     }
 
-    public Prato cadastrarPrato(Prato prato, Integer idFuncionario) {
+    public Prato cadastrarPrato(Prato prato, MultipartFile imagem, Integer idFuncionario) {
 
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
-        prato.setId(prato.getId());
         prato.setFuncionario(funcionario);
-        return pratoRepository.save(prato);
+        prato.setId(prato.getId());
+        Prato pratoSalvo = pratoRepository.save(prato);
+
+          if (imagem != null && !imagem.isEmpty()) {
+        try {
+            EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
+                    imagem.getBytes(),
+                    imagem.getOriginalFilename(),
+                    imagem.getContentType(),
+                    String.valueOf(pratoSalvo.getId())
+            );
+            rabbitMQProducerService.enviarEventoProcessamentoImagem(evento);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
+        }
+           }
+        return pratoSalvo;
+
     }
+
+    @Transactional
+    public void atualizarUrlImagem(Integer idPrato, String urlImagem) {
+        Prato prato = pratoRepository.findById(idPrato)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Prato não encontrado para atualização da imagem"));
+
+        prato.setImagem(urlImagem);
+        pratoRepository.save(prato);
+        System.out.println("URL da imagem do prato " + idPrato + " atualizada para: " + urlImagem);
+    }
+
 
     public Prato atualizarPrato(Prato prato, Integer idPrato, Integer idFuncionario) {
         Optional<Prato> entidadeAtualizar = pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(idPrato, idFuncionario);
