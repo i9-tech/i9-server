@@ -18,7 +18,7 @@ public class ImagemProducer {
 
     public void enviarEventoProcessamentoImagem(EventoProcessamentoImagemDto evento) {
         String routingKey = "evento.images.processar";
-        System.out.printf("Enviando evento de processamento de imagem para o prato ID: %s%n", evento.identificador());
+        System.out.printf("Enviando evento de processamento de imagem para o %s com ID: %s%n", evento.tipo(), evento.identificador());
         rabbitTemplate.convertAndSend(exchange, routingKey, evento);
     }
 }

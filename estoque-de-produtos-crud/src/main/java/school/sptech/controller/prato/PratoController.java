@@ -212,8 +212,8 @@ public class PratoController {
             )
     })
     public ResponseEntity<RespostaPratoDto> cadastrarPrato(
-            @Valid @RequestPart CadastroPratoDto request,
             @Parameter(description = "ID do funcionário responsável pelo cadastro do prato.", required = true)
+            @Valid @RequestPart CadastroPratoDto request,
             @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "Dados do prato para cadastro.", required = true)
             @PathVariable Integer idFuncionario

@@ -71,10 +71,11 @@ public class PratoService {
         prato.setId(prato.getId());
         Prato pratoSalvo = pratoRepository.save(prato);
 
-          if (imagem != null && !imagem.isEmpty()) {
+        if (imagem != null && !imagem.isEmpty()) {
         try {
             EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
                     imagem.getBytes(),
+                    "PRATO",
                     imagem.getOriginalFilename(),
                     imagem.getContentType(),
                     String.valueOf(pratoSalvo.getId())
@@ -83,7 +84,7 @@ public class PratoService {
         } catch (IOException e) {
             throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
         }
-           }
+        }
         return pratoSalvo;
 
     }
