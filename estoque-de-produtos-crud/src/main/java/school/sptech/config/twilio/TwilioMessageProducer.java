@@ -7,21 +7,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class TwilioMessageProducer {
 
-    private final RabbitTemplate twilioRabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
-    public TwilioMessageProducer(@Qualifier("twilioRabbitTemplate") RabbitTemplate twilioRabbitTemplate) {
-        this.twilioRabbitTemplate = twilioRabbitTemplate;
+    private final String exchange = "notificacoes.topic";
+
+    public TwilioMessageProducer(@Qualifier("twilioRabbitTemplate") RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
     }
 
-     //Envia a mensagem usando a EXCHANGE e a ROUTING KEY.
-    public void sendToQueue(TwilioRequest request) {
 
-        this.twilioRabbitTemplate.convertAndSend(
-                TwilioRabbitMqConstants.EXCHANGE_TWILIO,
-                TwilioRabbitMqConstants.ROUTING_KEY_TWILIO,
+    //Envia a mensagem usando a EXCHANGE e a ROUTING KEY.
+    public void sendToQueue(TwilioRequest request) {
+        String routingKey = "evento.twilio.mensagem";
+        rabbitTemplate.convertAndSend(
+                exchange,
+                routingKey,
                 request
         );
 
-        System.out.println("Mensagem para Twilio enviada para a Exchange: " + TwilioRabbitMqConstants.EXCHANGE_TWILIO);
+        System.out.println("Mensagem para Twilio enviada para a Exchange: " + exchange);
     }
 }
