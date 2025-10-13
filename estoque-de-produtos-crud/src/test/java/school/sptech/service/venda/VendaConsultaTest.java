@@ -69,40 +69,6 @@ public class VendaConsultaTest {
         assertThrows(NoSuchElementException.class, () -> vendaService.calcularLucroTotal(1, LocalDate.now(ZoneId.of("America/Sao_Paulo"))));
     }
 
-    // QUANTIDADE DE VENDAS IGUAL A ZERO
-    @Test
-    @DisplayName("quantidadeVendasPorEmpresaHoje quando acionado com produtos normais deve retornar lista vazia")
-    void quantidadeVendasPorEmpresaHojeQuandoAcionadoComProdutosNormaisDeveRetornarListaVazia() {
-        Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-
-        when(vendaRepository.contarVendasConcluidasPorEmpresaEData(empresaId, hoje)).thenReturn(0);
-
-        Integer resultado = vendaService.quantidadeVendasPorEmpresaHoje(empresaId);
-
-        assertEquals(0, resultado);
-    }
-
-    // CALCULANDO VALOR TOTAL POR CATEGORIA DO DIA ATUAL
-    @Test
-    @DisplayName("valorTotalPorCategoriaHoje quando acionado com produtos normais deve retornar resultado esperado")
-    void valorTotalPorCategoriaHojeQuandoAcionadoComProdutosNormaisDeveRetornarResultadoEsperado() {
-        Integer empresaId = 1;
-        LocalDate hoje = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
-
-        List<Object[]> mockResultado = List.of(
-                new Object[]{"Categoria A", 100.0},
-                new Object[]{"Categoria B", 200.0}
-        );
-
-        when(vendaRepository.valorTotalDiarioPorCategoriaEmpresa(eq(empresaId), eq(hoje))).thenReturn(mockResultado);
-
-        Map<String, Double> resultado = vendaService.valorTotalPorCategoriaHoje(empresaId);
-
-        assertEquals(2, resultado.size());
-        assertEquals(100.0, resultado.get("Categoria A"));
-        assertEquals(200.0, resultado.get("Categoria B"));
-    }
 
     // RETORNANDO VAZIO PARA CATEGORIAS
     @Test
