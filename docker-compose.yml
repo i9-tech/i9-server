@@ -25,12 +25,15 @@ services:
     container_name: estoque-produtos-app
     depends_on:
       - mysql
+      - rabbitmq-javamail
+      - rabbitmq-twilio 
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-      SPRING_RABBITMQ_HOST: rabbitmq-javamail
+      app.rabbitmq.primary.host: rabbitmq-javamail
+      app.rabbitmq.secondary.host: rabbitmq-twilio
     ports:
       - "8080:8080"
     networks:
