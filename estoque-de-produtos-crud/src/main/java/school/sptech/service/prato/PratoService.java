@@ -34,16 +34,16 @@ public class PratoService {
         return pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario);
     }
 
-    public Page<Prato> listarPratosPaginado(Integer idFuncionario, int pagina, int quantidadePorPagina, String ordem, String termoBusca, Boolean disponivel, Integer setorSelecionado, Integer categoriaSelecionada) {
+    public Page<Prato> listarPratosPaginado(Integer idFuncionario, int pagina, int quantidadePorPagina, String ordem, String termoBusca, Boolean disponivel, Integer setorSelecionado, Integer categoriaSelecionada, Integer areaSelecionada) {
         Sort ordenacao = Sort.by("nome");
         ordenacao = ordem.equalsIgnoreCase("desc") ? ordenacao.descending() : ordenacao.ascending();
         Pageable pageable = PageRequest.of(pagina, quantidadePorPagina, ordenacao);
 
-        if ((termoBusca == null || termoBusca.isEmpty()) && disponivel == null && setorSelecionado== null && categoriaSelecionada == null) {
+        if ((termoBusca == null || termoBusca.isEmpty()) && disponivel == null && setorSelecionado== null && categoriaSelecionada == null && areaSelecionada == null) {
             return pratoRepository.buscarPratosDaEmpresaDoFuncionario(idFuncionario, pageable);
         }
 
-        return pratoRepository.buscarPratosComFiltros(idFuncionario, termoBusca, disponivel, setorSelecionado, categoriaSelecionada, pageable);
+        return pratoRepository.buscarPratosComFiltros(idFuncionario, termoBusca, disponivel, setorSelecionado, categoriaSelecionada, areaSelecionada, pageable);
     }
 
 
