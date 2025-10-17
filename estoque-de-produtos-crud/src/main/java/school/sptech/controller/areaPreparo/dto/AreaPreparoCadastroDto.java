@@ -13,7 +13,7 @@ import school.sptech.entity.funcionario.Funcionario;
 public class AreaPreparoCadastroDto {
 
     @NotBlank(message = "O nome não pode estar em branco.")
-    @Size(min = 2, max = 100, message = "O nome deve ter no máximo 100 caracteres.")
+    @Size(min = 2, max = 100, message = "O nome deve ter no máximo 100 caracteres e no mínimo 2 caracteres.")
     @Schema(
             description = "Nome da área desejada.",
             example = "Chaperia",

@@ -80,20 +80,20 @@ public class AreaPreparoService {
         }
 
         @Transactional
-        public void removerAreaPreparo(Integer id, Integer idFuncionario) {
+        public void removerAreaPreparo(Integer areaId, Integer idFuncionario) {
 
             if (!areaPreparoRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
                 throw new EntidadeInativaException();
             }
 
-            Optional<AreaPreparo> areaPreparoEncontrada = areaPreparoRepository.findById(id);
+            Optional<AreaPreparo> areaPreparoEncontrada = areaPreparoRepository.findById(areaId);
 
             if (areaPreparoEncontrada.isEmpty()) {
                 throw new EntidadeNaoEncontradaException();
             }
 
-            areaPreparoRepository.desvincularPratosDaCategoria(id);
-            areaPreparoRepository.deleteAreaPreparoById(id);
+            areaPreparoRepository.desvincularPratosArea(areaId);
+            areaPreparoRepository.deleteAreaPreparoById(areaId);
         }
 
 }

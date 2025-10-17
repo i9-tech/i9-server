@@ -21,10 +21,10 @@ public interface AreaPreparoRepository  extends JpaRepository<AreaPreparo, Integ
 
     @Modifying
     @Query("UPDATE Prato p SET p.areaPreparo = NULL WHERE p.areaPreparo.id = :areaId")
-    void desvincularPratosDaCategoria(@Param("categoriaId") Integer areaId);
+    void desvincularPratosArea(@Param("areaId") Integer areaId);
 
     @Modifying
-    @Query("DELETE FROM AreaPreparo c WHERE c.id = :id")
-    void deleteAreaPreparoById(@Param("id") Integer id);
+    @Query("DELETE FROM AreaPreparo c WHERE c.id = :areaId")
+    void deleteAreaPreparoById(@Param("areaId") Integer areaId);
 
 }

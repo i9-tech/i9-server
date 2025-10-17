@@ -201,7 +201,7 @@ public class AreaPreparoController {
         return ResponseEntity.status(HttpStatus.OK).body(resposta);
     }
 
-    @DeleteMapping("/{id}/{idFuncionario}")
+    @DeleteMapping("/{areaId}/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Remover área de preparo existente", description = "Remove uma área de preparo da base de dados a partir de seu ID.")
     @ApiResponses(value = {
@@ -216,11 +216,11 @@ public class AreaPreparoController {
     })
     public ResponseEntity<Void> remover(
             @Parameter(description = "ID da área de preparo.", example = "1", required = true)
-            @PathVariable Integer id,
+            @PathVariable Integer areaId,
             @Parameter(description = "ID do funcionário responsável pela remoção da área de preparo.", example = "1", required = true)
             @PathVariable Integer idFuncionario) {
 
-        areaPreparoService.removerAreaPreparo(id, idFuncionario);
+        areaPreparoService.removerAreaPreparo(areaId, idFuncionario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
