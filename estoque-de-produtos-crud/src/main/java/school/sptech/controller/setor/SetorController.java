@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.controller.setor.dto.SetorAtualizarDto;
 import school.sptech.controller.setor.dto.SetorCadastroDto;
 import school.sptech.controller.setor.dto.SetorListagemDto;
@@ -127,9 +128,10 @@ public class SetorController {
             )
     })
     public ResponseEntity<SetorListagemDto> cadastrar(
-            @Valid @RequestBody SetorCadastroDto setorParaCadastro,
+            @Valid @RequestPart SetorCadastroDto setorParaCadastro,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @PathVariable Integer idFuncionario) {
-        SetorListagemDto novoSetor = setorService.cadastrarSetor(setorParaCadastro, idFuncionario);
+        SetorListagemDto novoSetor = setorService.cadastrarSetor(setorParaCadastro, imagem, idFuncionario);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoSetor);
     }
 

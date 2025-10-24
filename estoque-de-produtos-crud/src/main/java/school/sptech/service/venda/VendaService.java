@@ -210,7 +210,7 @@ public class VendaService {
         return vendaRepository.buscaProdutosAbaixoDeQuantidadeMinima(empresaId);
     }
 
-    public List<Venda> listarPratosVendidosPorEmpresaNoPeriodo(Integer empresaId, LocalDate dataInicio, LocalDate dataFim) {
+    public List<Venda> listarPratosVendidosPorEmpresaNoPeriodo(Integer empresaId, LocalDate dataInicio, LocalDate dataFim, Boolean vendaConcluida, Integer areaId) {
         LocalDate hojeNoBrasil = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         LocalDate inicio = dataInicio != null ? dataInicio : hojeNoBrasil;
@@ -223,7 +223,7 @@ public class VendaService {
             fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
         }
 
-        return vendaRepository.findVendasDePratosComItensPorEmpresaNoPeriodo(empresaId, inicio, fim);
+        return vendaRepository.findVendasDePratosComItensPorEmpresaNoPeriodo(empresaId, inicio, fim, vendaConcluida, areaId);
     }
 
     public List<String> listarResumoItensVendidosPorEmpresaEData(Integer empresaId) {
