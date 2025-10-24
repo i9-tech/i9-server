@@ -18,3 +18,13 @@ services:
     ports:
       - "5673:5672"
       - "15673:15672"
+
+  rabbitmq-images:
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq-images
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_IMAGES_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_IMAGES_PASSWORD}
+    ports:
+      - "5674:5672"
+      - "15674:15672"

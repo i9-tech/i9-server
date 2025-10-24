@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.controller.produto.dto.ProdutoCadastroDto;
 import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
 import school.sptech.controller.produto.dto.ProdutoListagemDto;
@@ -48,10 +49,11 @@ public class ProdutoController {
     })
     public ResponseEntity<ProdutoListagemDto> cadastrar(
             @Parameter(description = "Dados do produto para cadastro.", required = true)
-            @Valid @RequestBody ProdutoCadastroDto produtoParaCadastrar,
+            @Valid @RequestPart ProdutoCadastroDto produtoParaCadastrar,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "ID do funcionário responsável pelo cadastro do produto.", required = true)
             @PathVariable Integer idFuncionario) {
-        ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, idFuncionario);
+        ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, imagem, idFuncionario);
         return ResponseEntity.status(201).body(produtoCadastrado);
     }
 
