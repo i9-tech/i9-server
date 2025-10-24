@@ -24,6 +24,7 @@ public class PratoMapper {
         entity.setFuncionario(dto.getFuncionario());
         entity.setSetor(dto.getSetor());
         entity.setCategoria(dto.getCategoria());
+        entity.setAreaPreparo(dto.getAreaPreparo());
 
         return entity;
     }
@@ -44,6 +45,7 @@ public class PratoMapper {
         entity.setFuncionario(dto.getFuncionario());
         entity.setSetor(dto.getSetor());
         entity.setCategoria(dto.getCategoria());
+        entity.setAreaPreparo(dto.getAreaPreparo());
 
         return entity;
     }
@@ -65,6 +67,8 @@ public class PratoMapper {
         response.setFuncionario(entity.getFuncionario());
         response.setSetor(entity.getSetor());
         response.setCategoria(entity.getCategoria());
+        response.setAreaPreparo(entity.getAreaPreparo());
+
 
         return response;
     }
