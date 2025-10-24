@@ -176,11 +176,13 @@ public class PratoController {
             @Parameter(description = "Filtro opcional pelo setor do prato.")
             @RequestParam(required = false) Integer setorId,
             @Parameter(description = "Filtro opcional pela categoria do prato.")
-            @RequestParam(required = false) Integer categoriaId
+            @RequestParam(required = false) Integer categoriaId,
+            @Parameter(description = "Filtro opcional pela area do prato.")
+            @RequestParam(required = false) Integer areaId
     ) {
         return ResponseEntity.ok(
                 PratoMapper.toResponseDtoPage(
-                        pratoService.listarPratosPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId)
+                        pratoService.listarPratosPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId, areaId)
                 )
         );
     }

@@ -54,9 +54,21 @@ insert into categoria (nome, funcionario_id) values
 ('Bebidas', 1), -- 13
 ('Salgadinhos', 1); -- 14
 
+-- inserir area_preparo
+INSERT INTO area_preparo (nome, funcionario_id)
+VALUES
+  ('Choperia', 1),            -- Área responsável pelos chopes e bebidas artesanais
+  ('Grelha', 1),              -- Preparo de carnes e grelhados
+  ('Fritadeira', 1),          -- Preparo de frituras em geral
+  ('Massas', 1),              -- Preparo de massas frescas e molhos
+  ('Confeitaria', 1),         -- Doces, tortas e sobremesas
+  ('Lanches Quentes', 2),     -- Sanduíches e porções rápidas
+  ('Bebidas', 2),             -- Sucos naturais, refrigerantes e drinks não alcoólicos
+  ('Pratos Principais', 1),   -- Montagem dos pratos principais
+  ('Guarnições', 1),          -- Preparos de acompanhamentos
+  ('Pastelaria', 1);          -- Produção de pastéis e salgados
 
 -- Inserir prato
-
 -- Pratos Principais (categoria_id = 1)
 INSERT INTO prato (
   nome, imagem, valor_venda, descricao, disponivel, funcionario_id, setor_id, categoria_id, quantidade_vendida, total_vendas
