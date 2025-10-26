@@ -1,3 +1,9 @@
+-- 1. Cria o banco de dados (Opcional, se já estiver no .env)
+CREATE DATABASE IF NOT EXISTS estoque_db;
+
+-- 2. Seleciona o banco de dados para os comandos seguintes
+USE estoque_db;
+
 -- Inserir uma empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
 VALUES ('Tauá Lanches', '12.345.678/0001-00', 'Rua das Acácias, 123', '2023-01-01', true, 'nogueiramaykoon@gmail.com', 'taua', '+5511942780654');
