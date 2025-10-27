@@ -1,5 +1,9 @@
 -- Criação do Banco de Dados
-CREATE DATABASE IF NOT EXISTS estoque_db;
+CREATE DATABASE IF NOT EXISTS estoque_db 
+-- Garante que o banco de dados use UTF-8 completo (utf8mb4)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
+
 USE estoque_db;
 
 -- 1. Tabela EMPRESA
@@ -13,7 +17,9 @@ CREATE TABLE IF NOT EXISTS empresa (
     whatsapp VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     nome_senha VARCHAR(255)
-);
+) 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 2. Tabela FUNCIONARIO
 CREATE TABLE funcionario (
@@ -34,7 +40,9 @@ CREATE TABLE funcionario (
     empresa_id INT NOT NULL,
     matricula VARCHAR(255),
     FOREIGN KEY (empresa_id) REFERENCES empresa(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 3. Tabela AREA_PREPARO
 CREATE TABLE IF NOT EXISTS area_preparo (
@@ -42,7 +50,9 @@ CREATE TABLE IF NOT EXISTS area_preparo (
     nome VARCHAR(255) NOT NULL,
     funcionario_id INT,
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 4. Tabela SETOR
 CREATE TABLE IF NOT EXISTS setor (
@@ -51,7 +61,9 @@ CREATE TABLE IF NOT EXISTS setor (
     imagem VARCHAR(255),
     funcionario_id INT,
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 5. Tabela CATEGORIA
 CREATE TABLE IF NOT EXISTS categoria (
@@ -59,7 +71,9 @@ CREATE TABLE IF NOT EXISTS categoria (
     nome VARCHAR(100) NOT NULL,
     funcionario_id INT,
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 6. Tabela PRODUTO
 CREATE TABLE IF NOT EXISTS produto (
@@ -80,7 +94,9 @@ CREATE TABLE IF NOT EXISTS produto (
     FOREIGN KEY (setor_id) REFERENCES setor(id),
     FOREIGN KEY (categoria_id) REFERENCES categoria(id),
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 7. Tabela PRATO
 CREATE TABLE IF NOT EXISTS prato (
@@ -99,7 +115,9 @@ CREATE TABLE IF NOT EXISTS prato (
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id),
     FOREIGN KEY (setor_id) REFERENCES setor(id),
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 8. Tabela VENDA
 CREATE TABLE IF NOT EXISTS venda (
@@ -119,7 +137,9 @@ CREATE TABLE IF NOT EXISTS venda (
     lucro_liquido_diario DOUBLE,
     total_mercadoria_diario DOUBLE,
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 9. Tabela PEDIDO_PRATO_PRODUTO
 CREATE TABLE IF NOT EXISTS pedido_prato_produto (
@@ -131,7 +151,9 @@ CREATE TABLE IF NOT EXISTS pedido_prato_produto (
     total DOUBLE,
     fk_funcionario INT,
     FOREIGN KEY (fk_funcionario) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 10. Tabela ITEM_CARRINHO
 CREATE TABLE IF NOT EXISTS item_carrinho (
@@ -147,7 +169,9 @@ CREATE TABLE IF NOT EXISTS item_carrinho (
     FOREIGN KEY (produto_id) REFERENCES produto(id),
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id),
     FOREIGN KEY (venda_id) REFERENCES venda(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 11. Tabela RECUPERACAO_SENHA_TOKEN
 CREATE TABLE IF NOT EXISTS recuperacao_senha_token (
@@ -157,7 +181,9 @@ CREATE TABLE IF NOT EXISTS recuperacao_senha_token (
     token_usado BOOLEAN DEFAULT FALSE,
     funcionario_id INT,
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 12. Tabela OBS_PRATO_PRODUTO
 CREATE TABLE IF NOT EXISTS obs_prato_produto (
@@ -165,7 +191,9 @@ CREATE TABLE IF NOT EXISTS obs_prato_produto (
     descricao VARCHAR(255),
     fk_pedido_prato_produto INT,
     FOREIGN KEY (fk_pedido_prato_produto) REFERENCES pedido_prato_produto(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 -- 13. Tabela STATUS_PRATO_PRODUTO
 CREATE TABLE IF NOT EXISTS status_prato_produto (
@@ -175,7 +203,9 @@ CREATE TABLE IF NOT EXISTS status_prato_produto (
     cozinheiro VARCHAR(255),
     fk_pedido_prato_produto INT,
     FOREIGN KEY (fk_pedido_prato_produto) REFERENCES pedido_prato_produto(id)
-);
+)
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_general_ci;
 
 
 -- ============================================
