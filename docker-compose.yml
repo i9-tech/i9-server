@@ -133,6 +133,19 @@ services:
     networks:
       - app-network
 
+  rabbitmq-images:
+    image: rabbitmq:3.13-management
+    container_name: rabbitmq-images
+    hostname: rabbitmq-images
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_IMAGES_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_IMAGES_PASSWORD}
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    networks:
+      - app-network
+
 volumes:
   mysql_data:
 
