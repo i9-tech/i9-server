@@ -141,8 +141,8 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBIT_IMAGES_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBIT_IMAGES_PASSWORD}
     ports:
-      - "5673:5672"
-      - "15673:15672"
+      - "5674:5672"
+      - "15674:15672"
     networks:
       - app-network
 
