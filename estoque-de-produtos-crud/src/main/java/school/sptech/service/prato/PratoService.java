@@ -100,14 +100,28 @@ public class PratoService {
     }
 
 
-    public Prato atualizarPrato(Prato prato, Integer idPrato, Integer idFuncionario) {
+    public Prato atualizarPrato(Prato prato, MultipartFile imagem, Integer idPrato, Integer idFuncionario) {
         Optional<Prato> entidadeAtualizar = pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(idPrato, idFuncionario);
 
         if (entidadeAtualizar.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Prato não encontrado!");
         }
-
         prato.setId(idPrato);
+
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
+                        imagem.getBytes(),
+                        "PRATO",
+                        imagem.getOriginalFilename(),
+                        imagem.getContentType(),
+                        String.valueOf(prato.getId())
+                );
+                rabbitMQProducerService.enviarEventoProcessamentoImagem(evento);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
+            }
+        }
 
         return pratoRepository.save(prato);
     }

@@ -284,10 +284,11 @@ public class ProdutoController {
             @Parameter(description = "ID do produto a ser atualizado.", required = true)
             @PathVariable Integer id,
             @Parameter(description = "Dados do produto para atualização.", required = true)
-            @Valid @RequestBody ProdutoEdicaoDto produtoParaEditar,
+            @Valid @RequestPart ProdutoEdicaoDto produtoParaEditar,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "ID do funcionário responsável pela atualização do produto.", required = true)
             @PathVariable Integer idFuncionario) {
-        ProdutoListagemDto responseDto = service.editarProduto(id, idFuncionario, produtoParaEditar);
+        ProdutoListagemDto responseDto = service.editarProduto(id, idFuncionario, produtoParaEditar, imagem);
         return ResponseEntity.status(200).body(responseDto);
     }
 
