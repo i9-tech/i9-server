@@ -6,6 +6,10 @@ COLLATE utf8mb4_general_ci;
 
 USE estoque_db;
 
+SET character_set_client = 'utf8mb4';
+SET character_set_connection = 'utf8mb4';
+SET character_set_results = 'utf8mb4';
+
 -- 1. Tabela EMPRESA
 CREATE TABLE IF NOT EXISTS empresa (
     id INT PRIMARY KEY AUTO_INCREMENT,
