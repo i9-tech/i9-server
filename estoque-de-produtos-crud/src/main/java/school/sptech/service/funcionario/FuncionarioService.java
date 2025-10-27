@@ -120,10 +120,12 @@ public class FuncionarioService {
 
         Funcionario funcionarioSalvo = repository.save(funcionario);
         String cargos = FuncionarioEventListener.determinarCargo(funcionarioSalvo);
+        String funcionarioEmail = funcionarioSalvo.getEmail();
+
         String emailDestinatario =
-                funcionarioSalvo.getEmail() == null ?
-                        funcionarioSalvo.getEmpresa().getEmail() :
-                        funcionarioSalvo.getEmail();
+        (funcionarioEmail == null || funcionarioEmail.trim().isEmpty()) ?
+                funcionarioSalvo.getEmpresa().getEmail() :
+                funcionarioEmail;
 
         notificacaoProducer.publicarEventoFuncionarioCadastrado(
                 funcionarioSalvo.getNome(),
