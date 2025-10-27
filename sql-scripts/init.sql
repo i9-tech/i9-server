@@ -1,8 +1,186 @@
--- 1. Cria o banco de dados (Opcional, se já estiver no .env)
+-- Criação do Banco de Dados
 CREATE DATABASE IF NOT EXISTS estoque_db;
-
--- 2. Seleciona o banco de dados para os comandos seguintes
 USE estoque_db;
+
+-- 1. Tabela EMPRESA
+CREATE TABLE IF NOT EXISTS empresa (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(155) NOT NULL,
+    cnpj VARCHAR(18) UNIQUE NOT NULL,
+    endereco VARCHAR(255),
+    data_cadastro DATE,
+    ativo BOOLEAN DEFAULT TRUE,
+    whatsapp VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    nome_senha VARCHAR(255)
+);
+
+-- 2. Tabela FUNCIONARIO
+CREATE TABLE funcionario (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(40) NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    identificador_principal VARCHAR(255), 
+    login VARCHAR(255),                   
+    cargo VARCHAR(255) NOT NULL,
+    data_admissao DATE NOT NULL,
+    acesso_setor_cozinha BOOLEAN DEFAULT FALSE,
+    acesso_setor_estoque BOOLEAN DEFAULT FALSE,
+    acesso_setor_atendimento BOOLEAN DEFAULT FALSE,
+    proprietario BOOLEAN DEFAULT FALSE,
+    primeiro_acesso BOOLEAN DEFAULT TRUE,  
+    ativo BOOLEAN DEFAULT TRUE,
+    senha VARCHAR(255) NOT NULL,
+    empresa_id INT NOT NULL,
+    matricula VARCHAR(255),
+    FOREIGN KEY (empresa_id) REFERENCES empresa(id)
+);
+
+-- 3. Tabela AREA_PREPARO
+CREATE TABLE IF NOT EXISTS area_preparo (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    funcionario_id INT,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- 4. Tabela SETOR
+CREATE TABLE IF NOT EXISTS setor (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    imagem VARCHAR(255),
+    funcionario_id INT,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- 5. Tabela CATEGORIA
+CREATE TABLE IF NOT EXISTS categoria (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    funcionario_id INT,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- 6. Tabela PRODUTO
+CREATE TABLE IF NOT EXISTS produto (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    codigo INT NOT NULL,
+    imagem VARCHAR(255),
+    nome VARCHAR(255) NOT NULL,
+    quantidade INT NOT NULL,
+    valor_compra DOUBLE NOT NULL,
+    valor_unitario DOUBLE NOT NULL,
+    quantidade_min INT NOT NULL,
+    quantidade_max INT NOT NULL,
+    descricao VARCHAR(255),
+    data_registro DATE NOT NULL,
+    setor_id INT,
+    categoria_id INT,
+    funcionario_id INT,
+    FOREIGN KEY (setor_id) REFERENCES setor(id),
+    FOREIGN KEY (categoria_id) REFERENCES categoria(id),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- 7. Tabela PRATO
+CREATE TABLE IF NOT EXISTS prato (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    imagem VARCHAR(255),
+    valor_venda DOUBLE NOT NULL,
+    descricao VARCHAR(255),
+    disponivel BOOLEAN,
+    -- Campos de Dash/KIPs em tempo de execução, mas presentes na entidade
+    quantidade_vendida INT,
+    total_vendas DOUBLE,
+    funcionario_id INT,
+    setor_id INT,
+    categoria_id INT,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id),
+    FOREIGN KEY (setor_id) REFERENCES setor(id),
+    FOREIGN KEY (categoria_id) REFERENCES categoria(id)
+);
+
+-- 8. Tabela VENDA
+CREATE TABLE IF NOT EXISTS venda (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    data_venda DATE NOT NULL,
+    valor_total DOUBLE NOT NULL,
+    mesa VARCHAR(10),
+    cliente VARCHAR(255),
+    forma_pagamento VARCHAR(255),
+    venda_concluida BOOLEAN NOT NULL,
+    funcionario_id INT NOT NULL,
+    -- Campos de KIPs em tempo de execução, mas presentes na entidade
+    lucro_diario DOUBLE,
+    lucro_diario_ontem DOUBLE,
+    vendas_diaria INT,
+    vendas_diaria_ontem INT,
+    lucro_liquido_diario DOUBLE,
+    total_mercadoria_diario DOUBLE,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- 9. Tabela PEDIDO_PRATO_PRODUTO
+CREATE TABLE IF NOT EXISTS pedido_prato_produto (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    codigo_comanda INT,
+    nome_cliente VARCHAR(255),
+    mesa INT,
+    pagamento VARCHAR(255),
+    total DOUBLE,
+    fk_funcionario INT,
+    FOREIGN KEY (fk_funcionario) REFERENCES funcionario(id)
+);
+
+-- 10. Tabela ITEM_CARRINHO
+CREATE TABLE IF NOT EXISTS item_carrinho (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    venda VARCHAR(255),
+    valor_unitario DOUBLE,
+    observacao VARCHAR(255),
+    prato_id INT,
+    produto_id INT,
+    funcionario_id INT,
+    venda_id INT,
+    FOREIGN KEY (prato_id) REFERENCES prato(id),
+    FOREIGN KEY (produto_id) REFERENCES produto(id),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id),
+    FOREIGN KEY (venda_id) REFERENCES venda(id)
+);
+
+-- 11. Tabela RECUPERACAO_SENHA_TOKEN
+CREATE TABLE IF NOT EXISTS recuperacao_senha_token (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    token VARCHAR(255) UNIQUE NOT NULL,
+    expiracao DATETIME NOT NULL,
+    token_usado BOOLEAN DEFAULT FALSE,
+    funcionario_id INT,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+-- 12. Tabela OBS_PRATO_PRODUTO
+CREATE TABLE IF NOT EXISTS obs_prato_produto (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    descricao VARCHAR(255),
+    fk_pedido_prato_produto INT,
+    FOREIGN KEY (fk_pedido_prato_produto) REFERENCES pedido_prato_produto(id)
+);
+
+-- 13. Tabela STATUS_PRATO_PRODUTO
+CREATE TABLE IF NOT EXISTS status_prato_produto (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    status_produto BOOLEAN,
+    status_pedido BOOLEAN,
+    cozinheiro VARCHAR(255),
+    fk_pedido_prato_produto INT,
+    FOREIGN KEY (fk_pedido_prato_produto) REFERENCES pedido_prato_produto(id)
+);
+
+
+-- ============================================
+--              INSERT DE DADOS
+-- ============================================
 
 -- Inserir uma empresa
 INSERT INTO empresa (nome, CNPJ, endereco, data_cadastro, ativo, email, nome_senha, whatsapp)
@@ -217,13 +395,6 @@ INSERT INTO prato (
 ('Caldo De Cana 500ml', '', 9.00, 'Caldo De Cana 500ml', true, 1, 1, 10, NULL, NULL),
 ('Caldo De Cana 1 Litro', '', 18.00, 'Caldo De Cana 1 Litro', true, 1, 1, 10, NULL, NULL),
 ('Coco Verde', '', 8.00, 'Coco Verde', true, 1, 1, 10, NULL, NULL);
-
-
-
-
-
-
-
 
 -- PRODUTOS
 INSERT INTO produto (
