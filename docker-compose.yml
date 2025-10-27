@@ -4,26 +4,30 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql-estoque
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_CHARSET: utf8mb4
-      MYSQL_COLLATION: utf8mb4_unicode_ci
-    command: 
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-      - --default-authentication-plugin=mysql_native_password  
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
     ports:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      # - ./sql-scripts:/docker-entrypoint-initdb.d
+      - ./mysql-custom.cnf:/etc/mysql/conf.d/custom.cnf:ro
       - ./sql-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
-      # - ./estoque-de-produtos-crud/src/main/resources/data.sql:/docker-entrypoint-initdb.d/data.sql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
   app-1:
     build:
@@ -31,14 +35,18 @@ services:
       dockerfile: Dockerfile
     container_name: estoque-produtos-app
     depends_on:
-      - mysql
-      - rabbitmq-javamail
-      - rabbitmq-twilio 
+      mysql:
+        condition: service_healthy
+      rabbitmq-javamail:
+        condition: service_started
+      rabbitmq-twilio:
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci&useUnicode=true
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
       app.rabbitmq.primary.host: rabbitmq-javamail
       app.rabbitmq.secondary.host: rabbitmq-twilio
       app.rabbitmq.secondary.port: 5672
@@ -53,14 +61,18 @@ services:
       dockerfile: Dockerfile
     container_name: estoque-produtos-app-2
     depends_on:
-      - mysql
-      - rabbitmq-javamail
-      - rabbitmq-twilio 
+      mysql:
+        condition: service_healthy
+      rabbitmq-javamail:
+        condition: service_started
+      rabbitmq-twilio:
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci&useUnicode=true
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
       app.rabbitmq.primary.host: rabbitmq-javamail
       app.rabbitmq.secondary.host: rabbitmq-twilio
       app.rabbitmq.secondary.port: 5672
@@ -75,14 +87,18 @@ services:
       dockerfile: Dockerfile
     container_name: estoque-produtos-app-3
     depends_on:
-      - mysql
-      - rabbitmq-javamail
-      - rabbitmq-twilio 
+      mysql:
+        condition: service_healthy
+      rabbitmq-javamail:
+        condition: service_started
+      rabbitmq-twilio:
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci&useUnicode=true
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
       SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
       app.rabbitmq.primary.host: rabbitmq-javamail
       app.rabbitmq.secondary.host: rabbitmq-twilio
       app.rabbitmq.secondary.port: 5672
