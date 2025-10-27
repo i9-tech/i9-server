@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import school.sptech.controller.categoria.dto.CategoriaListagemDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.controller.setor.dto.SetorListagemDto;
+import school.sptech.entity.areaPreparo.AreaPreparo;
 import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.setor.Setor;
@@ -80,6 +81,21 @@ public class AtualizarPratoDto {
             implementation = CategoriaListagemDto.class
     )
     private Categoria categoria;
+
+    @ManyToOne
+    @Schema(
+            description = "Área de preparo que o prato pertencerá na hora da preparação na cozinha.",
+            implementation = CategoriaListagemDto.class
+    )
+    private AreaPreparo areaPreparo;
+
+    public AreaPreparo getAreaPreparo() {
+        return areaPreparo;
+    }
+
+    public void setAreaPreparo(AreaPreparo areaPreparo) {
+        this.areaPreparo = areaPreparo;
+    }
 
     public @NotBlank String getNome() {
         return nome;

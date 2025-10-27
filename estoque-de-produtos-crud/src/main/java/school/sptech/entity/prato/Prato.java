@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import school.sptech.controller.categoria.dto.CategoriaListagemDto;
 import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
 import school.sptech.controller.setor.dto.SetorListagemDto;
+import school.sptech.entity.areaPreparo.AreaPreparo;
 import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.setor.Setor;
@@ -86,6 +87,13 @@ public class Prato {
             implementation = CategoriaListagemDto.class
     )
     private Categoria categoria;
+
+    @ManyToOne
+    @Schema(
+            description = "Área de preparo que o prato pertencerá na hora da preparação na cozinha.",
+            implementation = CategoriaListagemDto.class
+    )
+    private AreaPreparo areaPreparo;
 
     private Integer quantidadeVendida;
     private Double totalVendas;
@@ -181,7 +189,7 @@ public class Prato {
 
     public Prato() {}
 
-    public Prato(int id, String nome, String imagem, Double valorVenda, String descricao, Boolean disponivel, Funcionario funcionario, Setor setor, Categoria categoria) {
+    public Prato(int id, String nome, String imagem, Double valorVenda, String descricao, Boolean disponivel, Funcionario funcionario, Setor setor, Categoria categoria, AreaPreparo areaPreparo, Integer quantidadeVendida, Double totalVendas) {
         this.id = id;
         this.nome = nome;
         this.imagem = imagem;
@@ -191,20 +199,17 @@ public class Prato {
         this.funcionario = funcionario;
         this.setor = setor;
         this.categoria = categoria;
-    }
-
-    public Prato(int id, String nome, String imagem, Double valorVenda, String descricao, Boolean disponivel, Funcionario funcionario, Setor setor, Categoria categoria, Integer quantidadeVendida, Double totalVendas) {
-        this.id = id;
-        this.nome = nome;
-        this.imagem = imagem;
-        this.valorVenda = valorVenda;
-        this.descricao = descricao;
-        this.disponivel = disponivel;
-        this.funcionario = funcionario;
-        this.setor = setor;
-        this.categoria = categoria;
+        this.areaPreparo = areaPreparo;
         this.quantidadeVendida = quantidadeVendida;
         this.totalVendas = totalVendas;
+    }
+
+    public AreaPreparo getAreaPreparo() {
+        return areaPreparo;
+    }
+
+    public void setAreaPreparo(AreaPreparo areaPreparo) {
+        this.areaPreparo = areaPreparo;
     }
 
     @Override

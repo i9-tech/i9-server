@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.controller.prato.dto.AtualizarPratoDto;
 import school.sptech.controller.prato.dto.CadastroPratoDto;
 import school.sptech.controller.prato.dto.PratoMapper;
@@ -175,11 +176,13 @@ public class PratoController {
             @Parameter(description = "Filtro opcional pelo setor do prato.")
             @RequestParam(required = false) Integer setorId,
             @Parameter(description = "Filtro opcional pela categoria do prato.")
-            @RequestParam(required = false) Integer categoriaId
+            @RequestParam(required = false) Integer categoriaId,
+            @Parameter(description = "Filtro opcional pela area do prato.")
+            @RequestParam(required = false) Integer areaId
     ) {
         return ResponseEntity.ok(
                 PratoMapper.toResponseDtoPage(
-                        pratoService.listarPratosPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId)
+                        pratoService.listarPratosPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, disponivel, setorId, categoriaId, areaId)
                 )
         );
     }
@@ -211,15 +214,16 @@ public class PratoController {
             )
     })
     public ResponseEntity<RespostaPratoDto> cadastrarPrato(
-            @Parameter(description = "Dados do prato para cadastro.", required = true)
-            @Valid @RequestBody CadastroPratoDto request,
             @Parameter(description = "ID do funcionário responsável pelo cadastro do prato.", required = true)
+            @Valid @RequestPart CadastroPratoDto request,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
+            @Parameter(description = "Dados do prato para cadastro.", required = true)
             @PathVariable Integer idFuncionario
     ) {
         return ResponseEntity
                 .ok(PratoMapper.toResponseDto
                         (pratoService.cadastrarPrato(
-                                PratoMapper.toEntity(request), idFuncionario)));
+                                PratoMapper.toEntity(request), imagem, idFuncionario)));
     }
 
     @PatchMapping("/{id}/{idFuncionario}")
@@ -261,8 +265,9 @@ public class PratoController {
             )
     })
     public ResponseEntity<RespostaPratoDto> atualizarPrato(
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "Dados do prato para atualização.", required = true)
-            @Valid @RequestBody AtualizarPratoDto request,
+            @Valid @RequestPart AtualizarPratoDto request,
             @Parameter(description = "ID do prato a ser atualizado.", required = true)
             @PathVariable Integer id,
             @Parameter(description = "ID do funcionário responsável pela atualização do prato.", required = true)
@@ -271,7 +276,7 @@ public class PratoController {
         return ResponseEntity
                 .ok(PratoMapper.toResponseDto
                         (pratoService.atualizarPrato(
-                                PratoMapper.toEntity(request),  id, idFuncionario)));
+                                PratoMapper.toEntity(request), imagem,  id, idFuncionario)));
     }
 
     @DeleteMapping("/{id}/{idFuncionario}")

@@ -4,8 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-
-    public static final String TWILIO_QUEUE = "twilio-queue";
-
-    @Bean
-    public Queue twilioQueue() {
-        return new Queue(TWILIO_QUEUE, true);
-    }
 
     @Bean
     public TopicExchange topicExchange() {
@@ -34,8 +26,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public MessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
+    public Queue filaProcessarImagens() {
+        return new Queue("notificacoes.images.processar.queue");
+    }
+
+    @Bean
+    public Queue filaImagensProcessadas() {
+        return new Queue("notificacoes.images.processadas.queue", true);
     }
 
     @Bean
@@ -52,13 +49,17 @@ public class RabbitMQConfig {
                 .with("evento.twilio.#");
     }
 
-
     @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(jsonMessageConverter());
-        return factory;
+    public Binding bindingProcessarImagens(Queue filaProcessarImagens, TopicExchange topicExchange) {
+        return BindingBuilder.bind(filaProcessarImagens)
+                .to(topicExchange)
+                .with("evento.images.processar");
     }
 
+    @Bean
+    public Binding bindingImagensProcessadas(Queue filaImagensProcessadas, TopicExchange topicExchange) {
+        return BindingBuilder.bind(filaImagensProcessadas)
+                .to(topicExchange)
+                .with("evento.images.processadas.sucesso");
+    }
 }
