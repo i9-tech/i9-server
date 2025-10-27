@@ -95,7 +95,7 @@ public class SetorService {
         return SetorMapper.transformarEmRespostaDto(setor);
     }
 
-    public SetorListagemDto atualizarSetor(Integer id, SetorAtualizarDto setorDto, Integer idFuncionario) {
+    public SetorListagemDto atualizarSetor(Integer id, SetorAtualizarDto setorDto, MultipartFile imagem, Integer idFuncionario) {
         if (!setorRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
             throw new EntidadeInativaException();
         }
@@ -107,6 +107,20 @@ public class SetorService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("O setor não foi encontrado"));
 
         Setor setor = SetorMapper.transformarEmEntidade(setorDto);
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
+                        imagem.getBytes(),
+                        "SETOR",
+                        imagem.getOriginalFilename(),
+                        imagem.getContentType(),
+                        String.valueOf(setor.getId())
+                );
+                rabbitMQProducerService.enviarEventoProcessamentoImagem(evento);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
+            }
+        }
         setor.setId(id);
         setor.setFuncionario(funcionario);
 
