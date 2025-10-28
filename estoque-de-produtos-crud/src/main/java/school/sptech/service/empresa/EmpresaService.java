@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.exception.EntidadeInativaException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.service.empresa.port.EmpresaPort;
 
 import java.util.List;
