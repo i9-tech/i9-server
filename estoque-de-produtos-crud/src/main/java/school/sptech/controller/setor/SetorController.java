@@ -173,9 +173,10 @@ public class SetorController {
     })
     public ResponseEntity<SetorListagemDto> atualizar(
             @PathVariable Integer idSetor,
-            @Valid @RequestBody SetorAtualizarDto setorParaAtualizar,
+            @Valid @RequestPart SetorAtualizarDto setorParaAtualizar,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @PathVariable Integer idFuncionario) {
-        SetorListagemDto atualizado = setorService.atualizarSetor(idSetor, setorParaAtualizar, idFuncionario);
+        SetorListagemDto atualizado = setorService.atualizarSetor(idSetor, setorParaAtualizar, imagem, idFuncionario);
         return ResponseEntity.ok(atualizado);
     }
 

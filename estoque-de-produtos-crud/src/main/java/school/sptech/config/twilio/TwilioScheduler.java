@@ -17,7 +17,7 @@ public class TwilioScheduler {
         this.empresaRepository = empresaRepository;
     }
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 23 * * *", zone = "America/Sao_Paulo")
     public void sendScheduledSms() {
         List<Empresa> empresas = empresaRepository.findAll();
         for (Empresa empresa : empresas){

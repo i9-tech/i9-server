@@ -125,7 +125,7 @@ public class ProdutoService {
     }
 
 
-    public ProdutoListagemDto editarProduto(Integer id, Integer idFuncionario, @Valid ProdutoEdicaoDto produtoParaEditar) {
+    public ProdutoListagemDto editarProduto(Integer id, Integer idFuncionario, @Valid ProdutoEdicaoDto produtoParaEditar, MultipartFile imagem) {
         Optional<Produto> produtoPorEmpresaFuncionario = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
         if (produtoPorEmpresaFuncionario.isEmpty()) {
@@ -149,6 +149,21 @@ public class ProdutoService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
         produtoExiste.setFuncionario(funcionario);
+
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
+                        imagem.getBytes(),
+                        "PRODUTO",
+                        imagem.getOriginalFilename(),
+                        imagem.getContentType(),
+                        String.valueOf(produtoExiste.getId())
+                );
+                rabbitMQProducerService.enviarEventoProcessamentoImagem(evento);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
+            }
+        }
 
         ProdutoMapper.atualizarProdutoComDto(produtoExiste, produtoParaEditar);
         return ProdutoMapper.toDto(repository.save(produtoExiste));

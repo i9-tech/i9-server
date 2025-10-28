@@ -265,8 +265,9 @@ public class PratoController {
             )
     })
     public ResponseEntity<RespostaPratoDto> atualizarPrato(
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "Dados do prato para atualização.", required = true)
-            @Valid @RequestBody AtualizarPratoDto request,
+            @Valid @RequestPart AtualizarPratoDto request,
             @Parameter(description = "ID do prato a ser atualizado.", required = true)
             @PathVariable Integer id,
             @Parameter(description = "ID do funcionário responsável pela atualização do prato.", required = true)
@@ -275,7 +276,7 @@ public class PratoController {
         return ResponseEntity
                 .ok(PratoMapper.toResponseDto
                         (pratoService.atualizarPrato(
-                                PratoMapper.toEntity(request),  id, idFuncionario)));
+                                PratoMapper.toEntity(request), imagem,  id, idFuncionario)));
     }
 
     @DeleteMapping("/{id}/{idFuncionario}")
