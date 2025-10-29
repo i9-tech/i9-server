@@ -221,7 +221,7 @@ public class FuncionarioController {
     public ResponseEntity<Void> redefinirSenha(
             @PathVariable int id,
             @PathVariable Integer idEmpresa,
-            @RequestBody RedefinirSenhaDto dto) {
+            @Valid @RequestBody RedefinirSenhaDto dto) {
 
         service.redefinirSenhaPrimeiroAcesso(id, idEmpresa, dto.getSenha(), dto.isPrimeiroAcesso());
         return ResponseEntity.ok().build();

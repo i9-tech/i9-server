@@ -1,6 +1,11 @@
 package school.sptech.controller.funcionario.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class RedefinirSenhaDto {
+    @NotBlank(message = "A senha é obrigatória.")
+    @Size(min = 11, message = "A senha deve ter no mínimo 11 caracteres.")
     private String senha;
     private boolean primeiroAcesso;
 
