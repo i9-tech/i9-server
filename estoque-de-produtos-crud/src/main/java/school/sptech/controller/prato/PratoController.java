@@ -98,8 +98,7 @@ public class PratoController {
             @PathVariable Integer idFuncionario
     ) {
         return ResponseEntity
-                .ok(PratoMapper
-                        .toResponseDtoList(pratoService.listarTodosPratos(idFuncionario)));
+                .ok(pratoService.listarTodosPratos(idFuncionario));
     }
 
     @GetMapping("/{idFuncionario}")
