@@ -16,10 +16,11 @@ public class AutenticacaoEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        if (authException.getClass().equals(BadCredentialsException.class)|| authException.getClass().equals(InsufficientAuthenticationException.class)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        if (authException.getClass().equals(BadCredentialsException.class) ||
+                authException.getClass().equals(InsufficientAuthenticationException.class)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         } else {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Não autorizado");
         }
     }
 }

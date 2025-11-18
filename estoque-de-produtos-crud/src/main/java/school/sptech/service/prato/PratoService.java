@@ -5,9 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import school.sptech.controller.images.EventoProcessamentoImagemDto;
+import school.sptech.controller.prato.dto.PratoMapper;
+import school.sptech.controller.prato.dto.RespostaPratoDto;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.prato.Prato;
 import school.sptech.exception.EntidadeNaoEncontradaException;
@@ -18,6 +21,7 @@ import school.sptech.service.imagesService.ImagemProducer;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PratoService {
@@ -34,11 +38,14 @@ public class PratoService {
         this.rabbitMQProducerService = rabbitMQProducerService;
     }
 
-    public List<Prato> listarTodosPratos(Integer idFuncionario) {
-        if (pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario).isEmpty()) {
+    @Cacheable(value = "listaPratos", key = "#idFuncionario")
+    public List<RespostaPratoDto> listarTodosPratos(Integer idFuncionario) {
+        List<Prato> pratos = pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario);
+
+        if (pratos.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Pratos não encontrados!");
         }
-        return pratoRepository.buscarTodosPratosDaEmpresaDoFuncionario(idFuncionario);
+        return pratos.stream().map(PratoMapper::toResponseDto).collect(Collectors.toList());
     }
 
     public Page<Prato> listarPratosPaginado(Integer idFuncionario, int pagina, int quantidadePorPagina, String ordem, String termoBusca, Boolean disponivel, Integer setorSelecionado, Integer categoriaSelecionada, Integer areaSelecionada) {
@@ -54,6 +61,7 @@ public class PratoService {
     }
 
 
+    @Cacheable(value = "pratoPorId", key = "#id")
     public Prato buscarPratoPorId(Integer id, Integer idFuncionario) {
         if (pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).isEmpty()) {
             throw new EntidadeNaoEncontradaException("Pratos não encontrados!");
@@ -62,6 +70,7 @@ public class PratoService {
         return pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).get();
     }
 
+    @CacheEvict(value = "listaPratos", key = "#idFuncionario")
     public Prato cadastrarPrato(Prato prato, MultipartFile imagem, Integer idFuncionario) {
 
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
@@ -100,6 +109,10 @@ public class PratoService {
     }
 
 
+    @Caching(evict = {
+            @CacheEvict(value = "pratoPorId", key = "#idPrato"),
+            @CacheEvict(value = "listaPratos", key = "#idFuncionario")
+    })
     public Prato atualizarPrato(Prato prato, MultipartFile imagem, Integer idPrato, Integer idFuncionario) {
         Optional<Prato> entidadeAtualizar = pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(idPrato, idFuncionario);
 
@@ -127,6 +140,10 @@ public class PratoService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "pratoPorId", key = "#id"),
+            @CacheEvict(value = "listaPratos", key = "#idFuncionario")
+    })
     public void deletarPrato(Integer id, Integer idFuncionario) {
         if (pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).isEmpty()) {
             throw new EntidadeNaoEncontradaException("Prato não encontrado!");

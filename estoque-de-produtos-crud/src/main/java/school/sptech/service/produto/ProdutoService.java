@@ -2,6 +2,7 @@ package school.sptech.service.produto;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +47,7 @@ public class ProdutoService {
         this.rabbitMQProducerService = rabbitMQProducerService;
     }
 
+    @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
     public ProdutoListagemDto cadastrarProduto(@Valid ProdutoCadastroDto produtoCadastroDto, MultipartFile imagem, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
@@ -74,6 +76,7 @@ public class ProdutoService {
     }
 
     @Transactional
+    @CacheEvict(value = "produtoPorId", key = "#idProduto")
     public void atualizarUrlImagem(Integer idProduto, String urlImagem) {
         Produto produto = repository.findById(idProduto)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado para atualização da imagem"));
@@ -83,6 +86,7 @@ public class ProdutoService {
         System.out.println("URL da imagem do produto " + idProduto + " atualizada para: " + urlImagem);
     }
 
+    @Cacheable(value = "produtoPorId", key = "#id")
     public ProdutoListagemDto buscarProdutoPorId(Integer id, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
@@ -97,6 +101,7 @@ public class ProdutoService {
         return respostaDto;
     }
 
+    @Cacheable(value = "listaProdutos", key = "#idFuncionario")
     public List<ProdutoListagemDto> listarTodosProdutoPorEmpresa(Integer idFuncionario) {
 
         List<Produto> todosProdutosEmpresa = repository.buscarTodosProdutosDaEmpresaDoFuncionario(idFuncionario);
@@ -124,7 +129,10 @@ public class ProdutoService {
         return produtosFiltrados.map(ProdutoMapper::toDto);
     }
 
-
+    @Caching(evict = {
+            @CacheEvict(value = "produtoPorId", key = "#id"),
+            @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    })
     public ProdutoListagemDto editarProduto(Integer id, Integer idFuncionario, @Valid ProdutoEdicaoDto produtoParaEditar, MultipartFile imagem) {
         Optional<Produto> produtoPorEmpresaFuncionario = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
@@ -171,6 +179,10 @@ public class ProdutoService {
 
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "produtoPorId", key = "#id"),
+            @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    })
     public void removerPorId(Integer id, Integer idFuncionario) {
         Optional<Produto> produto = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
