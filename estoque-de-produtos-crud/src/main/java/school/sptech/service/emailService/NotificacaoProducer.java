@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.sptech.controller.javamail.EventoNotificacaoDto;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -43,9 +44,21 @@ public class NotificacaoProducer {
         rabbitTemplate.convertAndSend(exchange, routingKey, evento);
     }
 
-    public void publicarEventoChamadaAcao(String emailAssinante) {
+    public void publicarEventoChamadaAcao(String emailAssinante, String plano, String periodo) {
         String routingKey = "evento.javamail.marketing.chamada_acao";
-        Map<String, Object> payload = Map.of("email", emailAssinante);
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("email", emailAssinante);
+
+        if (plano != null && !plano.isBlank()) {
+            payload.put("plano", plano);
+        }
+
+
+        if (periodo != null && !periodo.isBlank()) {
+            payload.put("periodo", periodo);
+        }
+
         EventoNotificacaoDto evento = new EventoNotificacaoDto("CHAMADA_ACAO_SITE", payload);
         rabbitTemplate.convertAndSend(exchange, routingKey, evento);
     }
