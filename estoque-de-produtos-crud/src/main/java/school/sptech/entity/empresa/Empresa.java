@@ -1,11 +1,12 @@
 package school.sptech.entity.empresa;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import school.sptech.entity.plano.GerenciamentoPlano;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "empresa")
@@ -84,6 +85,10 @@ public class Empresa {
     private String email;
 
     private String nomeSenha;
+
+    @OneToOne(mappedBy = "empresa")
+    @JsonBackReference
+    private GerenciamentoPlano gerenciamentoPlano;
 
     public Integer getId() {
         return id;
@@ -165,6 +170,14 @@ public class Empresa {
         this.whatsapp = whatsapp;
         this.email = email;
         this.nomeSenha = nomeSenha;
+    }
+
+    public GerenciamentoPlano getGerenciamentoPlano() {
+        return gerenciamentoPlano;
+    }
+
+    public void setGerenciamentoPlano(GerenciamentoPlano gerenciamentoPlano) {
+        this.gerenciamentoPlano = gerenciamentoPlano;
     }
 
     @Override

@@ -1,7 +1,11 @@
 package school.sptech.controller.empresa.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.OneToOne;
+import school.sptech.controller.plano.dto.GerenciamentoPlanoResponse;
+import school.sptech.entity.plano.GerenciamentoPlano;
 
 import java.time.LocalDate;
 
@@ -59,6 +63,11 @@ public class EmpresaListagemDto {
 
     private String whatsapp;
 
+    private String nomePlano;
+
+   private GerenciamentoPlanoResponse gerenciamentoPlano;
+
+
     public Integer getId() {
         return id;
     }
@@ -110,4 +119,21 @@ public class EmpresaListagemDto {
     public String getWhatsapp() { return whatsapp; }
 
     public void setWhatsapp(String whatsapp) { this.whatsapp = whatsapp; }
+
+
+    public String getNomePlano() {
+        return nomePlano;
+    }
+
+    public void setNomePlano(String nomePlano) {
+        this.nomePlano = nomePlano;
+    }
+
+    public GerenciamentoPlanoResponse getGerenciamentoPlano() {
+        return gerenciamentoPlano;
+    }
+
+    public void setGerenciamentoPlano(GerenciamentoPlanoResponse gerenciamentoPlano) {
+        this.gerenciamentoPlano = gerenciamentoPlano;
+    }
 }

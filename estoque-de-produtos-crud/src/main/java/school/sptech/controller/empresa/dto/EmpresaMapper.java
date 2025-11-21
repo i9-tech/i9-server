@@ -1,13 +1,15 @@
 package school.sptech.controller.empresa.dto;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
 import school.sptech.entity.empresa.Empresa;
+import school.sptech.entity.plano.GerenciamentoPlano;
+import school.sptech.entity.plano.PlanoTemplate;
+import school.sptech.controller.plano.dto.GerenciamentoPlanoResponse;
+import school.sptech.controller.plano.dto.PlanoTemplateResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmpresaMapper {
 
@@ -40,38 +42,73 @@ public class EmpresaMapper {
     @Operation(summary = "Transforma uma entidade de empresa em um DTO de resposta.",
             description = "Converte os dados de uma entidade de empresa em um DTO de resposta, para ser enviado na resposta da API.")
     public static EmpresaListagemDto transformarEmRespostaDto(Empresa entidadeEmpresaResposta) {
-        EmpresaListagemDto entidadeEmpresaParaResposta = new EmpresaListagemDto();
+        EmpresaListagemDto dto = new EmpresaListagemDto();
 
-        entidadeEmpresaParaResposta.setId(entidadeEmpresaResposta.getId());
-        entidadeEmpresaParaResposta.setNome(entidadeEmpresaResposta.getNome());
-        entidadeEmpresaParaResposta.setCnpj(entidadeEmpresaResposta.getCnpj());
-        entidadeEmpresaParaResposta.setEndereco(entidadeEmpresaResposta.getEndereco());
-        entidadeEmpresaParaResposta.setDataCadastro(entidadeEmpresaResposta.getDataCadastro());
-        entidadeEmpresaParaResposta.setAtivo(entidadeEmpresaResposta.isAtivo());
-        entidadeEmpresaParaResposta.setWhatsapp(entidadeEmpresaResposta.getWhatsapp());
+        dto.setId(entidadeEmpresaResposta.getId());
+        dto.setNome(entidadeEmpresaResposta.getNome());
+        dto.setCnpj(entidadeEmpresaResposta.getCnpj());
+        dto.setEndereco(entidadeEmpresaResposta.getEndereco());
+        dto.setDataCadastro(entidadeEmpresaResposta.getDataCadastro());
+        dto.setAtivo(entidadeEmpresaResposta.isAtivo());
+        dto.setWhatsapp(entidadeEmpresaResposta.getWhatsapp());
 
-        return entidadeEmpresaParaResposta;
+        // nomePlano (se tiver gerenciamento/planoTemplate)
+        if (entidadeEmpresaResposta.getGerenciamentoPlano() != null &&
+                entidadeEmpresaResposta.getGerenciamentoPlano().getPlanoTemplate() != null &&
+                entidadeEmpresaResposta.getGerenciamentoPlano().getPlanoTemplate().getTipo() != null) {
+
+            dto.setNomePlano(entidadeEmpresaResposta.getGerenciamentoPlano().getPlanoTemplate().getTipo().toString());
+
+            // Mapear GerenciamentoPlano -> GerenciamentoPlanoResponse (evita passar entidade)
+            GerenciamentoPlano gp = entidadeEmpresaResposta.getGerenciamentoPlano();
+            GerenciamentoPlanoResponse gpResp = new GerenciamentoPlanoResponse();
+
+            gpResp.setId(gp.getId());
+            gpResp.setPeriodo(gp.getPeriodo());
+            gpResp.setDataAdesao(gp.getDataAdesao());
+            gpResp.setDataInicio(gp.getDataInicio());
+            gpResp.setDataFim(gp.getDataFim());
+            gpResp.setTesteGratis(gp.isTesteGratis());
+            gpResp.setDiasTeste(gp.getDiasTeste());
+            gpResp.setAtivo(gp.isAtivo());
+            gpResp.setValorCobrado(gp.getValorCobrado());
+
+            if (gp.getEmpresa() != null) {
+                gpResp.setEmpresaId(gp.getEmpresa().getId());
+                gpResp.setEmpresaNome(gp.getEmpresa().getNome());
+            }
+
+            PlanoTemplate pt = gp.getPlanoTemplate();
+            if (pt != null) {
+                PlanoTemplateResponse ptr = new PlanoTemplateResponse();
+                ptr.setId(pt.getId());
+                ptr.setTipo(pt.getTipo() != null ? pt.getTipo().toString() : null);
+                ptr.setDescricao(pt.getDescricao());
+                ptr.setPrecoMensal(pt.getPrecoMensal());
+                ptr.setPrecoMensalComDescontoAnual(pt.getPrecoMensalComDescontoAnual());
+                ptr.setPrecoAnual(pt.getPrecoAnual());
+                ptr.setQtdUsuarios(pt.getQtdUsuarios());
+                ptr.setQtdSuperUsuarios(pt.getQtdSuperUsuarios());
+                ptr.setAcessoRelatorioWhatsApp(Boolean.valueOf(pt.isAcessoRelatorioWhatsApp()));
+                ptr.setAcessoDashboard(Boolean.valueOf(pt.isAcessoDashboard()));
+                gpResp.setPlanoTemplate(ptr);
+            }
+
+            dto.setGerenciamentoPlano(gpResp);
+        } else {
+            dto.setNomePlano("SEM PLANO");
+            dto.setGerenciamentoPlano(null);
+        }
+
+        return dto;
     }
 
     @Operation(summary = "Transforma uma lista de entidades de empresa em uma lista de DTOs de resposta.",
             description = "Converte uma lista de entidades de empresa em uma lista de DTOs de resposta, para ser enviada na resposta da API.")
     public static List<EmpresaListagemDto> transformarEmRespostaDtoList(List<Empresa> empresaList) {
-
-        List<EmpresaListagemDto> respostasEmDto = new ArrayList<>();
-
-        for (int i = 0; i < empresaList.size(); i++) {
-            EmpresaListagemDto entidadeEmpresaParaResposta = new EmpresaListagemDto();
-
-            entidadeEmpresaParaResposta.setId(empresaList.get(i).getId());
-            entidadeEmpresaParaResposta.setNome(empresaList.get(i).getNome());
-            entidadeEmpresaParaResposta.setCnpj(empresaList.get(i).getCnpj());
-            entidadeEmpresaParaResposta.setEndereco(empresaList.get(i).getEndereco());
-            entidadeEmpresaParaResposta.setDataCadastro(empresaList.get(i).getDataCadastro());
-            entidadeEmpresaParaResposta.setAtivo(empresaList.get(i).isAtivo());
-            entidadeEmpresaParaResposta.setWhatsapp(empresaList.get(i).getWhatsapp());
-
-            respostasEmDto.add(entidadeEmpresaParaResposta);
-        }
-        return respostasEmDto;
+        if (empresaList == null) return new ArrayList<>();
+        return empresaList.stream()
+                .map(EmpresaMapper::transformarEmRespostaDto)
+                .collect(Collectors.toList());
     }
 }
