@@ -69,6 +69,10 @@ public class FuncionarioDetalhesDto implements UserDetails {
             authorities.add(new SimpleGrantedAuthority("ROLE_PROPRIETARIO"));
         }
 
+        if (funcionario.isProprietario() && funcionario.getEmpresa().getGerenciamentoPlano() != null && funcionario.getEmpresa().getGerenciamentoPlano().getPlanoTemplate().isAcessoDashboard()) {
+            authorities.add(new SimpleGrantedAuthority("PROPRIETARIO_ROLE_PLANO_ACESSO_DASHBOARD"));
+        }
+
         return authorities;
     }
 

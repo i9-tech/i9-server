@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import school.sptech.entity.empresa.Empresa;
+import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.plano.GerenciamentoPlano;
+import school.sptech.entity.plano.PlanoTemplate;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -34,7 +38,6 @@ public class GerenciadorTokenJwt {
         final String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        System.out.println("Autorizações: " + authorities);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
@@ -43,11 +46,13 @@ public class GerenciadorTokenJwt {
                 .claim("acessoSetorEstoque", temPermissao(authentication, "ROLE_ESTOQUE"))
                 .claim("acessoSetorAtendimento", temPermissao(authentication, "ROLE_ATENDIMENTO"))
                 .claim("proprietario", temPermissao(authentication, "ROLE_PROPRIETARIO"))
+                .claim("acessoDashboard", temPermissao(authentication, "PROPRIETARIO_ROLE_PLANO_ACESSO_DASHBOARD"))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtTokenValidity * 1_000))
                 .signWith(parseSecret())
                 .compact();
     }
+
 
     // MÉTODO AUXILIAR QUE VERIFICA QUAIS AUTORIZAÇÕES O USUÁRIO TEM
     private boolean temPermissao(Authentication authentication, String role) {
