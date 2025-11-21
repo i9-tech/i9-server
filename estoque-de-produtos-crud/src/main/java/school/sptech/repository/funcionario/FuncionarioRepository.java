@@ -29,7 +29,8 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     Optional<Funcionario> findByCpf(String cpf);
 
     Optional<Funcionario> findByLogin(String login);
+    
+    int countByEmpresa_IdAndProprietarioFalseAndAtivoTrue(Integer idEmpresa);
 
-
-
+    int countByEmpresa_IdAndProprietarioTrueAndAtivoTrue(Integer idEmpresa);
 }

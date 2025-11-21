@@ -23,7 +23,7 @@ public class TwilioScheduler {
         List<Empresa> empresas = empresaRepository.findAll();
 
         for (Empresa empresa : empresas) {
-            if (empresa.isAtivo()) {
+            if (empresa.isAtivo() && empresa.getGerenciamentoPlano().isAtivo() && empresa.getGerenciamentoPlano().getPlanoTemplate().isAcessoRelatorioWhatsApp()) {
                 twilioService.enviarMensagemRelatorioCompletoHoje(empresa.getId());
             }
         }

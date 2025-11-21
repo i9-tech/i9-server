@@ -48,8 +48,22 @@ public class GerenciamentoPlanoService {
             GerenciamentoPlano antigo = empresa.getGerenciamentoPlano();
             antigo.setAtivo(false);
             antigo.setDataFim(LocalDate.now());
-            gerenciamentoPlanoRepository.save(antigo);
+            gerenciamentoPlanoRepository.saveAndFlush(antigo);
         }
+
+        if (empresa.getGerenciamentoPlano() != null && !empresa.getGerenciamentoPlano().isAtivo()) {
+            GerenciamentoPlano planoAtivo = empresa.getGerenciamentoPlano();
+            planoAtivo.setAtivo(true);
+            empresa.setAtivo(true);
+
+            AlterarPlanoDto dtoA = new AlterarPlanoDto();
+            dtoA.setPlanoTemplateId(dto.getPlanoTemplateId());
+            dtoA.setPeriodo(dto.getPeriodo());
+
+            this.alterarPlano(planoAtivo.getId(), dtoA);
+            return planoAtivo;
+        }
+
 
         GerenciamentoPlano novoPlano = new GerenciamentoPlano();
         Integer planoTemplateId = dto.getPlanoTemplateId();

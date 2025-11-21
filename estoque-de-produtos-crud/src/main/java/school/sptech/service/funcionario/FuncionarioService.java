@@ -18,6 +18,8 @@ import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.funcionario.IdentificadorFactory;
 import school.sptech.entity.funcionario.IdentificadorPrincipal;
+import school.sptech.entity.plano.GerenciamentoPlano;
+import school.sptech.entity.plano.PlanoTemplate;
 import school.sptech.exception.EntidadeConflictException;
 
 import school.sptech.exception.EntidadeNaoEncontradaException;
@@ -73,6 +75,11 @@ public class FuncionarioService {
                                 () -> new ResponseStatusException(404, "Login do usuário não cadastrado", null)
                         );
 
+        if (!funcionarioAutenticado.getEmpresa().isAtivo() || !funcionarioAutenticado.getEmpresa().getGerenciamentoPlano().isAtivo()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Empresa inativa. Solicite ativação com um administrador.");
+        }
+
         if (!funcionarioAutenticado.isAtivo()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Usuário inativo. Solicite ativação com um administrador.");
@@ -86,7 +93,6 @@ public class FuncionarioService {
     }
 
     public FuncionarioResponseDto cadastrarFuncionario(Funcionario funcionario, Integer idEmpresa){
-
         boolean funcionarioExisteByCpf = repository.existsByCpfAndEmpresa_Id(funcionario.getCpf(), idEmpresa);
         if (funcionarioExisteByCpf) {
             throw new EntidadeConflictException("O CPF informado já está em uso!");
@@ -107,6 +113,26 @@ public class FuncionarioService {
                     HttpStatus.BAD_REQUEST,
                     "Login inválido para o tipo " + validador.getTipo()
             );
+        }
+
+        // VALIDAÇÃO DE LIMITE DE FUNCIONÁRIOS/USUÁRIOS
+        GerenciamentoPlano planoAtivo = empresa.getGerenciamentoPlano();
+        if (planoAtivo == null || !planoAtivo.isAtivo() || !empresa.isAtivo()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Empresa não possui plano ativo.");
+        }
+
+        PlanoTemplate planoTemplate = planoAtivo.getPlanoTemplate();
+        int usuariosAtuaisAtivos = repository.countByEmpresa_IdAndProprietarioFalseAndAtivoTrue(idEmpresa);
+        int proprietariosAtuaisAtivos = repository.countByEmpresa_IdAndProprietarioTrueAndAtivoTrue(idEmpresa);
+
+        if (!funcionario.isProprietario() && usuariosAtuaisAtivos >= planoTemplate.getQtdUsuarios()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Limite de funcionários normais atingido para o plano atual. Limite Atual:" + planoTemplate.getQtdUsuarios() + ".");
+        }
+
+        if (funcionario.isProprietario() && proprietariosAtuaisAtivos >= planoTemplate.getQtdSuperUsuarios()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Limite de proprietários atingido para o plano atual. Limite Atual:" + planoTemplate.getQtdSuperUsuarios() + ".");
         }
 
         String senhaGerada = gerarSenha(empresa.getId(), funcionario.getCpf());
