@@ -82,4 +82,19 @@ public class GerenciamentoPlanoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @SecurityRequirement(name = "Bearer")
+    @Operation(
+            summary = "Renova plano por empresa",
+            description = "Renova o plano ativo da empresa toda vez que efetua pagamento. Retorna o novo plano renovado."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Plano renovado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Empresa não encontrada ou plano inválido"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
+    @PostMapping("/renovar/{empresaId}")
+    public ResponseEntity<GerenciamentoPlano> renovarPlano(@PathVariable Integer empresaId) {
+        GerenciamentoPlano novoPlano = gerenciamentoPlanoService.renovarPlano(empresaId);
+        return ResponseEntity.ok(novoPlano);
+    }
 }

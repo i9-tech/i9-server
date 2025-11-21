@@ -171,4 +171,34 @@ public class GerenciamentoPlanoService {
     public Optional<GerenciamentoPlano> buscarPorEmpresa(Integer empresaId) {
         return empresaRepository.findById(empresaId).map(Empresa::getGerenciamentoPlano);
     }
+
+    @Transactional
+    public GerenciamentoPlano renovarPlano(Integer empresaId) {
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada"));
+
+        GerenciamentoPlano planoAtual = empresa.getGerenciamentoPlano();
+        if (planoAtual == null || !planoAtual.isAtivo()) {
+            throw new IllegalStateException("Empresa não possui um plano ativo para renovar");
+        }
+
+        // Atualiza datas do plano existente
+        LocalDate novaDataInicio = LocalDate.now();
+        planoAtual.setDataInicio(novaDataInicio);
+        planoAtual.setDataFim(calcularDataFim(novaDataInicio, planoAtual.getPeriodo()));
+
+        // Mantém valor, template e período
+        planoAtual.setValorCobrado(planoAtual.getValorCobrado());
+        planoAtual.setAtivo(true);
+
+        // ATUALIZA E SALVA A RENOVACAO
+        gerenciamentoPlanoRepository.save(planoAtual);
+
+        System.out.println("[RENOVAÇÃO] Plano da empresa " + empresaId + " renovado. "
+                + "Data início: " + planoAtual.getDataInicio()
+                + ", Data fim: " + planoAtual.getDataFim());
+
+        return planoAtual;
+    }
+
 }
