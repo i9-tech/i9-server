@@ -14,6 +14,23 @@ import java.util.Objects;
         description = "Entidade que representa uma empresa cadastrada no sistema. É a base para execução de operações relacionadas à gestão empresarial.")
 public class Empresa {
 
+    // NOVO METODO (SRP - Lógica de Domínio)
+    public void desativar() {
+        if (!this.ativo) {
+            // Usa uma exceção de estado se necessário, mas o Service fará a validação primária
+            return;
+        }
+        this.ativo = false;
+    }
+
+    // NOVO METODO (SRP - Lógica de Domínio)
+    public void validarSePodeSerAtualizada() {
+        if (!this.ativo) {
+            // Se a empresa não estiver ativa, lançamos um erro (quem chamou cuida)
+            throw new IllegalStateException("A empresa está inativa e não pode ser atualizada.");
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(
@@ -54,7 +71,6 @@ public class Empresa {
     )
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataCadastro;
-
 
     @Schema(
             description = "Indica se a empresa está ativa no sistema. 'true' para ativa, 'false' para inativa.",
@@ -168,3 +184,12 @@ public class Empresa {
 
 
 }
+/*
+
+    A lógica de estado (ATIVO E INATIVO) passou a estar na entidade,
+ não no service, já que é uma regra de alto nível.
+    Ao mover essa lógica, a entidade se torna mais coesa.
+    Agora a service apenas chama o comportamento da entidade e não mais
+    implementa o comportamento.
+
+ */

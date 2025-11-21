@@ -1,6 +1,7 @@
 package school.sptech.controller.prato.dto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.data.domain.Page;
 import school.sptech.entity.prato.Prato;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class PratoMapper {
         entity.setFuncionario(dto.getFuncionario());
         entity.setSetor(dto.getSetor());
         entity.setCategoria(dto.getCategoria());
+        entity.setAreaPreparo(dto.getAreaPreparo());
 
         return entity;
     }
@@ -43,6 +45,7 @@ public class PratoMapper {
         entity.setFuncionario(dto.getFuncionario());
         entity.setSetor(dto.getSetor());
         entity.setCategoria(dto.getCategoria());
+        entity.setAreaPreparo(dto.getAreaPreparo());
 
         return entity;
     }
@@ -64,6 +67,8 @@ public class PratoMapper {
         response.setFuncionario(entity.getFuncionario());
         response.setSetor(entity.getSetor());
         response.setCategoria(entity.getCategoria());
+        response.setAreaPreparo(entity.getAreaPreparo());
+
 
         return response;
     }
@@ -78,6 +83,16 @@ public class PratoMapper {
         return entities.stream()
                 .map(PratoMapper::toResponseDto)
                 .toList();
+    }
+
+    @Operation(summary = "Transforma uma lista de entidades de pratos em uma lista de DTOs de resposta.",
+            description = "Converte uma lista de entidades de pratos em uma lista de DTOs de resposta, para ser enviada na resposta da API.")
+    public static Page<RespostaPratoDto> toResponseDtoPage(Page<Prato> entities) {
+        if (entities == null) {
+            return null;
+        }
+
+        return entities.map(PratoMapper::toResponseDto);
     }
 
     public static RespostaPratoDashDto toResponseDto(Object[] row) {

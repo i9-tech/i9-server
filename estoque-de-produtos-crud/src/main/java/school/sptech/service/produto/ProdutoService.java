@@ -2,20 +2,30 @@ package school.sptech.service.produto;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import school.sptech.controller.images.EventoProcessamentoImagemDto;
 import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
 import school.sptech.controller.produto.dto.ProdutoMapper;
 import school.sptech.controller.produto.dto.ProdutoCadastroDto;
 import school.sptech.controller.produto.dto.ProdutoListagemDto;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.prato.Prato;
 import school.sptech.entity.produto.Produto;
 import school.sptech.entity.setor.Setor;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.produto.ProdutoRepository;
+import school.sptech.service.imagesService.ImagemProducer;
 
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,12 +38,17 @@ public class ProdutoService {
 
     private final FuncionarioRepository funcionarioRepository;
 
-    public ProdutoService(ProdutoRepository repository, FuncionarioRepository funcionarioRepository) {
+    private final ImagemProducer rabbitMQProducerService;
+
+
+    public ProdutoService(ProdutoRepository repository, FuncionarioRepository funcionarioRepository, ImagemProducer rabbitMQProducerService) {
         this.repository = repository;
         this.funcionarioRepository = funcionarioRepository;
+        this.rabbitMQProducerService = rabbitMQProducerService;
     }
 
-    public ProdutoListagemDto cadastrarProduto(@Valid ProdutoCadastroDto produtoCadastroDto, Integer idFuncionario) {
+    @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    public ProdutoListagemDto cadastrarProduto(@Valid ProdutoCadastroDto produtoCadastroDto, MultipartFile imagem, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
 
@@ -42,9 +57,36 @@ public class ProdutoService {
 
         Produto produtoCadastrado = repository.save(produto);
 
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
+                        imagem.getBytes(),
+                        "PRODUTO",
+                        imagem.getOriginalFilename(),
+                        imagem.getContentType(),
+                        String.valueOf(produtoCadastrado.getId())
+                );
+                rabbitMQProducerService.enviarEventoProcessamentoImagem(evento);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
+            }
+        }
+
         return ProdutoMapper.toDto(produtoCadastrado);
     }
 
+    @Transactional
+    @CacheEvict(value = "produtoPorId", key = "#idProduto")
+    public void atualizarUrlImagem(Integer idProduto, String urlImagem) {
+        Produto produto = repository.findById(idProduto)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado para atualização da imagem"));
+
+        produto.setImagem(urlImagem);
+        repository.save(produto);
+        System.out.println("URL da imagem do produto " + idProduto + " atualizada para: " + urlImagem);
+    }
+
+    @Cacheable(value = "produtoPorId", key = "#id")
     public ProdutoListagemDto buscarProdutoPorId(Integer id, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
@@ -59,9 +101,10 @@ public class ProdutoService {
         return respostaDto;
     }
 
-    public List<ProdutoListagemDto> listarProdutoPorEmpresa(Integer idFuncionario) {
+    @Cacheable(value = "listaProdutos", key = "#idFuncionario")
+    public List<ProdutoListagemDto> listarTodosProdutoPorEmpresa(Integer idFuncionario) {
 
-        List<Produto> todosProdutosEmpresa = repository.buscarProdutosDaEmpresaDoFuncionario(idFuncionario);
+        List<Produto> todosProdutosEmpresa = repository.buscarTodosProdutosDaEmpresaDoFuncionario(idFuncionario);
         if (todosProdutosEmpresa.isEmpty()) {
             return Collections.emptyList();
         }
@@ -71,8 +114,26 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
+    public Page<ProdutoListagemDto> listarProdutoPorEmpresaPaginado(Integer idFuncionario,  int pagina, int quantidadePorPagina, String ordem, String termoBusca, String statusEstoque, Integer setorSelecionado, Integer categoriaSelecionada) {
+        Sort ordenacao = Sort.by("nome");
+        ordenacao = ordem.equalsIgnoreCase("desc") ? ordenacao.descending() : ordenacao.ascending();
+        Pageable pageable = PageRequest.of(pagina, quantidadePorPagina, ordenacao);
 
-    public ProdutoListagemDto editarProduto(Integer id, Integer idFuncionario, @Valid ProdutoEdicaoDto produtoParaEditar) {
+
+        if ((termoBusca == null || termoBusca.isEmpty()) && (statusEstoque == null || statusEstoque.isEmpty()) && setorSelecionado== null && categoriaSelecionada == null) {
+            Page<Produto> produtos = repository.buscarProdutosDaEmpresaDoFuncionarioPaginado(idFuncionario, pageable);
+            return produtos.map(ProdutoMapper::toDto);
+        }
+
+        Page<Produto> produtosFiltrados = repository.buscarProdutosDaEmpresaDoFuncionarioPaginadoComFiltro(idFuncionario, termoBusca, statusEstoque, setorSelecionado, categoriaSelecionada, pageable);
+        return produtosFiltrados.map(ProdutoMapper::toDto);
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = "produtoPorId", key = "#id"),
+            @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    })
+    public ProdutoListagemDto editarProduto(Integer id, Integer idFuncionario, @Valid ProdutoEdicaoDto produtoParaEditar, MultipartFile imagem) {
         Optional<Produto> produtoPorEmpresaFuncionario = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
         if (produtoPorEmpresaFuncionario.isEmpty()) {
@@ -97,12 +158,31 @@ public class ProdutoService {
 
         produtoExiste.setFuncionario(funcionario);
 
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                EventoProcessamentoImagemDto evento = new EventoProcessamentoImagemDto(
+                        imagem.getBytes(),
+                        "PRODUTO",
+                        imagem.getOriginalFilename(),
+                        imagem.getContentType(),
+                        String.valueOf(produtoExiste.getId())
+                );
+                rabbitMQProducerService.enviarEventoProcessamentoImagem(evento);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
+            }
+        }
+
         ProdutoMapper.atualizarProdutoComDto(produtoExiste, produtoParaEditar);
         return ProdutoMapper.toDto(repository.save(produtoExiste));
     }
 
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "produtoPorId", key = "#id"),
+            @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    })
     public void removerPorId(Integer id, Integer idFuncionario) {
         Optional<Produto> produto = repository.buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
 
@@ -124,8 +204,8 @@ public class ProdutoService {
         return valorTotal;
     }
 
-    public Double lucroPrevistoEstoqueProduto(Integer idFuncionario) {
-        Double valorTotal = repository.lucroTotalProdutosEstoqueEmpresa(idFuncionario);
+    public Double lucroBrutoPrevistoEstoqueProduto(Integer idFuncionario) {
+        Double valorTotal = repository.lucroBrutoTotalProdutosEstoqueEmpresa(idFuncionario);
         if (valorTotal == null) {
             valorTotal = 0.0;
         }
@@ -133,6 +213,14 @@ public class ProdutoService {
         return valorTotal;
     }
 
+    public Double lucroLiquidoPrevistoEstoqueProduto(Integer idFuncionario) {
+        Double valorTotal = repository.lucroLiquidoTotalProdutosEstoqueEmpresa(idFuncionario);
+        if (valorTotal == null) {
+            valorTotal = 0.0;
+        }
+
+        return valorTotal;
+    }
 
     public Integer quantidadeProdutoEstoque(Integer idFuncionario) {
         Integer quantidadeProduto = repository.quantidadeProdutoEstoqueEmpresa(idFuncionario);
@@ -143,8 +231,26 @@ public class ProdutoService {
         return quantidadeProduto;
     }
 
+    public Integer quantidadeProdutosDiferentesCadastrados(Integer idFuncionario) {
+        Integer quantidadeProdutos = repository.quantidadeProdutosDiferentesCadastrados(idFuncionario);
+
+        if (quantidadeProdutos == null) {
+            quantidadeProdutos = 0;
+        }
+        return quantidadeProdutos;
+    }
+
     public Integer quantidadeProdutoEstoqueBaixo(Integer idFuncionario) {
         Integer quantidadeProduto = repository.quantidadeProdutoEstoqueBaixoEmpresa(idFuncionario);
+
+        if (quantidadeProduto == null) {
+            quantidadeProduto = 0;
+        }
+        return quantidadeProduto;
+    }
+
+    public Integer quantidadeProdutoSemEstoque(Integer idFuncionario) {
+        Integer quantidadeProduto = repository.quantidadeProdutoSemEstoqueEmpresa(idFuncionario);
 
         if (quantidadeProduto == null) {
             quantidadeProduto = 0;

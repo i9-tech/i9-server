@@ -1,7 +1,7 @@
 services:
   rabbitmq-javamail:
     image: rabbitmq:3.13-management
-    hostname: rabbitmq-javamail
+    hostname: localhost
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBIT_JAVAMAIL_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBIT_JAVAMAIL_PASSWORD}
@@ -11,10 +11,59 @@ services:
 
   rabbitmq-twilio:
     image: rabbitmq:3.13-management
-    hostname: rabbitmq-twilio
+    hostname: localhost
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBIT_TWILIO_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBIT_TWILIO_PASSWORD}
     ports:
       - "5673:5672"
       - "15673:15672"
+
+  rabbitmq-images:
+    image: rabbitmq:3.13-management
+    hostname: localhost
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_IMAGES_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_IMAGES_PASSWORD}
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command:
+      [
+        "redis-server",
+        "--maxmemory", "512mb",
+        "--maxmemory-policy", "allkeys-lfu",
+        "--save", "60", "1",
+        "--loglevel", "warning"
+      ]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - redis-net
+
+  redisinsight:
+      image: redis/redisinsight:latest
+      container_name: redisinsight
+      ports:
+        - "5540:5540"
+      depends_on:
+        - redis
+      networks:
+        - redis-net
+      volumes:
+        - redisinsight_data:/data
+
+networks:
+    redis-net:
+      driver: bridge
+
+volumes:
+    redis_data:
+    redisinsight_data:

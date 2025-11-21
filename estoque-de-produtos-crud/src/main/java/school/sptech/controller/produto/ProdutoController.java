@@ -12,11 +12,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import school.sptech.controller.produto.dto.ProdutoCadastroDto;
 import school.sptech.controller.produto.dto.ProdutoEdicaoDto;
 import school.sptech.controller.produto.dto.ProdutoListagemDto;
+import school.sptech.controller.produto.dto.ProdutoListagemDtoPage;
 import school.sptech.entity.setor.Setor;
 import school.sptech.service.produto.ProdutoService;
 import java.util.List;
@@ -46,11 +49,86 @@ public class ProdutoController {
     })
     public ResponseEntity<ProdutoListagemDto> cadastrar(
             @Parameter(description = "Dados do produto para cadastro.", required = true)
-            @Valid @RequestBody ProdutoCadastroDto produtoParaCadastrar,
+            @Valid @RequestPart ProdutoCadastroDto produtoParaCadastrar,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "ID do funcionário responsável pelo cadastro do produto.", required = true)
             @PathVariable Integer idFuncionario) {
-        ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, idFuncionario);
+        ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, imagem, idFuncionario);
         return ResponseEntity.status(201).body(produtoCadastrado);
+    }
+
+    @GetMapping("/todos-produtos/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Listar produtos", description = "Lista todos os produtos de uma determinada empresa presentes na base de dados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produtos listados com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(
+                                    example = """
+    [
+      {
+       "id": 1,
+        "codigo": 1001,
+        "nome": "Arroz Branco Tipo 1",
+        "quantidade": 50,
+        "valorCompra": 15.9,
+        "valorUnitario": 22,
+        "quantidadeMin": 80,
+        "quantidadeMax": 100,
+        "descricao": "Arroz tipo 1 de ótima qualidade",
+        "dataRegistro": "2025-04-11",
+        "setor": {
+           "id": 1
+           },
+        "categoria": {
+           "id": 1
+           },
+        "funcionario": {
+           "id": 1,
+           "empresa": {
+              "id": 1
+           }
+        }
+      },
+      {
+      "id": 2,
+      "codigo": 1002,
+      "nome": "Feijão Preto",
+      "quantidade": 30,
+      "valorCompra": 12.5,
+      "valorUnitario": 18,
+      "quantidadeMin": 40,
+      "quantidadeMax": 60,
+      "descricao": "Feijão preto de boa qualidade, ideal para pratos tradicionais.",
+      "dataRegistro": "2025-04-12",
+      "setor": {
+        "id": 2
+      },
+      "categoria": {
+        "id": 2
+      },
+      "funcionario": {
+        "id": 1,
+        "empresa": {
+          "id": 1
+        }
+      }
+    }
+    ]""")))),
+            @ApiResponse(responseCode = "404", description = "Produtos não encontrados.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+            {
+              "mensagem": "Não foi encontrado nenhum produto nessa empresa."
+            }
+            """))
+            )
+    })
+    public ResponseEntity<List<ProdutoListagemDto>> listarTodosProduto(
+            @Parameter(description = "ID do funcionário para listagem de produtos.", required = true)
+            @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.listarTodosProdutoPorEmpresa(idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @GetMapping("/{idFuncionario}")
@@ -120,11 +198,26 @@ public class ProdutoController {
             """))
             )
     })
-    public ResponseEntity<List<ProdutoListagemDto>> listarProduto(
+    public ResponseEntity<Page<ProdutoListagemDto>> listarProdutoPaginado(
             @Parameter(description = "ID do funcionário para listagem de produtos.", required = true)
-            @PathVariable Integer idFuncionario) {
-        List<ProdutoListagemDto> responseDto = service.listarProdutoPorEmpresa(idFuncionario);
-        return ResponseEntity.status(200).body(responseDto);
+            @PathVariable Integer idFuncionario,
+            @Parameter(description = "Número da página a ser retornada. Padrão: 0")
+            @RequestParam(defaultValue = "0") int pagina,
+            @Parameter(description = "Quantidade de itens por página. Padrão: 10")
+            @RequestParam(defaultValue = "10") int quantidadePorPagina,
+            @Parameter(description = "Ordem de exibição: 'asc' ou 'desc'. Padrão: 'asc'")
+            @RequestParam(defaultValue = "asc") String ordem,
+            @Parameter(description = "Filtro opcional pelo nome do produto.")
+            @RequestParam(required = false) String termoBusca,
+            @Parameter(description = "Filtro opcional pelo status do produto.")
+            @RequestParam(required = false) String statusEstoque,
+            @Parameter(description = "Filtro opcional pelo setor do produto.")
+            @RequestParam(required = false) Integer setorId,
+            @Parameter(description = "Filtro opcional pela categoria do produto.")
+            @RequestParam(required = false) Integer categoriaId
+    ) {
+        Page<ProdutoListagemDto> responseDto = service.listarProdutoPorEmpresaPaginado(idFuncionario, pagina, quantidadePorPagina, ordem, termoBusca, statusEstoque, setorId, categoriaId);
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{idProduto}/{idFuncionario}")
@@ -191,10 +284,11 @@ public class ProdutoController {
             @Parameter(description = "ID do produto a ser atualizado.", required = true)
             @PathVariable Integer id,
             @Parameter(description = "Dados do produto para atualização.", required = true)
-            @Valid @RequestBody ProdutoEdicaoDto produtoParaEditar,
+            @Valid @RequestPart ProdutoEdicaoDto produtoParaEditar,
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem,
             @Parameter(description = "ID do funcionário responsável pela atualização do produto.", required = true)
             @PathVariable Integer idFuncionario) {
-        ProdutoListagemDto responseDto = service.editarProduto(id, idFuncionario, produtoParaEditar);
+        ProdutoListagemDto responseDto = service.editarProduto(id, idFuncionario, produtoParaEditar, imagem);
         return ResponseEntity.status(200).body(responseDto);
     }
 
@@ -245,27 +339,51 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(valorTotal);
     }
 
-    @GetMapping("/lucro-previsto-estoque/{idFuncionario}")
+    @GetMapping("/lucro-bruto-estoque/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
-    @Operation(summary = "Lucro previsto do estoque", description = "Calcula o lucro previsto a partir dos produtos no estoque de uma empresa.")
+    @Operation(summary = "Lucro bruto do estoque (Quantidade em estoque * valor de venda). Soma do valor de venda de todos os produtos em estoque.", description = "Calcula o lucro bruto a partir dos produtos no estoque de uma empresa.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lucro previsto calculado com sucesso.",
+            @ApiResponse(responseCode = "200", description = "Lucro bruto calculado com sucesso.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = "500.50"))
             ),
-            @ApiResponse(responseCode = "404", description = "Não foi possível calcular o lucro previsto.",
+            @ApiResponse(responseCode = "404", description = "Não foi possível calcular o lucro bruto.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
             {
-              "mensagem": "Não foi possível calcular o lucro previsto."
+              "mensagem": "Não foi possível calcular o lucro bruto."
             }
             """))
             )
     })
-    public ResponseEntity<Double> lucroPrevistoEstoque(
+    public ResponseEntity<Double> lucroBrutoPrevistoEstoque(
             @Parameter(description = "ID do funcionário para cálculo de valor do estoque.", required = true)
             @PathVariable Integer idFuncionario) {
-        Double valorTotal = service.lucroPrevistoEstoqueProduto(idFuncionario);
+        Double valorTotal = service.lucroBrutoPrevistoEstoqueProduto(idFuncionario);
+        return ResponseEntity.status(200).body(valorTotal);
+    }
+
+    @GetMapping("/lucro-liquido-estoque/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Lucro liquido do estoque (Quantidade em estoque * valor de venda) - (Quantidade em estoque * valor de compra). Diferença entre preço de venda e compra de todos os produtos. (Venda - Compra).", description = "Calcula o lucro liquido a partir dos produtos no estoque de uma empresa.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lucro liquido calculado com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "500.50"))
+            ),
+            @ApiResponse(responseCode = "404", description = "Não foi possível calcular o lucro liquido.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+            {
+              "mensagem": "Não foi possível calcular o lucro liquido."
+            }
+            """))
+            )
+    })
+    public ResponseEntity<Double> lucroLiquidoPrevistoEstoque(
+            @Parameter(description = "ID do funcionário para cálculo de valor do estoque.", required = true)
+            @PathVariable Integer idFuncionario) {
+        Double valorTotal = service.lucroLiquidoPrevistoEstoqueProduto(idFuncionario);
         return ResponseEntity.status(200).body(valorTotal);
     }
 
@@ -293,6 +411,30 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(valorTotal);
     }
 
+    @GetMapping("/quantidade-diferentes-estoque/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Quantidade de produtos diferentes no estoque", description = "Obtém a quantidade total de produtos distintos no estoque de uma empresa.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Quantidade total obtida com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "120"))
+            ),
+            @ApiResponse(responseCode = "404", description = "Não foi possível obter a quantidade total.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+            {
+              "mensagem": "Não foi possível obter a quantidade total."
+            }
+            """))
+            )
+    })
+    public ResponseEntity<Integer> quantidadeProdutosDiferentesEstoque(
+            @Parameter(description = "ID do funcionário para cálculo total de produtos no estoque.", required = true)
+            @PathVariable Integer idFuncionario) {
+        Integer valorTotal = service.quantidadeProdutosDiferentesCadastrados(idFuncionario);
+        return ResponseEntity.status(200).body(valorTotal);
+    }
+
     @GetMapping("/quantidade-estoque-baixo/{idFuncionario}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Quantidade de produtos com estoque baixo", description = "Obtém a quantidade de produtos com estoque abaixo do limite mínimo de uma empresa.")
@@ -314,6 +456,30 @@ public class ProdutoController {
             @Parameter(description = "ID do funcionário para cálculo de produtos em estoque baixo.", required = true)
             @PathVariable Integer idFuncionario) {
         Integer quantidadeProdutos = service.quantidadeProdutoEstoqueBaixo(idFuncionario);
+        return ResponseEntity.status(200).body(quantidadeProdutos);
+    }
+
+    @GetMapping("/quantidade-sem-estoque/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Quantidade de produtos com estoque zerado", description = "Obtém a quantidade de produtos com estoque zerado de uma empresa.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Quantidade de produtos obtida com sucesso.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = "15"))
+            ),
+            @ApiResponse(responseCode = "404", description = "Não foi possível obter a quantidade de produtos sem estoque.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(example = """
+            {
+              "mensagem": "Não foi possível obter a quantidade de produtos sem estoque."
+            }
+            """))
+            )
+    })
+    public ResponseEntity<Integer> quantidadeProdutosSemEstoque(
+            @Parameter(description = "ID do funcionário para cálculo de produtos sem estoque.", required = true)
+            @PathVariable Integer idFuncionario) {
+        Integer quantidadeProdutos = service.quantidadeProdutoSemEstoque(idFuncionario);
         return ResponseEntity.status(200).body(quantidadeProdutos);
     }
 

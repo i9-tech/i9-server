@@ -340,12 +340,12 @@ public class VendaController {
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado."),
             @ApiResponse(responseCode = "404", description = "Empresa não encontrada.")
     })
-    public ResponseEntity<List<VendaResponseDto>> listarPratosVendidos(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim) {
+    public ResponseEntity<List<VendaResponseDto>> listarPratosVendidos(@PathVariable Integer empresaId, @RequestParam(required = false) LocalDate dataInicio, @RequestParam(required = false) LocalDate dataFim, @RequestParam(required = false) Boolean vendaConcluida, @RequestParam(required = false) Integer areaId) {
 
         LocalDate inicio = dataInicio != null ? dataInicio : LocalDate.now();
         LocalDate fim = dataFim != null ? dataFim : inicio;
 
-        List<Venda> vendas = vendaService.listarPratosVendidosPorEmpresaNoPeriodo(empresaId, inicio, fim);
+        List<Venda> vendas = vendaService.listarPratosVendidosPorEmpresaNoPeriodo(empresaId, inicio, fim, vendaConcluida, areaId);
 
         List<VendaResponseDto> dtos = vendas.stream()
                 .map(VendaMapper::toDto)
@@ -447,6 +447,8 @@ public class VendaController {
 
         return ResponseEntity.ok(VendaMapper.toDtoListObject(vendaService.calculosKpi(empresaId, inicio, fim)));
     }
+
+
 
 }
 

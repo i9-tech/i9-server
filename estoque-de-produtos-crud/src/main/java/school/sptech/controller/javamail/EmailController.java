@@ -1,6 +1,7 @@
 package school.sptech.controller.javamail;
 
 import org.springframework.web.bind.annotation.*;
+import school.sptech.controller.javamail.dto.InteressadoDto;
 import school.sptech.service.emailService.NotificacaoProducer;
 import org.springframework.http.ResponseEntity;
 
@@ -15,8 +16,11 @@ public class EmailController {
     }
 
     @PostMapping("/interesse")
-    public ResponseEntity<String> solicitarEnvioEmail(@RequestBody String email) {
-        notificacaoProducer.publicarEventoChamadaAcao(email);
+    public ResponseEntity<String> solicitarEnvioEmail(@RequestBody InteressadoDto dto) {
+
+        notificacaoProducer.publicarEventoChamadaAcao(dto.getEmail(), dto.getPlano(), dto.getPeriodo());
+
         return ResponseEntity.ok("Solicitação de envio de email recebida com sucesso.");
     }
+
 }
