@@ -21,9 +21,11 @@ public class TwilioScheduler {
     public void sendScheduledSms() {
         List<Empresa> empresas = empresaRepository.findAll();
         for (Empresa empresa : empresas){
-            if (empresa.isAtivo()) {
+            if (empresa.isAtivo() && empresa.getWhatsapp() != null && !empresa.getWhatsapp().isEmpty())
+                {
+                String numeroEmpresa = empresa.getWhatsapp();
                 // Cria o DTO com o número/mensagem
-                TwilioRequest request = new TwilioRequest("+5511942780654", "Mensagem agendada!");
+                TwilioRequest request = new TwilioRequest(numeroEmpresa, "Mensagem agendada!");
                 twilioProducer.sendToQueue(request);
             }
         }
