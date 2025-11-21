@@ -1,6 +1,5 @@
 package school.sptech.controller.plano;
 
-import com.azure.core.annotation.Patch;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +12,13 @@ import school.sptech.service.plano.GerenciamentoPlanoService;
 
 @RestController
 @RequestMapping("/gerenciamento-planos")
-public class PlanoController {
+public class GerenciamentoPlanoController {
 
     private final GerenciamentoPlanoService gerenciamentoPlanoService;
 
     private final GerenciamentoPlanoMapper mapper;
 
-    public PlanoController(GerenciamentoPlanoService gerenciamentoPlanoService, GerenciamentoPlanoMapper mapper) {
+    public GerenciamentoPlanoController(GerenciamentoPlanoService gerenciamentoPlanoService, GerenciamentoPlanoMapper mapper) {
         this.gerenciamentoPlanoService = gerenciamentoPlanoService;
         this.mapper = mapper;
     }
