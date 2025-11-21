@@ -1,23 +1,49 @@
 package school.sptech.controller.plano.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import school.sptech.entity.plano.Periodo;
 
 import java.time.LocalDate;
-import java.math.BigDecimal;
 
+@Schema(
+        name = "GerenciamentoPlanoResponse",
+        description = "DTO para retorno das informações de um plano contratado por uma empresa.")
 public class GerenciamentoPlanoResponse {
+
+    @Schema(description = "ID do plano contratado", example = "1")
     private Integer id;
+
+    @Schema(description = "Período do plano contratado (MENSAL ou ANUAL)", example = "MENSAL")
     private Periodo periodo;
+
+    @Schema(description = "Data da adesão ao plano", example = "2025-11-21")
     private LocalDate dataAdesao;
+
+    @Schema(description = "Data de início do plano", example = "2025-11-21")
     private LocalDate dataInicio;
+
+    @Schema(description = "Data de término do plano", example = "2026-11-21")
     private LocalDate dataFim;
+
+    @Schema(description = "Indica se o plano está em período de teste grátis", example = "true")
     private boolean testeGratis;
+
+    @Schema(description = "Quantidade de dias de teste grátis restantes", example = "7")
     private Integer diasTeste;
+
+    @Schema(description = "Indica se o plano está ativo", example = "true")
     private boolean ativo;
+
+    @Schema(description = "Valor cobrado pelo plano", example = "249.99")
     private Double valorCobrado;
+
+    @Schema(description = "ID da empresa contratante", example = "1")
     private Integer empresaId;
+
+    @Schema(description = "Nome da empresa contratante", example = "Empresa XYZ")
     private String empresaNome;
 
+    @Schema(description = "Informações do template do plano contratado")
     private PlanoTemplateResponse planoTemplate;
 
     public GerenciamentoPlanoResponse() {}

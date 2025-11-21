@@ -1,21 +1,50 @@
 package school.sptech.controller.plano.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 
+@Schema(
+        name = "PlanoTemplateResponse",
+        description = "DTO de resposta contendo as informações de um template de plano.")
 public class PlanoTemplateResponse {
+
+    @Schema(description = "ID do template de plano", example = "1")
     private Integer id;
+
+    @Schema(description = "Tipo do plano", example = "Essencial")
     private String tipo;
+
+    @Schema(description = "Descrição detalhada do plano", example = "Plano para gestão completa do negócio em uma única plataforma")
     private String descricao;
+
+    @Schema(description = "Preço mensal do plano", example = "99.00")
     private BigDecimal precoMensal;
+
+    @Schema(description = "Preço mensal com desconto caso o pagamento anual seja escolhido", example = "89.00")
     private BigDecimal precoMensalComDescontoAnual;
+
+    @Schema(description = "Preço anual do plano", example = "999.00")
     private BigDecimal precoAnual;
+
+    @Schema(description = "Quantidade de usuários permitidos no plano", example = "10")
     private Integer qtdUsuarios;
+
+    @Schema(description = "Quantidade de super usuários permitidos no plano", example = "2")
     private Integer qtdSuperUsuarios;
+
+    @Schema(description = "Indica se há acesso a relatório via WhatsApp", example = "true")
     private Boolean acessoRelatorioWhatsApp;
+
+    @Schema(description = "Indica se há acesso ao dashboard analítico", example = "true")
     private Boolean acessoDashboard;
 
     public PlanoTemplateResponse() {}
 
-    public PlanoTemplateResponse(Integer id, String tipo, String descricao, BigDecimal precoMensal, BigDecimal precoMensalComDescontoAnual, BigDecimal precoAnual, Integer qtdUsuarios, Integer qtdSuperUsuarios, Boolean acessoRelatorioWhatsApp, Boolean acessoDashboard) {
+    public PlanoTemplateResponse(Integer id, String tipo, String descricao, BigDecimal precoMensal,
+                                 BigDecimal precoMensalComDescontoAnual, BigDecimal precoAnual,
+                                 Integer qtdUsuarios, Integer qtdSuperUsuarios,
+                                 Boolean acessoRelatorioWhatsApp, Boolean acessoDashboard) {
         this.id = id;
         this.tipo = tipo;
         this.descricao = descricao;

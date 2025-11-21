@@ -1,16 +1,31 @@
 package school.sptech.controller.plano.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import school.sptech.entity.plano.Periodo;
 
+@Schema(
+        name = "AlterarPlanoDTO",
+        description = "DTO para transferência de dados de alteração de um plano de assinatura.")
 public class AlterarPlanoDto {
+
     @NotNull(message = "O ID do plano é obrigatório.")
     @Min(value = 1, message = "O ID do plano deve ser maior que zero.")
+    @Schema(
+            description = "ID do template do plano que será alterado.",
+            example = "2",
+            required = true
+    )
     private Integer planoTemplateId;
-    @NotNull(message = "O período do plano é obrigatório.")
-    private Periodo periodo;
 
+    @NotNull(message = "O período do plano é obrigatório.")
+    @Schema(
+            description = "Período de contratação do plano. Pode ser MENSAL ou ANUAL.",
+            example = "MENSAL",
+            required = true
+    )
+    private Periodo periodo;
 
     public AlterarPlanoDto() {
     }

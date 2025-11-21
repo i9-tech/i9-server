@@ -1,6 +1,7 @@
 package school.sptech.entity.plano;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import school.sptech.entity.empresa.Empresa;
 
@@ -11,24 +12,43 @@ public class GerenciamentoPlano {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID único do gerenciamento do plano", example = "1")
     private Integer id;
+
     @Enumerated(EnumType.STRING)
+    @Schema(description = "Período do plano", example = "MENSAL")
     private Periodo periodo;
+
+    @Schema(description = "Data de adesão ao plano", example = "2025-11-21")
     private LocalDate dataAdesao;
+
+    @Schema(description = "Data de início do plano", example = "2025-11-21")
     private LocalDate dataInicio;
+
+    @Schema(description = "Data de término do plano", example = "2026-11-21")
     private LocalDate dataFim;
+
+    @Schema(description = "Indica se o plano possui teste grátis", example = "true")
     private boolean testeGratis;
+
+    @Schema(description = "Quantidade de dias de teste grátis", example = "7")
     private Integer diasTeste;
+
+    @Schema(description = "Indica se o plano está ativo", example = "true")
     private boolean ativo;
+
+    @Schema(description = "Valor cobrado pelo plano", example = "99.90")
     private Double valorCobrado;
 
     @OneToOne
     @JoinColumn(name = "empresa_id")
+    @Schema(description = "Empresa associada ao plano")
     private Empresa empresa;
+
     @ManyToOne
     @JoinColumn(name = "plano_template_id")
+    @Schema(description = "Template do plano associado")
     private PlanoTemplate planoTemplate;
-
     public GerenciamentoPlano() {
     }
 
