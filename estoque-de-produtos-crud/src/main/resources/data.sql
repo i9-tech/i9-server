@@ -323,3 +323,8 @@ VALUES(TRUE, FALSE, 2091.60, 249.00, 174.30, 4, 35,'Para quem busca otimizar os 
 -- PREMIUM (QTD_USUARIOS = ilimitado -> 2147483647)
 INSERT INTO PLANO_TEMPLATE(ACESSO_DASHBOARD,ACESSO_RELATORIO_WHATS_APP,PRECO_ANUAL,PRECO_MENSAL,PRECO_MENSAL_COM_DESCONTO_ANUAL,QTD_SUPER_USUARIOS,QTD_USUARIOS,DESCRICAO,TIPO)
 VALUES(TRUE, TRUE, 4191.60, 499.00, 349.30, 10, 2147483647, 'Para quem quer crescer o negócio com recursos para alta performance', 'Premium');
+
+
+-- INSERT DE GERENCIMENTO DE PLANO NA EMPRESA 1
+INSERT INTO gerenciamento_plano (periodo,data_adesao,data_inicio,data_fim,teste_gratis,dias_teste,ativo,valor_cobrado,empresa_id,plano_template_id)
+VALUES ('ANUAL','2025-11-28','2025-11-28','2026-11-27',false,0,TRUE,349.3,1,3);
