@@ -28,7 +28,6 @@ public class PlanoTemplateController {
         this.service = service;
     }
 
-    // --- Acesso público ---
     @GetMapping
     @Operation(summary = "Listar templates", description = "Retorna todos os templates de planos disponíveis.")
     @ApiResponses(value = {
@@ -40,7 +39,6 @@ public class PlanoTemplateController {
         return ResponseEntity.ok(resp);
     }
 
-    // --- Protegido ---
     @GetMapping("/{id}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Buscar template por ID", description = "Retorna um template de plano pelo seu ID.")
