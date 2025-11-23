@@ -12,6 +12,7 @@ import school.sptech.repository.empresa.EmpresaRepository;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,8 +33,7 @@ class EmpresaCriacaoTest {
 
 
         // WHEN - CONDIÇÃO
-        when(empresaRepository.save(empresaMock))
-                .thenReturn(empresaMock);
+        when(((school.sptech.service.empresa.port.EmpresaPort) empresaRepository).save(any(Empresa.class))).thenReturn(empresaMock);
 
 
         // THEN - RESPOSTA
