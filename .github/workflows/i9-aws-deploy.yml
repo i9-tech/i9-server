@@ -1,0 +1,141 @@
+name: 🚀 Deploy Backend - Arquitetura Distribuída
+
+on:
+  push:
+    branches:
+      - feature/aws
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend para EC2 Privada (via Bastion)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔁 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 🚀 Deploy via SSH com ProxyJump
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          proxy_host: ${{ secrets.REMOTE_HOST_PUBLIC }}    
+          proxy_username: ${{ secrets.REMOTE_USER }}       
+          proxy_key: ${{ secrets.EC2_SSH_KEY }}            
+
+          host: ${{ secrets.REMOTE_HOST_PRIVATE_APP }}      
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}                   
+          
+          command_timeout: 30m
+          
+          script: |
+            set -e # Para o script se houver erro
+
+            # --- 1. Definição de Variáveis (Injetadas pelos Secrets do GitHub) ---
+            # Define o diretório de trabalho na EC2 Privada 3
+            APP_DIR="/home/${{ secrets.REMOTE_USER }}/backend-app"
+            mkdir -p $APP_DIR
+            cd $APP_DIR
+
+            echo "🔵 Iniciando Deploy na EC2 Privada-3..."
+
+            # IPs dos serviços distribuídos
+            MYSQL_HOST="${{ secrets.MYSQL_HOST_PRIVATE_IP }}" # IP da EC2-Privada-1
+            REDIS_HOST="${{ secrets.REDIS_HOST_PRIVATE_IP }}" # IP da EC2-Privada-2
+            
+            # Imagem Docker
+            DOCKER_IMAGE="${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest"
+
+            # --- 2. Criar Docker Compose Dinamicamente ---
+            # Criamos um arquivo apenas com o necessário para a EC2-3
+            # Nota: O DB_URL é montado usando o protocolo jdbc:mysql e o IP da EC2-1
+            
+            cat <<EOF > docker-compose.yml
+            version: '3.8'
+            services:
+              app-backend:
+                image: $DOCKER_IMAGE
+                container_name: estoque-produtos-app
+                restart: always
+                ports:
+                  - "8080:8080"
+                environment:
+                  - SPRING_PROFILES_ACTIVE=dev
+                  # Conexão com EC2-Privada-1 (MySQL)
+                  - DB_URL=jdbc:mysql://${MYSQL_HOST}:3306/${{ secrets.MYSQL_DATABASE }}
+                  - DB_USER=${{ secrets.MYSQL_USER }}
+                  - DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+                  # Conexão com EC2-Privada-2 (Redis)
+                  - SPRING_DATA_REDIS_HOST=${REDIS_HOST}
+                  - SPRING_DATA_REDIS_PORT=6379
+                  # Configurações RabbitMQ (Rodando Localmente neste container ou ajuste os IPs se estiverem fora)
+                  - RABBIT_JAVAMAIL_HOST=rabbitmq-javamail
+                  - RABBIT_JAVAMAIL_PORT=5672
+                  - RABBIT_JAVAMAIL_USERNAME=${{ secrets.RABBIT_JAVAMAIL_USERNAME }}
+                  - RABBIT_JAVAMAIL_PASSWORD=${{ secrets.RABBIT_JAVAMAIL_PASSWORD }}
+                  - RABBIT_TWILIO_HOST=rabbitmq-twilio
+                  - RABBIT_TWILIO_PORT=5672
+                  - RABBIT_TWILIO_USERNAME=${{ secrets.RABBIT_TWILLIO_USERNAME }}
+                  - RABBIT_TWILIO_PASSWORD=${{ secrets.RABBIT_TWILLIO_PASSWORD }}
+                  - RABBIT_IMAGES_HOST=rabbitmq-images
+                  - RABBIT_IMAGES_PORT=5672
+                  - RABBIT_IMAGES_USERNAME=${{ secrets.RABBIT_IMAGES_USERNAME }}
+                  - RABBIT_IMAGES_PASSWORD=${{ secrets.RABBIT_IMAGES_PASSWORD }}
+                  # Outras configs
+                  - JWT_SECRET=${{ secrets.JWT_SECRET }}
+                  - TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+                  - TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+                  - AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_CONNECTION_STRING }}
+                  - AZURE_ACCOUNT_NAME=${{ secrets.AZURE_ACCOUNT_NAME }}
+                  - AZURE_CONTAINER_NAME=${{ secrets.AZURE_CONTAINER_NAME }}
+                  - EMAIL_USER=${{ secrets.EMAIL_USER }}
+                  - EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
+                depends_on:
+                  - rabbitmq-javamail
+                  - rabbitmq-twilio
+                  - rabbitmq-images
+
+              # Mantive os RabbitMQs locais na EC2-3 para garantir que o app suba.
+              # Se você tiver um RabbitMQ centralizado, remova isso e aponte os IPs acima.
+              rabbitmq-javamail:
+                image: rabbitmq:3.13-management
+                hostname: rabbitmq-javamail
+                environment:
+                  RABBITMQ_DEFAULT_USER: ${{ secrets.RABBIT_JAVAMAIL_USERNAME }}
+                  RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBIT_JAVAMAIL_PASSWORD }}
+                ports:
+                  - "5672:5672"
+                  - "15672:15672"
+
+              rabbitmq-twilio:
+                image: rabbitmq:3.13-management
+                hostname: rabbitmq-twilio
+                environment:
+                  RABBITMQ_DEFAULT_USER: ${{ secrets.RABBIT_TWILIO_USERNAME }}
+                  RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBIT_TWILIO_PASSWORD }}
+                ports:
+                  - "5673:5672"
+                  - "15673:15672"
+
+              rabbitmq-images:
+                image: rabbitmq:3.13-management
+                hostname: rabbitmq-images
+                environment:
+                  RABBITMQ_DEFAULT_USER: ${{ secrets.RABBIT_IMAGES_USERNAME }}
+                  RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBIT_IMAGES_PASSWORD }}
+                ports:
+                  - "5674:5672"
+                  - "15674:15672"
+            EOF
+
+            echo "✅ Docker Compose criado com sucesso."
+
+            # --- 3. Login e Deploy ---
+            echo "${{ secrets.DOCKER_HUB_TOKEN }}" | sudo docker login ${{ secrets.DOCKER_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            
+            echo "⬇️ Baixando nova imagem..."
+            sudo docker compose pull
+
+            echo "🔄 Reiniciando containers..."
+            sudo docker compose down --remove-orphans || true
+            sudo docker compose up -d
+
+            echo "🚀 Deploy finalizado na EC2 Privada-3!"

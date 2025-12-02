@@ -2,7 +2,7 @@ name: 🖥️ i9 Tech Server CD - Entrega Contínua (Docker Build + Push)
 
 on:
   push:
-    branches: [develop, main]
+    branches: [develop, main, feature/aws]
   workflow_dispatch:
 
 jobs:
