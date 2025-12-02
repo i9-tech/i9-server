@@ -59,33 +59,39 @@ jobs:
                   - "8080:8080"
                 environment:
                   - SPRING_PROFILES_ACTIVE=dev
-                  # Conexão com EC2-Privada-1 (MySQL)
+                  # --- Banco de Dados (MySQL) ---
+                  # Monta a URL JDBC usando o IP da EC2-Privada-1
                   - DB_URL=jdbc:mysql://${MYSQL_HOST}:3306/${{ secrets.MYSQL_DATABASE }}
                   - DB_USER=${{ secrets.MYSQL_USER }}
                   - DB_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
-                  # Conexão com EC2-Privada-2 (Redis)
+                  
+                  # --- Redis ---
                   - SPRING_DATA_REDIS_HOST=${REDIS_HOST}
                   - SPRING_DATA_REDIS_PORT=6379
-                  # Configurações RabbitMQ (Rodando Localmente neste container ou ajuste os IPs se estiverem fora)
+                  
+                  # --- RabbitMQ ---
                   - RABBIT_JAVAMAIL_HOST=rabbitmq-javamail
                   - RABBIT_JAVAMAIL_PORT=5672
-                  - RABBIT_JAVAMAIL_USERNAME=${{ secrets.RABBIT_JAVAMAIL_USERNAME }}
-                  - RABBIT_JAVAMAIL_PASSWORD=${{ secrets.RABBIT_JAVAMAIL_PASSWORD }}
+                  - RABBIT_JAVAMAIL_USERNAME=${{ secrets.RABBIT_USERNAME }}
+                  - RABBIT_JAVAMAIL_PASSWORD=${{ secrets.RABBIT_PASSWORD }}
                   - RABBIT_TWILIO_HOST=rabbitmq-twilio
                   - RABBIT_TWILIO_PORT=5672
-                  - RABBIT_TWILIO_USERNAME=${{ secrets.RABBIT_TWILLIO_USERNAME }}
-                  - RABBIT_TWILIO_PASSWORD=${{ secrets.RABBIT_TWILLIO_PASSWORD }}
+                  - RABBIT_TWILIO_USERNAME=${{ secrets.RABBIT_USERNAME }}
+                  - RABBIT_TWILIO_PASSWORD=${{ secrets.RABBIT_PASSWORD }}
                   - RABBIT_IMAGES_HOST=rabbitmq-images
                   - RABBIT_IMAGES_PORT=5672
-                  - RABBIT_IMAGES_USERNAME=${{ secrets.RABBIT_IMAGES_USERNAME }}
-                  - RABBIT_IMAGES_PASSWORD=${{ secrets.RABBIT_IMAGES_PASSWORD }}
-                  # Outras configs
+                  - RABBIT_IMAGES_USERNAME=${{ secrets.RABBIT_USERNAME }}
+                  - RABBIT_IMAGES_PASSWORD=${{ secrets.RABBIT_PASSWORD }}
+                  
+                  # --- Integrações Externas (Correção do Erro) ---
                   - JWT_SECRET=${{ secrets.JWT_SECRET }}
                   - TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
                   - TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
                   - AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_CONNECTION_STRING }}
                   - AZURE_ACCOUNT_NAME=${{ secrets.AZURE_ACCOUNT_NAME }}
                   - AZURE_CONTAINER_NAME=${{ secrets.AZURE_CONTAINER_NAME }}
+                  - AZURE_SAS_TOKEN=${{ secrets.AZURE_SAS_TOKEN }}  # <--- ADICIONADO AQUI
+                  
                   - EMAIL_USER=${{ secrets.EMAIL_USER }}
                   - EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
                 depends_on:
@@ -93,8 +99,6 @@ jobs:
                   - rabbitmq-twilio
                   - rabbitmq-images
 
-              # Mantive os RabbitMQs locais na EC2-3 para garantir que o app suba.
-              # Se você tiver um RabbitMQ centralizado, remova isso e aponte os IPs acima.
               rabbitmq-javamail:
                 image: rabbitmq:3.13-management
                 hostname: rabbitmq-javamail
