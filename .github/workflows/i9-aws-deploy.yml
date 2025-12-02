@@ -72,16 +72,16 @@ jobs:
                   # --- RabbitMQ ---
                   - RABBIT_JAVAMAIL_HOST=rabbitmq-javamail
                   - RABBIT_JAVAMAIL_PORT=5672
-                  - RABBIT_JAVAMAIL_USERNAME=${{ secrets.RABBIT_USERNAME }}
-                  - RABBIT_JAVAMAIL_PASSWORD=${{ secrets.RABBIT_PASSWORD }}
+                  - RABBIT_JAVAMAIL_USERNAME=${{ secrets.RABBIT_JAVAMAIL_USERNAME }}
+                  - RABBIT_JAVAMAIL_PASSWORD=${{ secrets.RABBIT_JAVAMAIL_PASSWORD }}
                   - RABBIT_TWILIO_HOST=rabbitmq-twilio
                   - RABBIT_TWILIO_PORT=5672
-                  - RABBIT_TWILIO_USERNAME=${{ secrets.RABBIT_USERNAME }}
-                  - RABBIT_TWILIO_PASSWORD=${{ secrets.RABBIT_PASSWORD }}
+                  - RABBIT_TWILIO_USERNAME=${{ secrets.RABBIT_TWILIO_USERNAME }}
+                  - RABBIT_TWILIO_PASSWORD=${{ secrets.RABBIT_TWILIO_PASSWORD }}
                   - RABBIT_IMAGES_HOST=rabbitmq-images
                   - RABBIT_IMAGES_PORT=5672
-                  - RABBIT_IMAGES_USERNAME=${{ secrets.RABBIT_USERNAME }}
-                  - RABBIT_IMAGES_PASSWORD=${{ secrets.RABBIT_PASSWORD }}
+                  - RABBIT_IMAGES_USERNAME=${{ secrets.RABBIT_IMAGES_USERNAME }}
+                  - RABBIT_IMAGES_PASSWORD=${{ secrets.RABBIT_IMAGES_PASSWORD }}
                   
                   # --- Integrações Externas (Correção do Erro) ---
                   - JWT_SECRET=${{ secrets.JWT_SECRET }}
