@@ -1,11 +1,12 @@
 package school.sptech.entity.empresa;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import school.sptech.entity.plano.GerenciamentoPlano;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "empresa")
@@ -13,6 +14,23 @@ import java.util.Objects;
         name = "Empresa",
         description = "Entidade que representa uma empresa cadastrada no sistema. É a base para execução de operações relacionadas à gestão empresarial.")
 public class Empresa {
+
+    // NOVO METODO (SRP - Lógica de Domínio)
+    public void desativar() {
+        if (!this.ativo) {
+            // Usa uma exceção de estado se necessário, mas o Service fará a validação primária
+            return;
+        }
+        this.ativo = false;
+    }
+
+    // NOVO METODO (SRP - Lógica de Domínio)
+    public void validarSePodeSerAtualizada() {
+        if (!this.ativo) {
+            // Se a empresa não estiver ativa, lançamos um erro (quem chamou cuida)
+            throw new IllegalStateException("A empresa está inativa e não pode ser atualizada.");
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +73,6 @@ public class Empresa {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataCadastro;
 
-
     @Schema(
             description = "Indica se a empresa está ativa no sistema. 'true' para ativa, 'false' para inativa.",
             example = "true",
@@ -68,6 +85,10 @@ public class Empresa {
     private String email;
 
     private String nomeSenha;
+
+    @OneToOne(mappedBy = "empresa")
+    @JsonBackReference
+    private GerenciamentoPlano gerenciamentoPlano;
 
     public Integer getId() {
         return id;
@@ -151,6 +172,14 @@ public class Empresa {
         this.nomeSenha = nomeSenha;
     }
 
+    public GerenciamentoPlano getGerenciamentoPlano() {
+        return gerenciamentoPlano;
+    }
+
+    public void setGerenciamentoPlano(GerenciamentoPlano gerenciamentoPlano) {
+        this.gerenciamentoPlano = gerenciamentoPlano;
+    }
+
     @Override
     public String toString() {
         return "Empresa{" +
@@ -168,3 +197,12 @@ public class Empresa {
 
 
 }
+/*
+
+    A lógica de estado (ATIVO E INATIVO) passou a estar na entidade,
+ não no service, já que é uma regra de alto nível.
+    Ao mover essa lógica, a entidade se torna mais coesa.
+    Agora a service apenas chama o comportamento da entidade e não mais
+    implementa o comportamento.
+
+ */

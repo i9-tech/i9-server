@@ -10,14 +10,14 @@ import school.sptech.entity.empresa.Empresa;
 import school.sptech.exception.EntidadeInativaException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.empresa.EmpresaRepository;
+import school.sptech.service.empresa.port.EmpresaPort; // Import necessário para o cast
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.*;
-        import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmpresaAtualizacaoTest {
@@ -39,10 +39,9 @@ class EmpresaAtualizacaoTest {
 
 
         // WHEN - CONDIÇÃO
-        when(empresaRepository.verificarEmpresaAtivaPorId(anyInt())).thenReturn(true);
-        when(empresaRepository.existsById(anyInt())).thenReturn(true);
         when(empresaRepository.findById(anyInt())).thenReturn(Optional.of(empresaAntigaMock));
-        when(empresaRepository.save(any(Empresa.class))).thenReturn(empresaNovaMock);
+
+        when(((EmpresaPort) empresaRepository).save(any(Empresa.class))).thenReturn(empresaNovaMock);
 
 
         // THEN - RESPOSTA
@@ -63,7 +62,7 @@ class EmpresaAtualizacaoTest {
 
 
         // WHEN - CONDIÇÃO
-        when(empresaRepository.verificarEmpresaAtivaPorId(anyInt())).thenReturn(false);
+        when(empresaRepository.findById(anyInt())).thenReturn(Optional.of(empresaAntigaMock));
 
 
         // THEN | ASSERT - POR JOGAR EXCEPTION, SÃO OS DOIS PASSOS EM UM
@@ -76,13 +75,12 @@ class EmpresaAtualizacaoTest {
     void atualizarEmpresaQuandoAcionadoComDadosInvalidosDeveLancarEntidadeNaoEncontradaException() {
 
         // GIVEN - VALOR MOCKADO
-        Empresa empresaAntigaMock = new Empresa(1, "Tauá Lanches", "12.345.678/0001-00", "Rua das Acácias, 123", LocalDate.parse("2023-01-01"), true, "+5511942780654", "yasmim.silva510811@gmail.com", "taua");
         Empresa empresaNovaMock = new Empresa(3, "Tauá Lanches e Pastelaria", "12.345.678/0001-00", "Rua das Acácias, 157", LocalDate.parse("2023-01-01"), true, "+5511942780654", "yasmim.silva510811@gmail.com", "taua");
 
 
         // WHEN - CONDIÇÃO
-        when(empresaRepository.verificarEmpresaAtivaPorId(anyInt())).thenReturn(true);
-        when(empresaRepository.existsById(anyInt())).thenReturn(false);
+        // CORREÇÃO: Para EntidadeNaoEncontradaException, o findById deve retornar Optional.empty()
+        when(empresaRepository.findById(anyInt())).thenReturn(Optional.empty());
 
 
         // THEN | ASSERT - POR JOGAR EXCEPTION, SÃO OS DOIS PASSOS EM UM
