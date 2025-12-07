@@ -57,4 +57,7 @@ public interface PratoRepository extends JpaRepository<Prato, Integer> {
 
     @Query("select count(distinct p.setor.id) from Prato p join p.funcionario f where f.empresa = (select f2.empresa from Funcionario f2 where f2.id = :idFuncionario)")
     Integer quantidadeSetoresPratoPorEmpresa(@Param("idFuncionario") Integer idFuncionario);
+
+    List<Prato> findByAreaPreparoId(Integer areaId);
+
 }
