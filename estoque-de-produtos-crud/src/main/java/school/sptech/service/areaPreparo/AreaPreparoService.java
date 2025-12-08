@@ -89,17 +89,10 @@ public class AreaPreparoService {
             throw new EntidadeInativaException();
         }
 
-        AreaPreparo areaPreparo = areaPreparoRepository.findById(areaId)
+        areaPreparoRepository.findById(areaId)
                 .orElseThrow(EntidadeNaoEncontradaException::new);
 
-
-        List<Prato> pratos = pratoRepository.findByAreaPreparoId(areaId);
-
-        for (Prato prato : pratos) {
-            prato.setAreaPreparo(null);
-        }
-
-        pratoRepository.saveAll(pratos);
-        areaPreparoRepository.delete(areaPreparo);
+        areaPreparoRepository.desvincularPratosArea(areaId);
+        areaPreparoRepository.deleteAreaPreparoById(areaId);
     }
 }
