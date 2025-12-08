@@ -19,11 +19,12 @@ public class AreaPreparoService {
 
         private final AreaPreparoRepository areaPreparoRepository;
         private final FuncionarioRepository funcionarioRepository;
-        private PratoRepository pratoRepository;
+        private final PratoRepository pratoRepository;
 
-    public AreaPreparoService(AreaPreparoRepository areaPreparoRepository, FuncionarioRepository funcionarioRepository) {
-        this.areaPreparoRepository = areaPreparoRepository;
+    public AreaPreparoService(PratoRepository pratoRepository, FuncionarioRepository funcionarioRepository, AreaPreparoRepository areaPreparoRepository) {
+        this.pratoRepository = pratoRepository;
         this.funcionarioRepository = funcionarioRepository;
+        this.areaPreparoRepository = areaPreparoRepository;
     }
 
     public AreaPreparo cadastrarAreaPreparo(AreaPreparo areaParaCadastrar, Integer idFuncionario) {
