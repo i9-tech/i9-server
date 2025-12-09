@@ -95,7 +95,7 @@ public class ItemCarrinhoController {
                             schema = @Schema(example = """
                                     {
                                         "id": 12,
-                                        "valorUnitario": 22.0,
+w222222222222222222222222w                                        "valorUnitario": 22.0,
                                         "observacao": null,
                                         "prato": null,
                                         "produto": {

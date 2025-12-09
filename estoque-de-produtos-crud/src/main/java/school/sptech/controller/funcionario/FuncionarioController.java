@@ -74,7 +74,6 @@ public class FuncionarioController {
         return ResponseEntity.ok(service.criptografar(senha));
     }
 
-
     @GetMapping("/{idEmpresa}")
     @SecurityRequirement(name = "Bearer")
     @Operation(summary = "Listar funcionários", description = "Lista todos os funcionários de uma determinada empresa presentes na base de dados.")

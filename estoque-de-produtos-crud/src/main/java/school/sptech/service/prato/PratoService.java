@@ -60,8 +60,6 @@ public class PratoService {
         return pratoRepository.buscarPratosComFiltros(idFuncionario, termoBusca, disponivel, setorSelecionado, categoriaSelecionada, areaSelecionada, pageable);
     }
 
-
-    @Cacheable(value = "pratoPorId", key = "#id")
     public Prato buscarPratoPorId(Integer id, Integer idFuncionario) {
         if (pratoRepository.buscarPratoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario).isEmpty()) {
             throw new EntidadeNaoEncontradaException("Pratos não encontrados!");

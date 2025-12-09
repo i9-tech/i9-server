@@ -4,10 +4,12 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.areaPreparo.AreaPreparo;
 import school.sptech.entity.funcionario.Funcionario;
+import school.sptech.entity.prato.Prato;
 import school.sptech.exception.EntidadeInativaException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.repository.areaPreparo.AreaPreparoRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
+import school.sptech.repository.prato.PratoRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +19,12 @@ public class AreaPreparoService {
 
         private final AreaPreparoRepository areaPreparoRepository;
         private final FuncionarioRepository funcionarioRepository;
+        private final PratoRepository pratoRepository;
 
-
-    public AreaPreparoService(AreaPreparoRepository areaPreparoRepository, FuncionarioRepository funcionarioRepository) {
-        this.areaPreparoRepository = areaPreparoRepository;
+    public AreaPreparoService(PratoRepository pratoRepository, FuncionarioRepository funcionarioRepository, AreaPreparoRepository areaPreparoRepository) {
+        this.pratoRepository = pratoRepository;
         this.funcionarioRepository = funcionarioRepository;
+        this.areaPreparoRepository = areaPreparoRepository;
     }
 
     public AreaPreparo cadastrarAreaPreparo(AreaPreparo areaParaCadastrar, Integer idFuncionario) {
@@ -79,21 +82,17 @@ public class AreaPreparoService {
             return areaPreparoRepository.save(areaParaAtualizar);
         }
 
-        @Transactional
-        public void removerAreaPreparo(Integer areaId, Integer idFuncionario) {
+    @Transactional
+    public void removerAreaPreparo(Integer areaId, Integer idFuncionario) {
 
-            if (!areaPreparoRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
-                throw new EntidadeInativaException();
-            }
-
-            Optional<AreaPreparo> areaPreparoEncontrada = areaPreparoRepository.findById(areaId);
-
-            if (areaPreparoEncontrada.isEmpty()) {
-                throw new EntidadeNaoEncontradaException();
-            }
-
-            areaPreparoRepository.desvincularPratosArea(areaId);
-            areaPreparoRepository.deleteAreaPreparoById(areaId);
+        if (!areaPreparoRepository.verificarEmpresaAtivaPorFuncionarioId(idFuncionario)) {
+            throw new EntidadeInativaException();
         }
 
+        areaPreparoRepository.findById(areaId)
+                .orElseThrow(EntidadeNaoEncontradaException::new);
+
+        areaPreparoRepository.desvincularPratosArea(areaId);
+        areaPreparoRepository.deleteAreaPreparoById(areaId);
+    }
 }
