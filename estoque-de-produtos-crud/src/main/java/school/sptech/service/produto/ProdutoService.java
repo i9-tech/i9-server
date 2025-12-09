@@ -86,7 +86,7 @@ public class ProdutoService {
         System.out.println("URL da imagem do produto " + idProduto + " atualizada para: " + urlImagem);
     }
 
-    @Cacheable(value = "produtoPorId", key = "#id")
+
     public ProdutoListagemDto buscarProdutoPorId(Integer id, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado"));
