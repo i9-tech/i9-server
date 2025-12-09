@@ -24,7 +24,7 @@ public class FuncionarioEventListener {
         Funcionario funcionario = event.getFuncionario();
 
         String cargoGerado = determinarCargo(funcionario);
-        String destinatario = funcionario.getEmpresa().getEmail(); // Certifique-se de que Empresa tem um e-mail válido
+        String destinatario = funcionario.getEmpresa().getEmail();
         String assunto = "Novo Funcionário Cadastrado";
         String conteudoHtml = String.format(
                 "<html><body>" +
@@ -42,12 +42,11 @@ public class FuncionarioEventListener {
         try {
             emailService.enviarEmailObserver(destinatario, assunto, conteudoHtml);
         } catch (MessagingException e) {
-            // Aqui você pode logar o erro ou tomar uma ação de fallback
             e.printStackTrace();
         }
     }
 
-    private String determinarCargo(Funcionario funcionario) {
+    public static String determinarCargo(Funcionario funcionario) {
         if (funcionario.isProprietario()) {
             return "Proprietário";
         }

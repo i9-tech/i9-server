@@ -1,0 +1,27 @@
+name: 🧪 i9 Tech Server CI - Testes Unitários
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  test:
+    name: 🧪 Executar Testes Unitários
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔁 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: ☕ Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven' 
+
+      - name: 🏃‍♂️ Executar Testes com Maven
+        working-directory: ./estoque-de-produtos-crud
+        run: mvn clean test

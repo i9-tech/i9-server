@@ -20,8 +20,8 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     List<Venda> findAllByDataVenda(LocalDate dataVenda);
 
 
-    @Query("select sum(v.valorTotal) from Venda v where v.funcionario.empresa.id = :empresaId and v.dataVenda = :data")
-    Double valorTotalVendasPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("data") LocalDate data);
+    @Query("select sum(v.valorTotal) from Venda v where v.funcionario.empresa.id = :empresaId and v.dataVenda between :inicio and :fim")
+    Double valorTotalPorEmpresaNoPeriodo(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
     @Query("""
             select
@@ -38,9 +38,9 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
             left join ic.prato p
             left join ic.produto pr
             where f.empresa.id = :empresaId
-              and v.dataVenda = :hoje
+              and v.dataVenda between :inicio and :fim
             """)
-    Double calcularLucroLiquidoPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
+    Double calcularLucroLiquidoPorEmpresaNoPeriodo(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
 
     @Query(""" 
@@ -75,8 +75,8 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     List<Object[]> valorTotalDiarioPorCategoriaEmpresa(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
 
 
-    @Query("select count(v) from Venda v where v.funcionario.empresa.id = :empresaId and v.dataVenda = :hoje")
-    Integer contarVendasConcluidasPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
+    @Query("select count(v) from Venda v where v.funcionario.empresa.id = :empresaId and v.dataVenda between :inicio and :fim")
+    Integer contarVendasConcluidasPorEmpresaEPeriodo(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
     @Query("select p from Produto p where p.funcionario.empresa.id = :empresaId and p.quantidade < p.quantidadeMin")
     List<Produto> buscaProdutosAbaixoDeQuantidadeMinima(@Param("empresaId") Integer empresaId);
@@ -85,8 +85,8 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     @Query("select distinct v from Venda v join fetch v.itensCarrinho where v.funcionario.empresa.id = :empresaId and v.dataVenda = :hoje")
     List<Venda> findVendasComItensPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
 
-    @Query("select distinct v from Venda v join fetch v.itensCarrinho ic where v.funcionario.empresa.id = :empresaId and v.dataVenda = :hoje and ic.produto is null")
-    List<Venda> findVendasDePratosComItensPorEmpresaEData(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
+    @Query("select distinct v from Venda v join fetch v.itensCarrinho ic where v.funcionario.empresa.id = :empresaId and v.dataVenda between :inicio and :fim and ic.produto is null  and (:vendaConcluida is null or v.vendaConcluida = :vendaConcluida) and (:areaId is null or ic.prato.areaPreparo.id = :areaId)")
+    List<Venda> findVendasDePratosComItensPorEmpresaNoPeriodo(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim, @Param("vendaConcluida") Boolean vendaConcluida, @Param("areaId") Integer areaId);
 
     @Query("""
     select p.nome, count(ic), sum(ic.valorUnitario)
@@ -96,11 +96,11 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     join v.funcionario f
     join f.empresa e
     where e.id = :empresaId
-      and v.dataVenda = :hoje
+      and v.dataVenda between :inicio and :fim
     group by p.nome
     order by count(ic) desc
     """)
-    List<Object[]> top7PratosMaisVendidos(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje, Pageable pageable);
+    List<Object[]> top7PratosMaisVendidos(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim, Pageable pageable);
 
     @Query("""
     select p.nome, count(ic), sum(ic.valorUnitario)
@@ -110,11 +110,11 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     join v.funcionario f
     join f.empresa e
     where e.id = :empresaId
-      and v.dataVenda = :hoje
+      and v.dataVenda between :inicio and :fim
     group by p.nome
     order by count(ic) desc
     """)
-    List<Object[]> top7ProdutosMaisVendidos(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje, Pageable pageable);
+    List<Object[]> top7ProdutosMaisVendidos(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim, Pageable pageable);
 
     @Query("""
             select coalesce(catPrato.nome, catProduto.nome),
@@ -129,11 +129,11 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
              join v.funcionario f
              join f.empresa e
             where e.id = :empresaId
-              and v.dataVenda = :hoje
+              and v.dataVenda between :inicio and :fim
             group by coalesce(catPrato.nome, catProduto.nome)
             order by sum(ic.valorUnitario) desc
     """)
-    List<Object[]> top5CategoriasMaisVendidas(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje, Pageable pageable);
+    List<Object[]> top5CategoriasMaisVendidas(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim, Pageable pageable);
 
 
 
@@ -151,11 +151,11 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     join v.funcionario f
     join f.empresa e
     where e.id = :empresaId
-    and v.dataVenda = :hoje
+    and v.dataVenda between :inicio and :fim
     group by coalesce(sp.nome, spr.nome)
     order by quantidadeVendida desc
 """)
-    List<Object[]> rankingSetoresMaisVendidos(@Param("empresaId") Integer empresaId, @Param("hoje") LocalDate hoje);
+    List<Object[]> rankingSetoresMaisVendidos(@Param("empresaId") Integer empresaId, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
 
 }

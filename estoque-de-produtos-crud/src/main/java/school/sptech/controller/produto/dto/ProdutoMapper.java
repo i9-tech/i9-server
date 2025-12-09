@@ -84,6 +84,7 @@ public class ProdutoMapper {
         );
     }
 
+
     @Operation(summary = "Transforma uma lista de entidades de produtos em uma lista de DTOs de resposta.",
             description = "Converte uma lista de entidades de produtos em uma lista de DTOs de resposta, para ser enviada na resposta da API.")
     public static List<ProdutoListagemDto> toResponseDtoList(List<Produto> entities) {

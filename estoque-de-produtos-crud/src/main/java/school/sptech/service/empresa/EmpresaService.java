@@ -1,72 +1,82 @@
 package school.sptech.service.empresa;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.exception.EntidadeInativaException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
-import school.sptech.repository.empresa.EmpresaRepository;
+import school.sptech.service.empresa.port.EmpresaPort;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class EmpresaService {
 
-    private final EmpresaRepository empresaRepository;
+    // aplicando inversão de dependência
+    private final EmpresaPort empresaPort;
 
-    public EmpresaService(EmpresaRepository empresaRepository) {
-        this.empresaRepository = empresaRepository;
+    public EmpresaService(EmpresaPort empresaPort) {
+        this.empresaPort = empresaPort;
     }
 
     public Empresa cadastrarEmpresa(Empresa empresaParaCadastrar) {
         empresaParaCadastrar.setId(empresaParaCadastrar.getId());
-        return empresaRepository.save(empresaParaCadastrar);
+        return empresaPort.save(empresaParaCadastrar);
     }
 
     public List<Empresa> listarEmpresa() {
-        if (empresaRepository.findAll().isEmpty()) {
+        if (empresaPort.findAll().isEmpty()) {
             throw new EntidadeNaoEncontradaException("Empresas não encontradas");
         }
-        return empresaRepository.findAll();
+        return empresaPort.findAll();
     }
 
     public Empresa listarEmpresaPorId(Integer id) {
-        if (!empresaRepository.existsById(id)) {
+        if (!empresaPort.existsById(id)) {
             throw new EntidadeNaoEncontradaException("Empresa não encontrada");
         }
-        return empresaRepository.findById(id).get();
+        return empresaPort.findById(id).get();
     }
 
     public Empresa atualizarEmpresa(Integer idEmpresa, Empresa empresaParaAtualizar) {
 
-        if (!empresaRepository.verificarEmpresaAtivaPorId(idEmpresa)) {
+        //buscando o estado atual da empresa
+        Empresa empresaEncontrada = empresaPort.findById(idEmpresa)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A empresa não foi encontrada"));
+
+        // Se a empresa estiver inativa, a Entidade lança a exceção e o Service propaga
+        // Chamando a regra de domínio
+        try {
+            empresaEncontrada.validarSePodeSerAtualizada();
+        } catch (IllegalStateException e) {
+            // Mapeia a exceção do domínio
             throw new EntidadeInativaException();
         }
 
-        if (!empresaRepository.existsById(idEmpresa)) {
-            throw new EntidadeNaoEncontradaException("A empresa não foi encontrada");
-        }
+        empresaEncontrada.setNome(empresaParaAtualizar.getNome());
+        empresaEncontrada.setEndereco(empresaParaAtualizar.getEndereco());
+        empresaEncontrada.setWhatsapp(empresaParaAtualizar.getWhatsapp());
 
-        Empresa empresaEncontrada = empresaRepository.findById(idEmpresa).get();
-
-        empresaParaAtualizar.setId(idEmpresa);
-        empresaParaAtualizar.setCnpj(empresaEncontrada.getCnpj());
-        empresaParaAtualizar.setDataCadastro(empresaEncontrada.getDataCadastro());
-        empresaParaAtualizar.setAtivo(empresaEncontrada.isAtivo());
-        return empresaRepository.save(empresaParaAtualizar);
+        return empresaPort.save(empresaEncontrada);
     }
 
     public void removerEmpresa(Integer id) {
 
-        if (!empresaRepository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("A empresa não foi encontrada");
-        }
+        Empresa empresaDesativar = empresaPort.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("A empresa não foi encontrada"));
 
-        Empresa empresaDesativar = empresaRepository.findById(id).get();
+        // chamando SRP (metododo da entidade)
+        empresaDesativar.desativar();
 
-        empresaDesativar.setAtivo(false);
+        // persistencia da mudança
+        empresaPort.save(empresaDesativar);
 
-        // empresaRepository.deleteById(id);
     }
 }
+
+/*
+
+Agora, o service não depende de uma camada externa (Repository)
+e sim da abstração Empresa port.
+
+ */

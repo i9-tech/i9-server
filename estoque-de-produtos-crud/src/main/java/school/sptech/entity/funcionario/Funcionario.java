@@ -45,6 +45,24 @@ public class Funcionario {
     )
     private String cpf;
 
+
+    @Enumerated(EnumType.STRING)
+    @Schema(
+            description = "Define qual identificador principal será utilizado para login.",
+            example = "EMAIL",
+            allowableValues = {"CPF", "EMAIL", "MATRICULA", "TELEFONE"}
+    )
+    private TipoIdentificador identificadorPrincipal;
+
+
+    @NotBlank(message = "O login é obrigatório.")
+    @Schema(
+            description = "Identificador de login do funcionário (CPF, e-mail, matrícula ou telefone), conforme definido pelo proprietário.",
+            example = "999.999.999-99 ou funcionario@empresa.com ou 11999999999 ou MAT12345",
+            type = "string"
+    )
+    private String login;
+
     @NotBlank(message = "O cargo é obrigatório.")
     @Schema(
             description = "Cargo da pessoa contratada pela empresa.",
@@ -93,6 +111,14 @@ public class Funcionario {
     private boolean proprietario;
 
     @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
+
+    @Schema(
             description = "Indica se o contrato da pessoa está ativo no sistema da empresa. 'true' para ativa, 'false' para inativa.",
             example = "true",
             type = "boolean"
@@ -107,6 +133,14 @@ public class Funcionario {
             type = "string"
     )
     private String senha;
+
+    @Email
+    @Schema(
+            description = "Endereço de e-mail do funcionário utilizado para reset de senha.",
+            example = "funcionario@empresa.com",
+            type = "string"
+    )
+    private String email;
 
     @NotNull(message = "A empresa vinculada é obrigatória.")
     @ManyToOne
@@ -138,6 +172,14 @@ public class Funcionario {
 
     public void setCpf(@NotBlank(message = "O CPF é obrigatório") @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve estar no formato 999.999.999-99") String cpf) {
         this.cpf = cpf;
+    }
+
+    public @Email String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Email String email) {
+        this.email = email;
     }
 
     public @NotBlank(message = "O cargo é obrigatório.") String getCargo() {
@@ -188,6 +230,10 @@ public class Funcionario {
         this.proprietario = proprietario;
     }
 
+    public boolean isPrimeiroAcesso() { return primeiroAcesso;}
+
+    public void setPrimeiroAcesso(boolean primeiroAcesso) {this.primeiroAcesso = primeiroAcesso;}
+
     public boolean isAtivo() {
         return ativo;
     }
@@ -210,5 +256,21 @@ public class Funcionario {
 
     public void setEmpresa(@NotNull(message = "A empresa vinculada é obrigatória.") Empresa empresa) {
         this.empresa = empresa;
+    }
+
+    public TipoIdentificador getIdentificadorPrincipal() {
+        return identificadorPrincipal;
+    }
+
+    public void setIdentificadorPrincipal(TipoIdentificador identificadorPrincipal) {
+        this.identificadorPrincipal = identificadorPrincipal;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }

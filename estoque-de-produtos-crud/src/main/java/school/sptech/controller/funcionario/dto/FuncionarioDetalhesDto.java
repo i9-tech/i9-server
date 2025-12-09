@@ -33,11 +33,20 @@ public class FuncionarioDetalhesDto implements UserDetails {
     )
     private final String cpf;
 
+    @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
+
     public FuncionarioDetalhesDto(Funcionario funcionario) {
         this.nome = funcionario.getNome();
         this.cpf = funcionario.getCpf();
         this.senha = funcionario.getSenha();
         this.funcionario = funcionario;
+        this.primeiroAcesso = funcionario.isPrimeiroAcesso();
     }
 
     private final Funcionario funcionario;
@@ -60,6 +69,10 @@ public class FuncionarioDetalhesDto implements UserDetails {
             authorities.add(new SimpleGrantedAuthority("ROLE_PROPRIETARIO"));
         }
 
+        if (funcionario.isProprietario() && funcionario.getEmpresa().getGerenciamentoPlano() != null && funcionario.getEmpresa().getGerenciamentoPlano().getPlanoTemplate().isAcessoDashboard()) {
+            authorities.add(new SimpleGrantedAuthority("PROPRIETARIO_ROLE_PLANO_ACESSO_DASHBOARD"));
+        }
+
         return authorities;
     }
 
@@ -74,7 +87,7 @@ public class FuncionarioDetalhesDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return cpf;
+        return funcionario.getLogin();
     }
 
     @Override

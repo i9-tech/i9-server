@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import school.sptech.entity.areaPreparo.AreaPreparo;
 import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.prato.Prato;
@@ -27,6 +28,10 @@ class PratoListagemTest {
 
     @Mock
     private PratoRepository pratoRepository;
+
+    @Mock
+    private AreaPreparo areaPrepato;
+
 
     @Test
     @DisplayName("Buscar pratos por nome quando acionado com pratos cadastrados deve retornar lista de pratos com nome 'Lasanha'")
@@ -51,8 +56,8 @@ class PratoListagemTest {
 
 
         List<Prato> pratosMockados = List.of(
-                new Prato(1, "Lasanha Bolonhesa", "", 35.0, "prato", true, funcionarioMock, setorMock, categoriaMock),
-                new Prato(2, "Lasanha de Queijo", "", 32.0, "prato", true, funcionarioMock, setorMock, categoriaMock)
+                new Prato(1, "Lasanha Bolonhesa", "", 35.0, "prato", true, funcionarioMock, setorMock, categoriaMock, areaPrepato, 0, 0.00),
+                new Prato(2, "Lasanha de Queijo", "", 32.0, "prato", true, funcionarioMock, setorMock, categoriaMock, areaPrepato, 0, 0.00)
         );
 
         // WHEN - CONDIÇÃO

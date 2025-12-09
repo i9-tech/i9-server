@@ -1,4 +1,4 @@
-package school.sptech.config.Twilio;
+package school.sptech.config.twilio;
 import com.twilio.Twilio;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;

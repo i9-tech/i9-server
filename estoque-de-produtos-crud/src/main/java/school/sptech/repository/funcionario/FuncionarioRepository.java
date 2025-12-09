@@ -17,15 +17,20 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Intege
     Optional<Funcionario> findByIdAndEmpresaId(int id, Integer idEmpresa);
 
     boolean existsByCpfAndEmpresa_Id(String cpf, Integer idEmpresa);
+    boolean existsByLogin(String login);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Funcionario f SET f.ativo = false, f.cpf = '00000000000' WHERE f.id = :id AND f.empresa.id = :idEmpresa")
+    @Query("UPDATE Funcionario f SET f.ativo = false, f.cpf = '00000000000', f.login = '00000000000' WHERE f.id = :id AND f.empresa.id = :idEmpresa")
     void softDeleteByIdAndEmpresa(@Param("id") int id, @Param("idEmpresa") Integer idEmpresa);
 
     List<Funcionario> findByEmpresaIdAndAtivoTrue(Integer idEmpresa);
 
     Optional<Funcionario> findByCpf(String cpf);
 
+    Optional<Funcionario> findByLogin(String login);
+    
+    int countByEmpresa_IdAndProprietarioFalseAndAtivoTrue(Integer idEmpresa);
 
+    int countByEmpresa_IdAndProprietarioTrueAndAtivoTrue(Integer idEmpresa);
 }

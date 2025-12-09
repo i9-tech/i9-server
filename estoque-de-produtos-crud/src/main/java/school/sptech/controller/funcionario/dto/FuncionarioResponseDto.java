@@ -1,10 +1,9 @@
 package school.sptech.controller.funcionario.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import school.sptech.entity.funcionario.TipoIdentificador;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class FuncionarioResponseDto {
 
@@ -24,6 +23,20 @@ public class FuncionarioResponseDto {
             type = "string"
     )
     private String cpf;
+
+    @Schema(
+            description = "Define qual identificador será usado para login.",
+            example = "CPF",
+            allowableValues = {"CPF", "EMAIL", "MATRICULA", "TELEFONE"}
+    )
+    private TipoIdentificador identificadorPrincipal;
+
+    @Schema(
+            description = "Login do funcionário, conforme definido pelo tipo de identificador escolhido (CPF, email, telefone ou matrícula).",
+            example = "999.999.999-99"
+    )
+    private String login;
+
 
     @Schema(
             description = "Cargo da pessoa contratada pela empresa.",
@@ -68,19 +81,38 @@ public class FuncionarioResponseDto {
     )
     private boolean proprietario;
 
-    public FuncionarioResponseDto(Integer id, String nome, String cpf, String cargo,
+    @Schema(
+            description = "Indica se a pessoa já fez o primeiro acesso ao sistema, uma flag que caso verdadeira exigirá a redefinição de senha.",
+            example = "true",
+            type = "boolean"
+    )
+    private boolean primeiroAcesso;
+
+
+    @Schema(
+            description = "Endereço de e-mail do funcionário utilizado para reset de senha.",
+            example = "funcionario@empresa.com",
+            type = "string"
+    )
+    private String email;
+
+    public FuncionarioResponseDto(Integer id, String nome, String cpf, TipoIdentificador identificadorPrincipal, String login, String cargo,
                                   LocalDate dataAdmissao, boolean acessoSetorCozinha, boolean acessoSetorEstoque,
-                                  boolean acessoSetorAtendimento, boolean proprietario) {
+                                  boolean acessoSetorAtendimento, boolean proprietario,  boolean primeiroAcesso, String email) {
 
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
+        this.identificadorPrincipal = identificadorPrincipal;
+        this.login = login;
         this.cargo = cargo;
         this.dataAdmissao = dataAdmissao;
         this.acessoSetorCozinha = acessoSetorCozinha;
         this.acessoSetorEstoque = acessoSetorEstoque;
         this.acessoSetorAtendimento = acessoSetorAtendimento;
         this.proprietario = proprietario;
+        this.primeiroAcesso = primeiroAcesso;
+        this.email = email;
 
     }
 
@@ -98,6 +130,22 @@ public class FuncionarioResponseDto {
 
     public String getCpf() {
         return cpf;
+    }
+
+    public TipoIdentificador getIdentificadorPrincipal() {
+        return identificadorPrincipal;
+    }
+
+    public void setIdentificadorPrincipal(TipoIdentificador identificadorPrincipal) {
+        this.identificadorPrincipal = identificadorPrincipal;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public void setCpf(String cpf) {
@@ -150,5 +198,17 @@ public class FuncionarioResponseDto {
 
     public void setProprietario(boolean proprietario) {
         this.proprietario = proprietario;
+    }
+
+    public boolean isPrimeiroAcesso() {return primeiroAcesso;}
+
+    public void setPrimeiroAcesso(boolean primeiroAcesso) {this.primeiroAcesso = primeiroAcesso;}
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

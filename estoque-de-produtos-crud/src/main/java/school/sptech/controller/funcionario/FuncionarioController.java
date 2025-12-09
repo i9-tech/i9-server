@@ -52,7 +52,6 @@ public class FuncionarioController {
             @PathVariable Integer idEmpresa) {
 
 
-        // Corrigido: aqui já retorna um DTO
         FuncionarioResponseDto respostaFuncionarioDto = service.cadastrarFuncionario(
                 FuncionarioMapper.toEntity(requestDto),
                 idEmpresa
@@ -74,7 +73,6 @@ public class FuncionarioController {
     public ResponseEntity<String> criptografarSenha(@RequestParam String senha) {
         return ResponseEntity.ok(service.criptografar(senha));
     }
-
 
     @GetMapping("/{idEmpresa}")
     @SecurityRequirement(name = "Bearer")
@@ -217,5 +215,16 @@ public class FuncionarioController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @PatchMapping("/primeiro-acesso/{id}/{idEmpresa}")
+    public ResponseEntity<Void> redefinirSenha(
+            @PathVariable int id,
+            @PathVariable Integer idEmpresa,
+            @Valid @RequestBody RedefinirSenhaDto dto) {
+
+        service.redefinirSenhaPrimeiroAcesso(id, idEmpresa, dto.getSenha(), dto.isPrimeiroAcesso());
+        return ResponseEntity.ok().build();
+    }
+
 
 }
