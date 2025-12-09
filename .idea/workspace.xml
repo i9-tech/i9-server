@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f0561acd-c3ea-463f-beb7-34a88bb054e0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/estoque-de-produtos-crud/.env" beforeDir="false" afterPath="$PROJECT_DIR$/estoque-de-produtos-crud/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/estoque-de-produtos-crud/full_build_log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/estoque-de-produtos-crud/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/estoque-de-produtos-crud/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/estoque-de-produtos-crud/replay_pid12800.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/estoque-de-produtos-crud/replay_pid30360.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/estoque-de-produtos-crud/replay_pid5716.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +26,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;m4yk0n&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/i9-tech/i9-server.git&quot;,
+    &quot;accountId&quot;: &quot;0e1d85d6-6d64-4a4e-a618-3375ff15ef72&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -32,7 +50,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/entidade-empresa&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/guilh/Documents/Clone aqui/i9Tech/i9-server/estoque-de-produtos-crud&quot;,
@@ -44,14 +62,6 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

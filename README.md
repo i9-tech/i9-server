@@ -1,260 +1,283 @@
 # 🖥️ Servidor i9
-[![☕ Serviço de App Web Backend Java na Azure CI/CD](https://github.com/i9-tech/i9-server/actions/workflows/feature-integracao-azure-web-app_i9-server-backend.yml/badge.svg)](https://github.com/i9-tech/i9-server/actions/workflows/feature-integracao-azure-web-app_i9-server-backend.yml)
+![CI](https://github.com/i9-tech/i9-server/actions/workflows/i9-testes-unitarios-ci.yml/badge.svg?branch=main)
+![CD](https://github.com/i9-tech/i9-server/actions/workflows/i9-images-cd.yml/badge.svg?branch=main)
+![CD](https://github.com/i9-tech/i9-server/actions/workflows/i9-aws-deploy.yml/badge.svg?branch=feature/aws)
 
-***
+-----
 
-### 🌟 Boas-vindas!
-Esse é o repositório da **i9 Tech** referente aos servidores de nosso sistema. Esse repositório tem como propósito **armazenar** toda nossa **regra de negócio** junto a **camadas de segurança** e **fluxos de funcionamento**, tudo em **um só servidor**. Cada nova implementação é desenvolvida em uma nova branch, para que não haja conflitos na aplicação final, então o que estiver presente na branch principal será o conteúdo mais atualizado e homologado.
+### 🌟 Boas-vindas\!
 
-***
+Esse é o repositório da **i9 Tech** referente aos servidores de nosso sistema. Esse repositório tem como propósito **armazenar** toda nossa **regra de negócio** junto a **camadas de segurança** e **fluxos de funcionamento**, tudo em **um só servidor**.
+
+Com a evolução para a `feature/aws`, o projeto agora utiliza uma arquitetura robusta pronta para a nuvem, incluindo Docker, balanceamento de carga e processamento assíncrono com RabbitMQ.
+
+-----
+
+## 🏛️ Arquitetura (feature/aws)
+
+Esta branch introduz uma arquitetura de microsserviços e contêineres para garantir escalabilidade e resiliência:
+
+  * **Servidor Principal (Spring Boot):** Continua sendo o cérebro da aplicação, lidando com a regra de negócio principal (CRUDs, segurança, etc.).
+  * **Balanceamento de Carga:** O `docker-compose` inicia **três instâncias** do servidor principal (`app-1`, `app-2`, `app-3`) para distribuir o tráfego e garantir alta disponibilidade.
+  * **Banco de Dados:** Um contêiner `MySQL` dedicado para persistência dos dados.
+  * **Filas (RabbitMQ):** Utilizamos o RabbitMQ como *Message Broker* para processamento assíncrono, desacoplando serviços:
+      * `rabbitmq-javamail`: Fila para o microsserviço de envio de e-mails (ex: recuperação de senha, notificações).
+      * `rabbitmq-twilio`: Fila para o microsserviço de notificações via SMS (ex: status de pedido).
+      * `rabbitmq-images`: Fila para o microsserviço de processamento e upload de imagens (ex: fotos de pratos/produtos).
+
+-----
 
 ## 📋 Requisitos de Uso
-Para utilizar nosso sistema em sua máquina, é preciso instalar alguns softwares e máquinas. Para desenvolvimento desse servidor, foram utilizados:
-- IntelliJ IDEA - IDE para desenvolvimento de códigos
-- Java 21 - versão do Java para melhor compilação
-- SDK 21
-- Springboot 3.4.1
-- Maven 3.9.9 para rodar dependências
 
-<br/>
+Para rodar o ambiente de produção/desenvolvimento localmente, você precisará de:
 
-***
+  * [Docker](https://www.docker.com/get-started)
+  * [Docker Compose](https://docs.docker.com/compose/install/)
+
+Para desenvolvimento do código-fonte:
+
+  * IntelliJ IDEA ou outra IDE de sua preferência
+  * Java 21
+  * SDK 21
+  * Maven 3.9.9
+
+-----
 
 ## 🧳 Dependências
-Além das ferramentas de desenvolvimento, é possível encontrar as seguintes dependências em nosso servidor:
-- Springboot 
-- H2 Database
-- Validation
-- Lombok
-- Swagger
-- JSON Web Token
-- Spring Security
-- MySQL
 
-<br/>
+Além das ferramentas, o servidor utiliza as seguintes dependências principais:
 
-***
+  - Springboot
+  - Spring Data JPA (com MySQL)
+  - Spring AMQP (RabbitMQ)
+  - Validation
+  - Lombok
+  - Swagger (OpenAPI)
+  - JSON Web Token (JWT)
+  - Spring Security
+  - H2 Database (para testes)
 
-## 🔑 Acesso a Aplicação
-Para acessar nossa aplicação, siga os passos:
-1. Clone o repositório:
-```sh
-git clone https://github.com/i9-tech/i9-application.git
-```
-2. Acesse o diretório `i9-server`
-```sh
-cd i9-application
-```
-3. Acesse o diretório `estoque-de-produtos-crud`
-```sh
-cd estoque-de-produtos-crud
-```
-4. Abra o arquivo `pom.xml` ou busque o diretório em sua IDE de preferência
+<br>
 
-5. Espere as dependências serem carregadas para que então possa executar a aplicação
+-----
 
-6. Acesse a classe `i9Application` e aperte o play *(símbolo verde na linha 7 e aguarde a aplicação iniciar)*
+## 🚀 Executando a Aplicação (Docker)
 
-7. Pronto! A aplicação estará rodando com sucesso na `porta 8080` do seu `localhost`!
+A forma mais simples de subir todo o ambiente é usando o Docker Compose.
 
-8. Para acessar, basta digitar `localhost:8080` em seu navegador que verá uma mensagem em tela branca!
+1.  Clone o repositório:
 
-<br/>
+    ```sh
+    git clone https://github.com/i9-tech/i9-server.git
+    ```
 
-***
+2.  Acesse o diretório do projeto:
+
+    ```sh
+    cd i9-server
+    ```
+
+3.  **Crie um arquivo `.env`** na raiz do projeto. Este arquivo é **essencial** para injetar as variáveis de ambiente no `docker-compose`. Preencha-o com base nas variáveis listadas na próxima seção.
+
+4.  Suba os contêineres em modo "detached" (background):
+
+    ```sh
+    docker-compose up -d
+    ```
+
+5.  Pronto\! O ambiente estará rodando:
+
+      * **Aplicação (Balanceada):**
+          * `http://localhost:8080` (Instância 1)
+          * `http://localhost:8081` (Instância 2)
+          * `http://localhost:8082` (Instância 3)
+      * **Banco de Dados (MySQL):** `localhost:3307` (acessível externamente)
+      * **RabbitMQ (Javamail):** `http://localhost:15672` (Painel de Gestão)
+      * **RabbitMQ (Twilio):** `http://localhost:15673` (Painel de Gestão)
+      * **RabbitMQ (Images):** `http://localhost:15674` (Painel de Gestão)
+
+<br>
+
+-----
 
 ## 🔐 Variáveis de Ambiente
 
-As variáveis de ambiente são essenciais para manter informações sensíveis *(como senhas, tokens e chaves de API)* fora do código-fonte e permitir configurações distintas entre os ambientes *(desenvolvimento, produção, testes)*.
+### Backend (Spring Boot)
 
-### Backend *(Spring Boot)*
-
-Utilizamos o arquivo `application.properties` para configurar a aplicação. As variáveis são referenciadas no seguinte formato:
+Utilizamos o `application.properties` para configurar a aplicação. Para desenvolvimento local (fora do Docker), pode-se usar um `dev.properties` (ignorado pelo `.gitignore`) para sobrescrever valores.
 
 ```properties
+# Exemplo de application.properties
 spring.datasource.password=${DB_PASSWORD}
-```
-O valor de DB_PASSWORD deve ser definido fora do código — localmente *(em arquivos como dev.properties, não versionados)* ou por meio de variáveis em ambientes de nuvem *(GitHub Actions, AWS, Azure, etc.)*.
-
-Para variáveis personalizadas no código Java, utilizamos a anotação @Value:
-```java
-@Value("${azure.storage.account-name}")
-private String contaAzure;
+app.rabbitmq.primary.host=${RABBIT_JAVAMAIL_HOST}
 ```
 
-**💡 Dica:** mantenha o `application.properties` com placeholders genéricos e utilize arquivos separados como `dev.properties` para os valores reais durante o desenvolvimento.
+### Docker Compose (`.env`)
 
-### ⚠️ Atenção às variáveis!
-Nunca suba arquivos com variáveis sensíveis preenchidas para o repositório.
+Para que o `docker-compose.yml` funcione, crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-Certifique-se de que arquivos como `dev.properties` estejam listados no seu `.gitignore`.
-<br/>
-***
+```env
+# Configuração do Banco de Dados MySQL
+MYSQL_ROOT_PASSWORD=seu-password-root
+MYSQL_DATABASE=nome-do-banco
+MYSQL_USER=usuario-banco
+MYSQL_PASSWORD=senha-banco
 
-## ⚠️ ATENÇÃO
-Para utilizar qualquer função dentro de nosso servidor, será necessário informar um `token de segurança` a partir de um **login**. existe um usuário padrão que é criado para testes, é possível utilizar seu login com as credenciais:
+# Credenciais RabbitMQ (Javamail)
+RABBIT_JAVAMAIL_USERNAME=user_javamail
+RABBIT_JAVAMAIL_PASSWORD=pass_javamail
 
-- 000.000.000-00
-- 00000000000@teste
+# Credenciais RabbitMQ (Twilio)
+RABBIT_TWILIO_USERNAME=user_twilio
+RABBIT_TWILIO_PASSWORD=pass_twilio
 
-Esse usuário pertence a uma empresa fictícia e não tem nenhuma ligação com clientes reais da aplicação, não causando danos em testes de uso. 
-
-<br/>
-
-***
-
-## 📚 Entidades
-As entidades presentes no servidor são:
-- Categoria
-- Empresa
-- Funcionário
-- ItemCarrinho
-- Pedido
-- Prato
-- Setor
-- Venda
-
-<br/>
-
-***
-
-## 📂 Pacotes
-Os pacotes presentes em nossa aplicação são:
-
-- `Config`: Armazena configurações de segurança e Swagger
-
-- `Controller`: Armazena os controladores do servidor, responsáveis por receber requisições em DTO, converter para entidade e devolver a resposta novamente em DTO, além de seus DTOs e mapeadores que fazem conversão dos dados
-
-- `Entity`: Armazena as entidades do sistema
-
-- `Exception`: Armazena os erros do sistema
-
-- `Repository`: Armazena a camada de repositório do servidor, responsável pela consulta direta ao banco de dados
-
-- `Service`: Armazena a camada de serviço do servidor, recebendo entidades e fazendo a consulta de dados ou jogando exceções 
-
-<br/>
-
-***
-
-## 🧪 Exemplos de Uso
-Ao testar algumas rotas de nosso servidor, você irá se deparar ou com um corpo em **JSON de resposta**, um **status HTTP** ou uma **mensagem de erro** vinda de uma exceção. Alguns exemplos de resposta de sucesso são:
-
-1. Cadastrar Empresa (`POST /empresas`)
-```json
-{
-	"id": 4,
-	"nome": "Nome da Empresa",
-	"cnpj": "12345678901234",
-	"endereco": "Rua Exemplo, 123",
-	"dataCadastro": "2025-04-25",
-	"ativo": true
-}
+# Credenciais RabbitMQ (Images)
+RABBIT_IMAGES_USERNAME=user_images
+RABBIT_IMAGES_PASSWORD=pass_images
 ```
 
-2. Cadastrar Funcionário (`POST /colaboradores/1`)
-```json
-{
-	"nome": "Pedro",
-	"cpf": "133.356.389-00",
-	"cargo": "Cozinheiro",
-	"dataAdmissao": "2025-04-25T00:00:00.000+00:00",
-	"acessoSetorCozinha": true,
-	"acessoSetorEstoque": true,
-	"acessoSetorAtendimento": false,
-	"proprietario": false
-}
-```
+⚠️ **Atenção:** Nunca suba arquivos `.env` ou `dev.properties` com dados sensíveis para o repositório.
 
-3. Realizar Login (`POST /colaboradores/login`)
-```json
-{
-	"userId": 1,
-	"empresaId": 1,
-	"nome": "João Silva",
-	"token": "eyJhbGciOiJIUzUxMiJ9"
-}
-```
+<br>
 
-4. Editar Permissão de Funcionário (`PATCH /colaboradores/1/1`)
-```json
-{
-	"nome": "Pedro",
-	"cpf": "133.356.389-00",
-	"cargo": "Cozinheiro",
-	"dataAdmissao": "2025-04-25T00:00:00.000+00:00",
-	"acessoSetorCozinha": false,
-	"acessoSetorEstoque": false,
-	"acessoSetorAtendimento": true,
-	"proprietario": false
-}
-```
+-----
 
-5. Remover Funcionário (`DELETE /colaboradores/1/1`)
-```http
-204 No Content
-No body returned for response
-```
+## ✨ Funcionalidades Principais
 
-6. Remover Empresa (`DELETE /empresas/1`)
-```http
-204 No Content
-No body returned for response
-```
+Este servidor oferece um CRUD completo para gestão de restaurantes e estoques, além de funcionalidades avançadas:
 
+  * **Autenticação e Autorização:** Controle de acesso granular por funcionário usando JWT e Spring Security.
+  * **Processamento Assíncrono:** Uso de RabbitMQ para tarefas que não precisam bloquear o usuário, como:
+      * Envio de e-mails (confirmação, recuperação de senha).
+      * Envio de SMS via Twilio.
+      * Upload e processamento de imagens.
+  * **Paginação:** Os principais endpoints de listagem (ex: `/produtos`, `/pratos`) suportam paginação via query params (`?page=0&size=10&sort=nome,asc`) para melhor performance.
+  * **Escalabilidade Horizontal:** A arquitetura está pronta para escalar. O Docker Compose já simula isso com 3 instâncias da aplicação rodando em balanceamento de carga.
 
-<br/>
+<br>
 
-***
+-----
 
 ## 🔐 Camada de Segurança
 
-A camada de segurança do sistema é baseada em **Spring Security** com autenticação via **JWT (JSON Web Token)**. Ao fazer login, o usuário recebe um `token JWT assinado`, que deve ser enviado em cada requisição no cabeçalho `Authorization`. O token é validado por um filtro personalizado, e, se for válido, o usuário é **autenticado automaticamente**. O controle de acesso aos endpoints é feito com base nos papéis definidos no token. Além disso, utilizamos boas práticas como **expiração de tokens**, **senhas com hash** seguro (BCrypt) e **rotas públicas configuradas** separadamente das protegidas.
+A camada de segurança do sistema é baseada em **Spring Security** com autenticação via **JWT (JSON Web Token)**. Ao fazer login, o usuário recebe um `token JWT assinado`, que deve ser enviado em cada requisição no cabeçalho `Authorization`. O token é validado por um filtro personalizado, e, se for válido, o usuário é **autenticado automaticamente**. O controle de acesso aos endpoints é feito com base nos papéis definidos no token.
 
-<br/>
+<br>
 
-***
+-----
+
+## ⚠️ ATENÇÃO (Usuário de Teste)
+
+Para utilizar qualquer função dentro de nosso servidor, será necessário informar um `token de segurança` a partir de um **login**. existe um usuário padrão que é criado para testes, é possível utilizar seu login com as credenciais:
+
+  * 000.000.000-00
+  * 00000000000@teste
+
+Esse usuário pertence a uma empresa fictícia e não tem nenhuma ligação com clientes reais da aplicação.
+
+<br>
+
+-----
+
+## 📚 Entidades
+
+As entidades presentes no servidor são:
+
+  - Categoria
+  - Empresa
+  - Funcionário
+  - ItemCarrinho
+  - Pedido
+  - Prato
+  - Setor
+  - Venda
+
+<br>
+
+-----
+
+## 📂 Pacotes
+
+Os pacotes presentes em nossa aplicação são:
+
+  - `Config`: Armazena configurações de segurança, Swagger e RabbitMQ.
+  - `Controller`: Armazena os controladores (endpoints) e seus DTOs/Mappers.
+  - `Entity`: Armazena as entidades JPA do sistema.
+  - `Exception`: Armazena as classes de exceções customizadas.
+  - `Repository`: Armazena as interfaces do Spring Data JPA.
+  - `Service`: Armazena a camada de serviço (regra de negócio).
+  - `Consumer`: (Novo) Classes responsáveis por consumir mensagens das filas RabbitMQ.
+
+<br>
+
+-----
+
+## 🧪 Exemplos de Uso
+
+Exemplos de respostas de sucesso da API:
+
+1.  Cadastrar Empresa (`POST /empresas`)
+
+    ```json
+    {
+    	"id": 4,
+    	"nome": "Nome da Empresa",
+    	"cnpj": "12345678901234",
+    	"endereco": "Rua Exemplo, 123",
+    	"dataCadastro": "2025-04-25",
+    	"ativo": true
+    }
+    ```
+
+2.  Realizar Login (`POST /colaboradores/login`)
+
+    ```json
+    {
+    	"userId": 1,
+    	"empresaId": 1,
+    	"nome": "João Silva",
+    	"token": "eyJhbGciOiJIUzUxMiJ9"
+    }
+    ```
+
+3.  Remover Funcionário (`DELETE /colaboradores/1/1`)
+
+    ```http
+    204 No Content
+    No body returned for response
+    ```
+
+<br>
+
+-----
 
 ## 📖 Swagger
-Caso deseje obter mais detalhes da aplicação, ao executá-la, basta acessar a url de documentação para que possa entender melhor sobre todas as entidades e rotas do sistema. Se deseja ler essas informações, acesse o link:
+
+Ao executar a aplicação (via Docker ou IDE), acesse a documentação da API para ver todos os endpoints, modelos e testar as rotas:
 
 `http://localhost:8080/swagger-ui/index.html#/`
 
-Nele, é possível ver algumas informações do sistema como nas imagens abaixo:
+*(Substitua `8080` por `8081` ou `8082` se estiver testando as outras instâncias)*
 
-![Primeira visão ao acessar documentação swagger](./assets/swagger-p1.png)
+<br>
 
-![Rotas Categorias e Pratos](./assets/swagger-p2.png)
+-----
 
-![Rotas Funcionários e Itens Carrinhos](./assets/swagger-p3.png)
+## 🔗 Integração (Front-End)
 
-![Rotas Setores e Produtos](./assets/swagger-p4.png)
+A i9 oferece um repositório com a interface gráfica (Front-End) desenvolvida para consumir este servidor.
 
-![Primeira parte de entidades](./assets/swagger-p5.png)
+Acesse o link para clonar e rodar a aplicação:
+[https://github.com/i9-tech/i9-application](https://github.com/i9-tech/i9-application)
 
-![Segunda parte de entidades](./assets/swagger-p6.png)
+<br>
 
-
-<br/>
-
-***
-
-## 🔗 Integração
-
-Caso deseje testar a aplicação e dados gerados por meio de uma interface gráfica, a i9 oferece um repositório com toda a aplicação desenvolvida para o front-end do projeto. Se deseja clonar o repositório, acesse o link:
-
-https://github.com/i9-tech/i9-application
-
-Nele, é possível ler o passo a passo de como realizar a instalação do repositório e rodar localmente.
-
-<br/>
-
-***
+-----
 
 ## 📜 Licença
 
-Este projeto está licenciado sob a Licença MIT. Isso significa que você pode usá-lo, modificá-lo e distribuí-lo livremente, desde que mantenha os avisos de copyright e a licença original.
-
+Este projeto está licenciado sob a Licença MIT.
 Consulte o arquivo [LICENSE](./LICENSE) para mais detalhes.
-
+<br/>
+i9 Tech 2025 © Todos os direitos reservados. <br/>
 i9 Tech 2025 &copy; Todos os direitos reservados.

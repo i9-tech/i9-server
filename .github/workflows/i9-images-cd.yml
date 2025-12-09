@@ -111,3 +111,9 @@ jobs:
             RABBIT_IMAGES_PORT=${{ env.RABBIT_IMAGES_PORT }}
             RABBIT_IMAGES_USERNAME=${{ env.RABBIT_IMAGES_USERNAME }}
             RABBIT_IMAGES_PASSWORD=${{ env.RABBIT_IMAGES_PASSWORD }}
+
+  deploy:
+    name: 🚀 Deploy para AWS EC2
+    needs: build-and-push
+    uses: i9-tech/i9-server/.github/workflows/i9-aws-deploy.yml@main
+    secrets: inherit            
