@@ -226,5 +226,23 @@ public class FuncionarioController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/alterar-senha/{id}/{idEmpresa}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Alterar senha do funcionário", description = "Altera a senha informando a senha atual e a nova senha.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso."),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos."),
+            @ApiResponse(responseCode = "404", description = "Funcionário não encontrado.")
+    })
+    public ResponseEntity<Void> alterarSenha(
+            @PathVariable int id,
+            @PathVariable Integer idEmpresa,
+            @Valid @RequestBody AlterarSenhaDto dto) {
+
+        service.alterarSenha(id, idEmpresa, dto);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }

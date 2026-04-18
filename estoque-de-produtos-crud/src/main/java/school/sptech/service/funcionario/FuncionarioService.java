@@ -9,11 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.config.GerenciadorTokenJwt;
-import school.sptech.controller.funcionario.dto.FuncionarioMapper;
-import school.sptech.controller.funcionario.dto.FuncionarioRequestDto;
-import school.sptech.controller.funcionario.dto.FuncionarioResponseDto;
+import school.sptech.controller.funcionario.dto.*;
 
-import school.sptech.controller.funcionario.dto.FuncionarioTokenDto;
 import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.funcionario.IdentificadorFactory;
@@ -252,11 +249,48 @@ public class FuncionarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nova senha é obrigatória");
         }
 
+        if (!funcionario.isPrimeiroAcesso()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A redefinição de senha só é permitida no primeiro acesso");
+        }
+
+        if (passwordEncoder.matches(novaSenha, funcionario.getSenha())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A nova senha deve ser diferente da atual");
+        }
+
         String senhaCriptografada = passwordEncoder.encode(novaSenha);
         funcionario.setSenha(senhaCriptografada);
         funcionario.setPrimeiroAcesso(false);
 
         return repository.save(funcionario);
+    }
+
+    public void alterarSenha(int idFuncionario, Integer idEmpresa, AlterarSenhaDto dto) {
+
+        Funcionario funcionario = repository.findByIdAndEmpresaId(idFuncionario, idEmpresa)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada."));
+
+        if (dto.getSenhaAtual() == null || dto.getSenhaAtual().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A senha atual é obrigatória");
+        }
+
+        if (dto.getNovaSenha() == null || dto.getNovaSenha().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nova senha é obrigatória");
+        }
+
+        if (!passwordEncoder.matches(dto.getSenhaAtual(), funcionario.getSenha())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha atual incorreta");
+        }
+
+        if (passwordEncoder.matches(dto.getNovaSenha(), funcionario.getSenha())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nova senha deve ser diferente da atual");
+        }
+
+        String senhaCriptografada = passwordEncoder.encode(dto.getNovaSenha());
+        funcionario.setSenha(senhaCriptografada);
+
+        repository.save(funcionario);
     }
 
 }
