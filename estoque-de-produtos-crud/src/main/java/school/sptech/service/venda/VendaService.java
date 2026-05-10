@@ -90,14 +90,16 @@ public class VendaService {
                     eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
                             produto,
                             TipoEventoEstoque.ZERADO,
-                            "O produto " + produto.getNome() + " está zerado no estoque. Reposição necessária."
+                            "O produto " + produto.getNome() + " está zerado no estoque. Reposição necessária.",
+                            produto.getFuncionario().getEmpresa().getId()
                     ));
                 }
                 else if (produto.getQuantidade() <= produto.getQuantidadeMin()) {
                     eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
                             produto,
                             TipoEventoEstoque.ABAIXO_MINIMO,
-                            "O produto " + produto.getNome() + " possui apenas " + produto.getQuantidade() + " unidades disponíveis. Considere a reposição."
+                            "O produto " + produto.getNome() + " possui apenas " + produto.getQuantidade() + " unidades disponíveis. Considere a reposição.",
+                            produto.getFuncionario().getEmpresa().getId()
                     ));
                 }
             }

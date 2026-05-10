@@ -6,4 +6,7 @@ import java.util.List;
 public interface NotificacaoRepository extends JpaRepository<Notificacao, Integer> {
 
     List<Notificacao> findByLidaFalseOrderByDataCriacaoDesc();
+
+    List<Notificacao> findByEmpresaIdOrderByDataCriacaoDesc(Integer empresaId);
+
 }

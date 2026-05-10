@@ -99,9 +99,12 @@ public class RelatorioService {
         novaNotificacao.setTitulo("📊 Relatório Diário de Vendas");
         novaNotificacao.setMensagem(mensagemFinal);
 
+        novaNotificacao.setEmpresa(empresa);
         notificacaoRepository.save(novaNotificacao);
-        messagingTemplate.convertAndSend("/topic/notificacoes", mensagemFinal);
 
+        messagingTemplate.convertAndSend(
+                "/topic/notificacoes/" + empresaId, mensagemFinal
+        );
         logger.info("📨 Relatório para o aplicativo da empresa '{}' gerado e enviado via WebSocket.", empresa.getNome());
     }
 }

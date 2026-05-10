@@ -197,12 +197,14 @@ public class FuncionarioService {
                 acessosFormatados
         );
 
-        // 4. Dispara o gatilho com a mensagem rica
+        // Dispara o gatilho com a mensagem no app
         eventPublisher.publishEvent(new NotificacaoFuncionarioEvent(
                 funcionarioSalvo,
                 TipoEventoFuncionario.CADASTRADO,
-                mensagemFuncionario
+                mensagemFuncionario,
+                funcionarioSalvo.getEmpresa().getId()
         ));
+
 
         return FuncionarioMapper.toDto(funcionario);
     }
@@ -274,7 +276,8 @@ public class FuncionarioService {
                         cargos,
                         dataFormatada,
                         acessosFormatados
-                )
+                ),
+                funcionario.getEmpresa().getId()
         ));
     }
 

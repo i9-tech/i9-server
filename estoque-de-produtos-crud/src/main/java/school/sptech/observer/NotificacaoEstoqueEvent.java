@@ -5,7 +5,6 @@ import school.sptech.observer.enums.TipoEventoEstoque;
 public record NotificacaoEstoqueEvent(
         Produto produto,
         TipoEventoEstoque tipo,
-        String mensagem
-) {
-
-}
+        String mensagem,
+        Integer empresaId
+) { }

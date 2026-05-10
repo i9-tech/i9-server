@@ -1,6 +1,8 @@
 package school.sptech.entity.notificacao;
 
 import jakarta.persistence.*;
+import school.sptech.entity.empresa.Empresa;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,6 +21,10 @@ public class Notificacao {
 
     private LocalDateTime dataCriacao;
     private Boolean lida;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_empresa")
+    private Empresa empresa;
 
     public Notificacao() {
         this.dataCriacao = LocalDateTime.now();
@@ -39,4 +45,8 @@ public class Notificacao {
 
     public Boolean getLida() { return lida; }
     public void setLida(Boolean lida) { this.lida = lida; }
+
+    public Empresa getEmpresa() {return empresa;}
+
+    public void setEmpresa(Empresa empresa) {this.empresa = empresa;}
 }

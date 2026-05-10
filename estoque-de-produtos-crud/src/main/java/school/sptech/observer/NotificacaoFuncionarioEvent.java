@@ -6,5 +6,6 @@ import school.sptech.observer.enums.TipoEventoFuncionario;
 public record NotificacaoFuncionarioEvent(
         Funcionario funcionario,
         TipoEventoFuncionario tipo,
-        String mensagem
+        String mensagem,
+        Integer empresaId
 ) {}

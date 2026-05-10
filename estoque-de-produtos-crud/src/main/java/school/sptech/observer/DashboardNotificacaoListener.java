@@ -5,7 +5,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import school.sptech.entity.empresa.Empresa;
 import school.sptech.entity.notificacao.Notificacao;
+import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.notificacao.NotificacaoRepository;
 
 @Component
@@ -15,7 +17,11 @@ public class DashboardNotificacaoListener {
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    private NotificacaoRepository repository;
+    private NotificacaoRepository notificacaoRepository;
+
+    @Autowired
+    private EmpresaRepository empresaRepository;
+
 
     @Async
     @EventListener
@@ -31,12 +37,21 @@ public class DashboardNotificacaoListener {
             default -> "ℹ️ Informação de Estoque";
         };
 
-        Notificacao nova = new Notificacao();
-        nova.setTitulo(tituloNotificacao);
-        nova.setMensagem(event.mensagem());
-        repository.save(nova);
+        Notificacao novaNotificacao = new Notificacao();
+        novaNotificacao.setTitulo(tituloNotificacao);
+        novaNotificacao.setMensagem(event.mensagem());
 
-        messagingTemplate.convertAndSend("/topic/notificacoes", event.mensagem());
+        Empresa empresa = empresaRepository.findById(event.empresaId())
+                .orElseThrow();
+
+        novaNotificacao.setEmpresa(empresa);
+
+        notificacaoRepository.save(novaNotificacao);
+
+        messagingTemplate.convertAndSend(
+                "/topic/notificacoes/" + event.empresaId(),
+                event.mensagem()
+        );
     }
 
     @Async
@@ -44,12 +59,19 @@ public class DashboardNotificacaoListener {
     public void onVendaEvent(NotificacaoVendaEvent event) {
         System.out.println("[VENDA] Enviando alerta para o aplicativo...");
 
-        Notificacao nova = new Notificacao();
-        nova.setTitulo("Alerta de Venda");
-        nova.setMensagem(event.mensagem());
-        repository.save(nova);
+        Notificacao novaNotificacao = new Notificacao();
+        novaNotificacao.setTitulo("Alerta de Venda");
+        novaNotificacao.setMensagem(event.mensagem());
+        Empresa empresa = empresaRepository.findById(event.empresaId())
+                .orElseThrow();
+        novaNotificacao.setEmpresa(empresa);
 
-        messagingTemplate.convertAndSend("/topic/notificacoes", event.mensagem());
+        notificacaoRepository.save(novaNotificacao);
+
+        messagingTemplate.convertAndSend(
+                "/topic/notificacoes/" + event.empresaId(),
+                event.mensagem()
+        );
     }
 
     @Async
@@ -64,12 +86,21 @@ public class DashboardNotificacaoListener {
             default -> "Informação de Colaborador";
         };
 
-        Notificacao nova = new Notificacao();
-        nova.setTitulo(tituloNotificacao);
-        nova.setMensagem(event.mensagem());
-        repository.save(nova);
+        Notificacao novaNotificacao = new Notificacao();
+        novaNotificacao.setTitulo(tituloNotificacao);
+        novaNotificacao.setMensagem(event.mensagem());
 
-        messagingTemplate.convertAndSend("/topic/notificacoes", event.mensagem());
+        Empresa empresa = empresaRepository.findById(event.empresaId())
+                .orElseThrow();
+
+        novaNotificacao.setEmpresa(empresa);
+
+        notificacaoRepository.save(novaNotificacao);
+
+        messagingTemplate.convertAndSend(
+                "/topic/notificacoes/" + event.empresaId(),
+                event.mensagem()
+        );
     }
 
 }

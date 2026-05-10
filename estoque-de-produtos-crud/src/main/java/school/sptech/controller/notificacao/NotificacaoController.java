@@ -16,8 +16,8 @@ public class NotificacaoController {
     private NotificacaoRepository repository;
 
     @GetMapping
-    public List<Notificacao> listar() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "dataCriacao"));
+    public List<Notificacao> listar(@RequestParam Integer empresaId) {
+        return repository.findByEmpresaIdOrderByDataCriacaoDesc(empresaId);
     }
 
     @PatchMapping("/{id}/lida")
