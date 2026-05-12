@@ -40,12 +40,11 @@ public class ProdutoController {
             @ApiResponse(responseCode = "400", description = "Requisição inválida ou dados mal formatados.",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(example = """
-            {
-              "mensagem": "Dados inválidos. Verifique os campos obrigatórios."
-            }
-            """))
+        {
+          "mensagem": "Dados inválidos. Verifique os campos obrigatórios."
+        }
+        """))
             )
-
     })
     public ResponseEntity<ProdutoListagemDto> cadastrar(
             @Parameter(description = "Dados do produto para cadastro.", required = true)
@@ -55,6 +54,17 @@ public class ProdutoController {
             @PathVariable Integer idFuncionario) {
         ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, imagem, idFuncionario);
         return ResponseEntity.status(201).body(produtoCadastrado);
+    }
+
+    @PatchMapping("/preco-venda/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Atualizar preço de venda", description = "Atualiza apenas o preço de venda de um produto.")
+    public ResponseEntity<ProdutoListagemDto> atualizarPrecoVenda(
+            @PathVariable Integer id,
+            @PathVariable Integer idFuncionario,
+            @RequestBody Double valorUnitario) {
+        ProdutoListagemDto responseDto = service.atualizarPrecoVenda(id, idFuncionario, valorUnitario);
+        return ResponseEntity.status(200).body(responseDto);
     }
 
     @GetMapping("/todos-produtos/{idFuncionario}")

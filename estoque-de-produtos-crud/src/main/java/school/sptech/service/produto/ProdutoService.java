@@ -86,6 +86,26 @@ public class ProdutoService {
         System.out.println("URL da imagem do produto " + idProduto + " atualizada para: " + urlImagem);
     }
 
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "produtoPorId", key = "#id"),
+            @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    })
+    public ProdutoListagemDto atualizarPrecoVenda(Integer id, Integer idFuncionario, Double valorUnitario) {
+        Optional<Produto> produtoPorEmpresaFuncionario = repository
+                .buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(id, idFuncionario);
+
+        if (produtoPorEmpresaFuncionario.isEmpty()) {
+            throw new EntidadeNaoEncontradaException(
+                    "Produto não encontrado ou não pertence à empresa do funcionário informado.");
+        }
+
+        Produto produto = produtoPorEmpresaFuncionario.get();
+        produto.setValorUnitario(valorUnitario);
+
+        return ProdutoMapper.toDto(repository.save(produto));
+    }
+
     @Cacheable(value = "produtoPorId", key = "#id")
     public ProdutoListagemDto buscarProdutoPorId(Integer id, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
