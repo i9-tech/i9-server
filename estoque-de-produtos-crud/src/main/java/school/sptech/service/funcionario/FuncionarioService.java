@@ -1,5 +1,7 @@
 package school.sptech.service.funcionario;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +24,16 @@ import school.sptech.exception.EntidadeConflictException;
 import school.sptech.exception.EntidadeNaoEncontradaException;
 import school.sptech.exception.ValidacaoException;
 import school.sptech.observer.FuncionarioEventListener;
+import school.sptech.observer.NotificacaoEstoqueEvent;
+import school.sptech.observer.NotificacaoFuncionarioEvent;
+import school.sptech.observer.enums.TipoEventoEstoque;
+import school.sptech.observer.enums.TipoEventoFuncionario;
 import school.sptech.repository.empresa.EmpresaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.service.emailService.NotificacaoProducer;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +62,9 @@ public class FuncionarioService {
         this.authenticationManager = authenticationManager;
         this.notificacaoProducer = notificacaoProducer;
     }
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     public String criptografar(String senha) {
         return passwordEncoder.encode(senha);
@@ -157,6 +168,44 @@ public class FuncionarioService {
                 emailDestinatario
         );
 
+        // 1. Formata a data de admissão para o padrão brasileiro
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataFormatada = funcionarioSalvo.getDataAdmissao() != null
+                ? funcionarioSalvo.getDataAdmissao().format(formatter)
+                : "Data não informada";
+
+        List<String> acessos = new ArrayList<>();
+        if (funcionarioSalvo.isAcessoSetorAtendimento()) {
+            acessos.add("Atendimento");
+        }
+        if (funcionarioSalvo.isAcessoSetorCozinha()) {
+            acessos.add("Cozinha");
+        }
+        if (funcionarioSalvo.isAcessoSetorEstoque()) {
+            acessos.add("Estoque");
+        }
+
+        String acessosFormatados = acessos.isEmpty()
+                ? "Apenas acessos básicos"
+                : String.join(", ", acessos);
+
+        String mensagemFuncionario = String.format(
+                "Novo talento na equipe! %s acaba de ser cadastrado(a) como %s. Início em: %s. Acessos liberados: [%s].",
+                funcionarioSalvo.getNome(),
+                cargos,
+                dataFormatada,
+                acessosFormatados
+        );
+
+        // Dispara o gatilho com a mensagem no app
+        eventPublisher.publishEvent(new NotificacaoFuncionarioEvent(
+                funcionarioSalvo,
+                TipoEventoFuncionario.CADASTRADO,
+                mensagemFuncionario,
+                funcionarioSalvo.getEmpresa().getId()
+        ));
+
+
         return FuncionarioMapper.toDto(funcionario);
     }
 
@@ -191,14 +240,45 @@ public class FuncionarioService {
 
 
     public void removerPorId(int id, Integer idEmpresa) {
-        Optional<Funcionario> funcionario = repository.findByIdAndEmpresaId(id, idEmpresa);
+        Optional<Funcionario> funcionarioOpt = repository.findByIdAndEmpresaId(id, idEmpresa);
 
-        if (funcionario.isEmpty()) {
+        if (funcionarioOpt.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Funcionário não encontrado na empresa especificada.");
         }
 
-        repository.softDeleteByIdAndEmpresa(id,idEmpresa);
+        Funcionario funcionario = funcionarioOpt.get();
 
+        repository.softDeleteByIdAndEmpresa(id, idEmpresa);
+
+        List<String> acessos = new ArrayList<>();
+        if (funcionario.isAcessoSetorAtendimento()) {
+            acessos.add("Atendimento");
+        }
+        if (funcionario.isAcessoSetorCozinha()) {
+            acessos.add("Cozinha");
+        }
+        if (funcionario.isAcessoSetorEstoque()) {
+            acessos.add("Estoque");
+        }
+
+        String acessosFormatados = acessos.isEmpty() ? "Nenhum" : String.join(", ", acessos);
+        String cargos = funcionario.getCargo() != null ? funcionario.getCargo().toString() : "N/A";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataFormatada = java.time.LocalDate.now().format(formatter);
+
+        eventPublisher.publishEvent(new NotificacaoFuncionarioEvent(
+                funcionario,
+                TipoEventoFuncionario.DESLIGADO,
+                String.format(
+                        "%s não faz mais parte do time. Cargo: %s. Desligamento em: %s. Acessos revogados: [%s].",
+                        funcionario.getNome(),
+                        cargos,
+                        dataFormatada,
+                        acessosFormatados
+                ),
+                funcionario.getEmpresa().getId()
+        ));
     }
 
     public Funcionario editarFuncionario(int id, Integer idEmpresa, Funcionario funcionarioParaEditar) {

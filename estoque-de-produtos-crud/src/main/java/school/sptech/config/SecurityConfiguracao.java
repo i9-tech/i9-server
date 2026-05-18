@@ -58,7 +58,8 @@ public class SecurityConfiguracao {
             new AntPathRequestMatcher("/error/**"),
             new AntPathRequestMatcher("/envio-email/**"),
             new AntPathRequestMatcher("/recuperacoes/**"),
-            new AntPathRequestMatcher("/plano-templates/**", HttpMethod.GET.name())
+            new AntPathRequestMatcher("/plano-templates/**", HttpMethod.GET.name()),
+            new AntPathRequestMatcher("/ws/**")
     };
 
     @Bean

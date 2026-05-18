@@ -1,15 +1,14 @@
 package school.sptech.service.venda;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import school.sptech.controller.venda.dto.VendaMapper;
-import school.sptech.controller.venda.dto.VendaRequestDto;
-import school.sptech.controller.venda.dto.VendaResponseDto;
-import school.sptech.entity.categoria.Categoria;
 import school.sptech.entity.funcionario.Funcionario;
 import school.sptech.entity.itemCarrinho.ItemCarrinho;
-import school.sptech.entity.prato.Prato;
 import school.sptech.entity.produto.Produto;
 import school.sptech.entity.venda.Venda;
+import school.sptech.observer.NotificacaoEstoqueEvent;
+import school.sptech.observer.enums.TipoEventoEstoque;
 import school.sptech.repository.venda.VendaRepository;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.itemCarrinho.ItemCarrinhoRepository;
@@ -20,14 +19,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +38,9 @@ public class VendaService {
         this.produtoRepository = produtoRepository;
     }
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     public Venda criarVenda(Venda venda) {
 
         Funcionario funcionario = funcionarioRepository.findById(venda.getFuncionario().getId())
@@ -59,6 +56,15 @@ public class VendaService {
 
         List<ItemCarrinho> itensCarrinho = itemCarrinhoRepository.findAllById(itemIds);
 
+
+        Map<Integer, Integer> produtosQuantidadeVendida = new HashMap<>();
+        for (ItemCarrinho item : itensCarrinho) {
+            Produto p = item.getProduto();
+            if (p != null) {
+                produtosQuantidadeVendida.put(p.getId(), produtosQuantidadeVendida.getOrDefault(p.getId(), 0) + 1);
+            }
+        }
+
         for (ItemCarrinho item : itensCarrinho) {
             Produto produto = item.getProduto();
             if (produto != null) {
@@ -72,6 +78,32 @@ public class VendaService {
                 produtoRepository.save(produto);
             }
         }
+        Set<Integer> produtosNotificados = new HashSet<>();
+
+        for (ItemCarrinho item : itensCarrinho) {
+            Produto produto = item.getProduto();
+            if (produto != null && !produtosNotificados.contains(produto.getId())) {
+                produtosNotificados.add(produto.getId());
+
+
+                if (produto.getQuantidade() == 0) {
+                    eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                            produto,
+                            TipoEventoEstoque.ZERADO,
+                            "O produto " + produto.getNome() + " está zerado no estoque. Reposição necessária.",
+                            produto.getFuncionario().getEmpresa().getId()
+                    ));
+                }
+                else if (produto.getQuantidade() <= produto.getQuantidadeMin()) {
+                    eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                            produto,
+                            TipoEventoEstoque.ABAIXO_MINIMO,
+                            "O produto " + produto.getNome() + " possui apenas " + produto.getQuantidade() + " unidades disponíveis. Considere a reposição.",
+                            produto.getFuncionario().getEmpresa().getId()
+                    ));
+                }
+            }
+        }
 
         if (itensCarrinho.isEmpty()) {
             throw new RuntimeException("Nenhum item válido encontrado para os IDs informados.");
@@ -82,7 +114,6 @@ public class VendaService {
 
         Double valorTotal = calcularValorTotal(itensCarrinho);
         venda.setValorTotal(valorTotal);
-
         return vendaRepository.save(venda);
     }
 
@@ -157,8 +188,7 @@ public class VendaService {
             fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
         }
 
-        Double lucro = vendaRepository.calcularLucroLiquidoPorEmpresaNoPeriodo(empresaId, inicio, fim);
-        return lucro;
+        return vendaRepository.calcularLucroLiquidoPorEmpresaNoPeriodo(empresaId, inicio, fim);
     }
 
     public Map<String, Double> valorTotalPorSetorHoje(Integer empresaId) {
@@ -202,8 +232,7 @@ public class VendaService {
             fim = dataFim.atStartOfDay(ZoneId.of("America/Sao_Paulo")).toLocalDate();
         }
 
-        Integer quantidade = vendaRepository.contarVendasConcluidasPorEmpresaEPeriodo(empresaId, inicio, fim);
-        return quantidade;
+        return vendaRepository.contarVendasConcluidasPorEmpresaEPeriodo(empresaId, inicio, fim);
     }
 
     public List<Produto> listarProdutosAbaixoDaQuantidadeMinima(Integer empresaId) {
