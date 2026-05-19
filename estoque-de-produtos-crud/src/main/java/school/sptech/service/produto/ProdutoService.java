@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.cache.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,8 @@ import school.sptech.entity.prato.Prato;
 import school.sptech.entity.produto.Produto;
 import school.sptech.entity.setor.Setor;
 import school.sptech.exception.EntidadeNaoEncontradaException;
+import school.sptech.observer.NotificacaoEstoqueEvent;
+import school.sptech.observer.enums.TipoEventoEstoque;
 import school.sptech.repository.funcionario.FuncionarioRepository;
 import school.sptech.repository.produto.ProdutoRepository;
 import school.sptech.service.imagesService.ImagemProducer;
@@ -47,6 +50,9 @@ public class ProdutoService {
         this.rabbitMQProducerService = rabbitMQProducerService;
     }
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
     public ProdutoListagemDto cadastrarProduto(@Valid ProdutoCadastroDto produtoCadastroDto, MultipartFile imagem, Integer idFuncionario) {
         Funcionario funcionario = funcionarioRepository.findById(idFuncionario)
@@ -56,6 +62,39 @@ public class ProdutoService {
         produto.setFuncionario(funcionario);
 
         Produto produtoCadastrado = repository.save(produto);
+
+        // Gatilho: Produto recém-cadastrado
+        eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                produtoCadastrado,
+                TipoEventoEstoque.CADASTRADO,
+                "O produto " + produtoCadastroDto.getNome() + " foi adicionado ao estoque com sucesso, e já pode ser vendido na tela da Atendimento!",
+                produtoCadastrado.getFuncionario().getEmpresa().getId()
+        ));
+
+        if (produtoCadastrado.getQuantidade() == 0) {
+            eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                    produtoCadastrado,
+                    TipoEventoEstoque.ZERADO,
+                    "O produto " + produtoCadastrado.getNome() + " está zerado no estoque. Reposição necessária.",
+                    produtoCadastrado.getFuncionario().getEmpresa().getId()
+            ));
+        }
+        else if (produtoCadastrado.getQuantidade() <= produtoCadastrado.getQuantidadeMin()) {
+            eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                    produtoCadastrado,
+                    TipoEventoEstoque.ABAIXO_MINIMO,
+                    "O produto \"" + produtoCadastrado.getNome() + " possui apenas " + produtoCadastrado.getQuantidade() + " unidades disponíveis. Considere a reposição.",
+                    produtoCadastrado.getFuncionario().getEmpresa().getId()
+            ));
+        }
+        else if (produtoCadastrado.getQuantidade() > produtoCadastrado.getQuantidadeMax()) {
+            eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                    produtoCadastrado,
+                    TipoEventoEstoque.ACIMA_MAXIMO,
+                    "A quantidade de " + produtoCadastrado.getQuantidade() +  "do produto '" + produtoCadastrado.getNome() + "' excede o limite máximo permitido em estoque (" + produtoCadastrado.getQuantidadeMax() + ").",
+                    produtoCadastrado.getFuncionario().getEmpresa().getId()
+            ));
+        }
 
         if (imagem != null && !imagem.isEmpty()) {
             try {
@@ -71,6 +110,7 @@ public class ProdutoService {
                 throw new RuntimeException("Erro ao ler os bytes da imagem.", e);
             }
         }
+
 
         return ProdutoMapper.toDto(produtoCadastrado);
     }
@@ -96,9 +136,8 @@ public class ProdutoService {
         if (produtoPorEmpresaFuncionario.isEmpty()) {
             throw new EntidadeNaoEncontradaException("Produto não encontrado ou não pertence à empresa do funcionário informado.");
         }
-        ProdutoListagemDto respostaDto = ProdutoMapper.toDto(produtoPorEmpresaFuncionario.get());
 
-        return respostaDto;
+        return ProdutoMapper.toDto(produtoPorEmpresaFuncionario.get());
     }
 
     @Cacheable(value = "listaProdutos", key = "#idFuncionario")
@@ -174,7 +213,36 @@ public class ProdutoService {
         }
 
         ProdutoMapper.atualizarProdutoComDto(produtoExiste, produtoParaEditar);
-        return ProdutoMapper.toDto(repository.save(produtoExiste));
+
+        Produto produtoSalvo = repository.save(produtoExiste);
+
+       if (produtoSalvo.getQuantidade() == 0) {
+            eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                    produtoSalvo,
+                    TipoEventoEstoque.ZERADO,
+                    "O produto " + produtoSalvo.getNome() + " está zerado no estoque. Reposição necessária.",
+                    produtoSalvo.getFuncionario().getEmpresa().getId()
+            ));
+        }
+        else if (produtoSalvo.getQuantidade() <= produtoSalvo.getQuantidadeMin()) {
+            eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                    produtoSalvo,
+                    TipoEventoEstoque.ABAIXO_MINIMO,
+                    "O produto \"" + produtoSalvo.getNome() + " possui apenas " + produtoSalvo.getQuantidade() + " unidades disponíveis. Considere a reposição.",
+                    produtoSalvo.getFuncionario().getEmpresa().getId()
+            ));
+        }
+        else if (produtoSalvo.getQuantidade() > produtoSalvo.getQuantidadeMax()) {
+            eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                    produtoSalvo,
+                    TipoEventoEstoque.ACIMA_MAXIMO,
+                    "A quantidade de " + produtoSalvo.getQuantidade() +  " do produto '" + produtoSalvo.getNome() + "' excede o limite máximo permitido em estoque (" + produtoSalvo.getQuantidadeMax() + ").",
+                    produtoSalvo.getFuncionario().getEmpresa().getId()
+            ));
+        }
+
+
+        return ProdutoMapper.toDto(produtoSalvo);
     }
 
 
@@ -192,6 +260,16 @@ public class ProdutoService {
 
         repository.desvincularProdutoDosItens(id);
         repository.delete(produto.get());
+
+        Produto produtoExtraido = produto.get();
+
+        // Gatilho: Produto removido
+        eventPublisher.publishEvent(new NotificacaoEstoqueEvent(
+                produtoExtraido,
+                TipoEventoEstoque.REMOVIDO,
+                produtoExtraido.getNome() + " foi removido do estoque.",
+                produtoExtraido.getFuncionario().getEmpresa().getId()
+        ));
     }
 
 
