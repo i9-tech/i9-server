@@ -17,8 +17,8 @@ public class RelatorioScheduler {
         this.relatorioService = relatorioService;
     }
 
-    // @Scheduled(cron = "0 0 23 * * *", zone = "America/Sao_Paulo")
-    @Scheduled(cron = "0 0/3 * * * *", zone = "America/Sao_Paulo")
+     @Scheduled(cron = "0 0 23 * * *", zone = "America/Sao_Paulo")
+    // @Scheduled(cron = "0 0/3 * * * *", zone = "America/Sao_Paulo")
     public void agendarEnvioRelatorioNotificacao() {
         List<Empresa> empresas = empresaRepository.findAll();
 

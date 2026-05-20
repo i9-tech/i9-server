@@ -8,14 +8,19 @@ public class ItemNotaDTO {
 
     private double valorUnitario;
 
+    private String codigoProduto;
+
+
     public ItemNotaDTO(
             String descricao,
             double quantidade,
-            double valorUnitario
+            double valorUnitario,
+            String codigoProduto
     ) {
         this.descricao = descricao;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
+        this.codigoProduto = codigoProduto;
     }
 
     public String getDescricao() {
@@ -40,5 +45,13 @@ public class ItemNotaDTO {
 
     public void setValorUnitario(double valorUnitario) {
         this.valorUnitario = valorUnitario;
+    }
+
+    public String getCodigoProduto() {
+        return codigoProduto;
+    }
+
+    public void setCodigoProduto(String codigoProduto) {
+        this.codigoProduto = codigoProduto;
     }
 }
