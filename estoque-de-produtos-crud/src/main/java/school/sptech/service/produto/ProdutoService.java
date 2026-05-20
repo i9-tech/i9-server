@@ -378,5 +378,29 @@ public class ProdutoService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "produtoPorId", key = "#idProduto"),
+            @CacheEvict(value = "listaProdutos", key = "#idFuncionario")
+    })
+    public ProdutoListagemDto atualizarQuantidade(Integer idProduto, Integer idFuncionario, Integer quantidadeAdicional) {
+        Optional<Produto> produtoPorEmpresaFuncionario = repository
+                .buscarProdutoPorIdComMesmaEmpresaDoFuncionarioInformadoParametro(idProduto, idFuncionario);
+
+        if (produtoPorEmpresaFuncionario.isEmpty()) {
+            throw new EntidadeNaoEncontradaException(
+                    "Produto não encontrado ou não pertence à empresa do funcionário informado.");
+        }
+
+        Produto produto = produtoPorEmpresaFuncionario.get();
+        produto.setQuantidade(produto.getQuantidade() + quantidadeAdicional);
+        return ProdutoMapper.toDto(repository.save(produto));
+    }
+
+    public List<ProdutoListagemDto> buscarProdutoPorNomeExatoEmpresa(String nome, Integer idFuncionario) {
+        List<Produto> produtos = repository.listarProdutoPorNomeExatoEmpresa(nome, idFuncionario);
+        if (produtos.isEmpty()) return Collections.emptyList();
+        return produtos.stream().map(ProdutoMapper::toDto).collect(Collectors.toList());
+    }
 
 }

@@ -636,5 +636,43 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(responseDto);
     }
 
+    @GetMapping("/busca-exata/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(
+            summary = "Buscar produto por nome exato",
+            description = "Usado pelo ETL para verificar duplicatas com precisão. Diferente do /nome que usa LIKE."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produtos encontrados com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado com esse nome exato.")
+    })
+    public ResponseEntity<List<ProdutoListagemDto>> buscarPorNomeExato(
+            @Parameter(description = "Nome exato do produto.", required = true)
+            @RequestParam String nome,
+            @Parameter(description = "ID do funcionário.", required = true)
+            @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.buscarProdutoPorNomeExatoEmpresa(nome, idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
+    }
 
+    @PostMapping("/etl/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Cadastrar produto via ETL", description = "Cadastra produto importado via ETL, sem imagem.")
+    public ResponseEntity<ProdutoListagemDto> cadastrarViaEtl(
+            @Valid @RequestBody ProdutoCadastroDto produtoParaCadastrar,
+            @PathVariable Integer idFuncionario) {
+        ProdutoListagemDto produtoCadastrado = service.cadastrarProduto(produtoParaCadastrar, null, idFuncionario);
+        return ResponseEntity.status(201).body(produtoCadastrado);
+    }
+
+    @PatchMapping("/quantidade/{id}/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Atualizar quantidade do produto", description = "Soma a quantidade informada ao estoque existente.")
+    public ResponseEntity<ProdutoListagemDto> atualizarQuantidade(
+            @PathVariable Integer id,
+            @PathVariable Integer idFuncionario,
+            @RequestBody Integer quantidadeAdicional) {
+        ProdutoListagemDto responseDto = service.atualizarQuantidade(id, idFuncionario, quantidadeAdicional);
+        return ResponseEntity.status(200).body(responseDto);
+    }
 }
