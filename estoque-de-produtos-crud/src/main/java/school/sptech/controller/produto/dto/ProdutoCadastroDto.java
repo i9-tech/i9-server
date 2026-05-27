@@ -20,9 +20,9 @@ public class ProdutoCadastroDto {
     @Schema(
             description = "Código de identificação do produto.",
             example = "0122339475",
-            type = "int"
+            type = "string"
     )
-    private Integer codigo;
+    private String codigo;
 
     private String imagem;
 
@@ -110,11 +110,11 @@ public class ProdutoCadastroDto {
     )
     private Funcionario funcionario;
 
-    public @NotNull Integer getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(@NotNull Integer codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

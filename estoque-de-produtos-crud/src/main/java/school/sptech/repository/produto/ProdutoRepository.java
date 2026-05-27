@@ -61,6 +61,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     @Query("select produto from Produto produto join produto.funcionario funcionarioProduto where lower(produto.nome) like lower(concat('%', :nome, '%')) and funcionarioProduto.empresa = (select funcionarioParametro.empresa from Funcionario funcionarioParametro where funcionarioParametro.id = :idFuncionario)")
     List<Produto> listarProdutoPorNomeLikeEmpresa(@Param("nome") String categoria, @Param("idFuncionario") Integer idFuncionario);
 
+    @Query("SELECT p FROM Produto p WHERE p.codigo = :codigo AND p.funcionario.empresa.id = (SELECT f.empresa.id FROM Funcionario f WHERE f.id = :idFuncionario)")
+    List<Produto> listarProdutoPorCodigoExatoEmpresa(@Param("codigo") String codigo, @Param("idFuncionario") Integer idFuncionario);
+
     @Query("""
     select produto from Produto produto
     join produto.funcionario funcionarioProduto

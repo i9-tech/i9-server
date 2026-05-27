@@ -675,4 +675,14 @@ public class ProdutoController {
         return ResponseEntity.status(200).body(responseDto);
     }
 
+    @GetMapping("/busca-por-codigo/{idFuncionario}")
+    @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Buscar produto por código exato", description = "Usado pelo ETL para verificar duplicatas pelo código do produto.")
+    public ResponseEntity<List<ProdutoListagemDto>> buscarPorCodigo(
+            @RequestParam String codigo,
+            @PathVariable Integer idFuncionario) {
+        List<ProdutoListagemDto> responseDto = service.buscarProdutoPorCodigoEmpresa(codigo, idFuncionario);
+        return ResponseEntity.status(200).body(responseDto);
+    }
+
 }
