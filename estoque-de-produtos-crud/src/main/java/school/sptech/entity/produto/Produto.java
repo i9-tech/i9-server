@@ -31,9 +31,9 @@ public class Produto {
     @Schema(
             description = "Código de identificação do produto.",
             example = "0122339475",
-            type = "int"
+            type = "string"
     )
-    private int codigo;
+    private String codigo;
 
 
     private String imagem;
@@ -150,11 +150,11 @@ public class Produto {
         this.id = id;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

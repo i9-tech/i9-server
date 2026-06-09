@@ -26,9 +26,9 @@ public class ProdutoListagemDto {
     @Schema(
             description = "Código de identificação do produto.",
             example = "0122339475",
-            type = "int"
+            type = "string"
     )
-    private int codigo;
+    private String codigo;
 
     private String imagem;
 
@@ -119,7 +119,7 @@ public class ProdutoListagemDto {
     private Funcionario funcionario;
 
 
-    public ProdutoListagemDto(Integer id, int codigo, String imagem, String nome, int quantidade, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, LocalDate dataRegistro, Setor setor, Categoria categoria, Funcionario funcionario) {
+    public ProdutoListagemDto(Integer id, String codigo, String imagem, String nome, int quantidade, double valorCompra, double valorUnitario, int quantidadeMin, int quantidadeMax, String descricao, LocalDate dataRegistro, Setor setor, Categoria categoria, Funcionario funcionario) {
         this.id = id;
         this.codigo = codigo;
         this.imagem = imagem;
@@ -152,11 +152,11 @@ public class ProdutoListagemDto {
         this.id = id;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

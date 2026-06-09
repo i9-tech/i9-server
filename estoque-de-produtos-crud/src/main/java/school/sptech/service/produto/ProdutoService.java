@@ -403,8 +403,9 @@ public class ProdutoService {
         return produtos.stream().map(ProdutoMapper::toDto).collect(Collectors.toList());
     }
 
-
-
-
-
+    public List<ProdutoListagemDto> buscarProdutoPorCodigoEmpresa(String codigo, Integer idFuncionario) {
+        List<Produto> produtos = repository.listarProdutoPorCodigoExatoEmpresa(codigo, idFuncionario);
+        if (produtos.isEmpty()) return Collections.emptyList();
+        return produtos.stream().map(ProdutoMapper::toDto).collect(Collectors.toList());
+    }
 }
